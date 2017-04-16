@@ -52,7 +52,8 @@ namespace StarMap
       Container.RegisterTypeForNavigation<StartPage, StartPageViewModel>();
       Container.RegisterTypeForNavigation<MasterDetail, MasterDetailViewModel>();
       Container.RegisterTypeForNavigation<MainPage, MainPageViewModel>();
-      Container.RegisterTypeForNavigation<DetailPage, DetailPageViewModel>();      
+      Container.RegisterTypeForNavigation<StarDetailPage, StarDetailPageViewModel>();
+      Container.RegisterTypeForNavigation<SettingsPage>();
     }
 
     protected override void OnSleep()

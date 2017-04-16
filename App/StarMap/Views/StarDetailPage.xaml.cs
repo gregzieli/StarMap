@@ -2,9 +2,9 @@
 
 namespace StarMap.Views
 {
-  public partial class DetailPage : ContentPage
+  public partial class StarDetailPage : ContentPage
   {
-    public DetailPage()
+    public StarDetailPage()
     {
       InitializeComponent();
     }

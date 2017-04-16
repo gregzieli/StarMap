@@ -5,10 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarMap.ViewModels
+namespace StarMap.ViewModels.Core
 {
-  public class BaseViewModel : BindableBase
+  public abstract class BaseViewModel : BindableBase
   {
+    private bool _isBusy = false;
+    public bool IsBusy
+    {
+      get { return _isBusy; }
+      set { SetProperty(ref _isBusy, value); }
+    }
+
     /// <summary>
     /// Executes a delegate that returns a value of the given type, 
     /// catching any exception that may happen during execution.
@@ -40,12 +47,17 @@ namespace StarMap.ViewModels
     {
       try
       {
+        IsBusy = true;
         return await fn();
       }
       catch (Exception ex)
       {
         onException?.Invoke(ex);
         return default(A);
+      }
+      finally
+      {
+        IsBusy = false;
       }
     }
 
@@ -57,14 +69,21 @@ namespace StarMap.ViewModels
     /// <param name="onException">An action to execute upon catching an exception.</param>
     protected async Task CallAsync(Func<Task> fn, Action<Exception> onException = null)
     {
+      // TODO: do a check if isBusy first maybe? Then I wouldn't need to Observe it on every command.
       try
       {
+        IsBusy = true;
         await fn();
       }
       catch (Exception ex)
       {
         onException?.Invoke(ex);
-        return;
+        // TODO:
+        // maybe if null, invoke (abstracted here) HandleException method
+      }
+      finally
+      {
+        IsBusy = false;
       }
     }
   }

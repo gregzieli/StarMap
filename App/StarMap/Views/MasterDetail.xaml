@@ -9,6 +9,7 @@
     <ContentPage Title="Default" Opacity="0.8">
       <StackLayout Padding="20">
         <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/MainPage" />
+        <Button Text="Settings" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/SettingsPage" />
 
 
         <ListView ItemsSource="{Binding Constellations}" HeightRequest="200">

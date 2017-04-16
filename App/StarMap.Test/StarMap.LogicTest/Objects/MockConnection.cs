@@ -11,7 +11,7 @@ namespace StarMap.LogicTest.Objects
     {
       string path = Path.Combine(Directory.GetCurrentDirectory(), @"StarMap.Dal\Database\Universe.db3"),
         // For some unknown reason, sometimes the Current Directory is system root.
-        absolutePath = @"C:\Root\Other\StarMap\App\StarMap.Logic\StarMap.Dal\Database\Universe.db3";
+        absolutePath = @"C:\Root\Git\Private\StarMap\App\StarMap.Logic\StarMap.Dal\Database\Universe.db3";
 
       return new SQLiteConnection(File.Exists(path) ? path : absolutePath);
     }

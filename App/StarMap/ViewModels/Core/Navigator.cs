@@ -1,20 +1,13 @@
 ﻿using Prism.Commands;
 using Prism.Navigation;
 
-namespace StarMap.ViewModels
+namespace StarMap.ViewModels.Core
 {
-  public class Navigator : BaseViewModel, INavigationAware
+  public abstract class Navigator : Observer, INavigationAware
   {
     INavigationService _navigationService;
 
-    public virtual DelegateCommand<string> NavigateCommand { get; set; }
-
-    private bool _isBusy = false;
-    public bool IsBusy
-    {
-      get { return _isBusy; }
-      set { SetProperty(ref _isBusy, value); }
-    }
+    public virtual DelegateCommand<string> NavigateCommand { get; private set; }
 
     public Navigator(INavigationService navigationService)
     {

@@ -6,6 +6,7 @@ using System.Linq;
 using Prism.Navigation;
 using System.Collections.ObjectModel;
 using StarMap.Cll.Models;
+using StarMap.ViewModels.Core;
 
 namespace StarMap.ViewModels
 {
