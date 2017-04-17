@@ -9,6 +9,6 @@
           VerticalOptions="Center"
           HorizontalOptions="Center"
           Scale="1.1"
-          Command="{Binding NavigateCommand}" CommandParameter="MasterDetail/NavigationPage/SettingsPage?init=true" />
+          Command="{Binding NavigateCommand}" CommandParameter="MasterDetail/NavigationPage/SettingsPage" />
 
 </ContentPage>

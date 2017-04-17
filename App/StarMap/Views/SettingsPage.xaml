@@ -11,8 +11,9 @@
     <Label Text="Coordinates" FontAttributes="Bold" FontSize="Large"/>
     <StackLayout Orientation="Horizontal" HeightRequest="20">
       <Button Command="{Binding UpdateLocationCommand}" Image="refresh.png" WidthRequest="24" />
-      <Label Text="{Binding GeoPosition.DmsLatitude}" />
-      <Label Text="{Binding GeoPosition.DmsLongitude}" />
+      <!-- Although binding uses ToString, this StringFormat part here is needed. -->
+      <Label Text="{Binding GeoPosition.DmsLatitude, StringFormat='{0}'}" />
+      <Label Text="{Binding GeoPosition.DmsLongitude, StringFormat='{0}'}" />
       <ActivityIndicator IsRunning="{Binding IsBusy}" />
     </StackLayout>
   </StackLayout>

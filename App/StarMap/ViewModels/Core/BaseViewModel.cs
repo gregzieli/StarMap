@@ -23,6 +23,25 @@ namespace StarMap.ViewModels.Core
     /// <typeparam name="A">Type returned by the delegate.</typeparam>
     /// <param name="fn">Delegate to execute.</param>
     /// <param name="onException">An action to execute upon catching an exception.</param>
+    protected void Call(Action fn, Action<Exception> onException = null)
+    {
+      try
+      {
+        fn();
+      }
+      catch (Exception ex)
+      {
+        onException?.Invoke(ex);
+      }
+    }
+
+    /// <summary>
+    /// Executes a delegate that returns a value of the given type, 
+    /// catching any exception that may happen during execution.
+    /// </summary>
+    /// <typeparam name="A">Type returned by the delegate.</typeparam>
+    /// <param name="fn">Delegate to execute.</param>
+    /// <param name="onException">An action to execute upon catching an exception.</param>
     protected A Call<A>(Func<A> fn, Action<Exception> onException = null)
     {
       try

@@ -2,6 +2,7 @@
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
+using StarMap.Bll.Helpers;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Models.Geolocation;
 using StarMap.ViewModels.Core;
@@ -37,7 +38,7 @@ namespace StarMap.ViewModels
     {
       await CallAsync(async () =>
       {
-        GeoPosition = await _locationManager.GetGpsPositionAsync();
+        GeoPosition = await _locationManager.GetNewGpsPositionAsync();
       }, onException: async (ex) =>
       {
         string message = "Cannot get localization for this device. The position will not update.";
@@ -48,10 +49,17 @@ namespace StarMap.ViewModels
       });
     }
 
+    private async void UpdateSettings()
+    {
+      await CallAsync(async () =>
+      {
+        GeoPosition = await _locationManager.GetGpsPositionAsync();
+      });
+    }
+
     public override void OnNavigatingTo(NavigationParameters parameters)
     {
-      if (parameters.ContainsKey("init"))
-        UpdateLocation();
+      UpdateSettings();
     }
   }
 }
