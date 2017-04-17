@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="StarMap.Views.SettingsPage">
+             x:Class="StarMap.Views.SettingsPage"
+             Title="Settings">
 
   <StackLayout Padding="10">
     <!-- TODO: create a custom template for sections -->
