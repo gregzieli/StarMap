@@ -3,6 +3,7 @@ using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
+using StarMap.Cll.Models.Geolocation;
 using StarMap.ViewModels.Core;
 using System;
 
@@ -14,8 +15,8 @@ namespace StarMap.ViewModels
     
     public DelegateCommand UpdateLocationCommand { get; private set; }
 
-    private Position _geoPosition;
-    public Position GeoPosition
+    private ExtendedPosition _geoPosition;
+    public ExtendedPosition GeoPosition
     {
       get { return _geoPosition; }
       set { SetProperty(ref _geoPosition, value); }

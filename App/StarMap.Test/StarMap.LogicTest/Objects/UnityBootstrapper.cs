@@ -11,7 +11,8 @@ namespace StarMap.LogicTest.Objects
     {
       container
         .RegisterType<IStarDataProvider, StarDatabaseProvider>(new InjectionConstructor(new MockConnection()))
-        .RegisterType<IStarManager, StarManager>();
+        .RegisterType<IStarManager, StarManager>()
+        .RegisterType<ILocationManager, LocationManager>();
     }
   }
 }

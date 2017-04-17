@@ -6,14 +6,12 @@
              x:Class="StarMap.Views.SettingsPage">
 
   <StackLayout Padding="10">
-    <!-- TODO: create a custom template for this -->
+    <!-- TODO: create a custom template for sections -->
     <Label Text="Coordinates" FontAttributes="Bold" FontSize="Large"/>
-    <StackLayout Orientation="Horizontal" >
-      <Button Command="{Binding UpdateLocationCommand}" Image="refresh.png" HeightRequest="50" WidthRequest="50" />      
-      <Label Text="Lat:" />
-      <Label Text="{Binding GeoPosition.Latitude}" />
-      <Label Text="Long:" />
-      <Label Text="{Binding GeoPosition.Longitude}" />
+    <StackLayout Orientation="Horizontal" HeightRequest="20">
+      <Button Command="{Binding UpdateLocationCommand}" Image="refresh.png" WidthRequest="24" />
+      <Label Text="{Binding GeoPosition.DmsLatitude}" />
+      <Label Text="{Binding GeoPosition.DmsLongitude}" />
       <ActivityIndicator IsRunning="{Binding IsBusy}" />
     </StackLayout>
   </StackLayout>
