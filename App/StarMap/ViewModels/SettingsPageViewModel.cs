@@ -1,16 +1,15 @@
-﻿using Plugin.Geolocator.Abstractions;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
-using StarMap.Bll.Helpers;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Models.Geolocation;
 using StarMap.ViewModels.Core;
 using System;
+using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
-  public class SettingsPageViewModel : Interlocutor
+  public class SettingsPageViewModel : Navigator
   {
     ILocationManager _locationManager;
     
@@ -23,43 +22,41 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _geoPosition, value); }
     }
 
-    public SettingsPageViewModel(INavigationService navigationService, 
-      IPageDialogService dialogService, 
+    public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, 
       ILocationManager locationManager) 
-      : base(navigationService, dialogService)
+      : base(navigationService, pageDialogService)
     {
       _locationManager = locationManager;
-      UpdateLocationCommand = new DelegateCommand(UpdateLocation, CanExecute).ObservesProperty(() => IsBusy);
+      UpdateLocationCommand = new DelegateCommand(UpdateLocation, CanExecute)
+        .ObservesProperty(() => IsBusy);
     }
 
-    // From what I read async void (fire and forget) is bad practice, however,
-    // it's the only way to be used as a delegate (for a Command or EventHandler).
+    // Async void command handler
     private async void UpdateLocation()
+    {      
+      await CallAsync(async () =>
+      {
+        var currentPosition = GeoPosition;
+        GeoPosition = await _locationManager.GetNewGpsPositionAsync() ?? currentPosition;
+      });
+    }
+
+    protected override async Task Restore()
     {
       await CallAsync(async () =>
       {
-        GeoPosition = await _locationManager.GetNewGpsPositionAsync();
-      }, onException: async (ex) =>
-      {
-        string message = "Cannot get localization for this device. The position will not update.";
+        GeoPosition = await _locationManager.CheckLocationAsync().ConfigureAwait(false);
+        // other settings
+      });
+    }
+
+    protected override async Task HandleException(Exception ex)
+    {
+      string message = "Cannot get localization for this device. The position will not update.";
 #if DEBUG
-        message += Environment.NewLine + "Exception:" + Environment.NewLine + ex.Message;
+      message += Environment.NewLine + "Exception:" + Environment.NewLine + ex.Message;
 #endif
-        await DisplayAlertAsync("Localization error", message, "OK");
-      });
-    }
-
-    private async void UpdateSettings()
-    {
-      await CallAsync(async () =>
-      {
-        GeoPosition = await _locationManager.GetGpsPositionAsync();
-      });
-    }
-
-    public override void OnNavigatingTo(NavigationParameters parameters)
-    {
-      UpdateSettings();
+      await DisplayAlertAsync("Localization error", message, "OK");
     }
   }
 }

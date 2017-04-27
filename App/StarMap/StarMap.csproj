@@ -41,10 +41,9 @@
     <Compile Include="Events\MyEvent.cs" />
     <Compile Include="UnityBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\Core\BaseViewModel.cs" />
+    <Compile Include="ViewModels\Core\Overseer.cs" />
     <Compile Include="ViewModels\Core\Interlocutor.cs" />
     <Compile Include="ViewModels\Core\Navigator.cs" />
-    <Compile Include="ViewModels\Core\Observer.cs" />
     <Compile Include="ViewModels\SettingsPageViewModel.cs" />
     <Compile Include="ViewModels\StarDetailPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />

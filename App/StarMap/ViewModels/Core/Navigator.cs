@@ -1,15 +1,19 @@
-﻿using Prism.Commands;
+﻿using System;
+using System.Threading.Tasks;
+using Prism.Commands;
 using Prism.Navigation;
+using Prism.Services;
 
 namespace StarMap.ViewModels.Core
 {
-  public abstract class Navigator : Observer, INavigationAware
+  public abstract class Navigator : Interlocutor, INavigationAware
   {
     INavigationService _navigationService;
 
     public virtual DelegateCommand<string> NavigateCommand { get; private set; }
 
-    public Navigator(INavigationService navigationService)
+    public Navigator(INavigationService navigationService, IPageDialogService pageDialogService)
+      : base(pageDialogService)
     {
       _navigationService = navigationService;
       NavigateCommand = new DelegateCommand<string>(Navigate);
@@ -17,23 +21,23 @@ namespace StarMap.ViewModels.Core
 
     protected async void Navigate(string uri)
     {
-      await _navigationService.NavigateAsync(uri);
+      await Navigate(uri, null);
     }
 
-    protected async void Navigate(string uri, object param)
+    protected async Task Navigate(string uri, object param)
     {
-      var navParams = new NavigationParameters();
-      await _navigationService.NavigateAsync(uri, new NavigationParameters() { { "TODO", param } });
+      var navParams = new NavigationParameters() { { "TODO", param } };
+      await Navigate(uri, navParams);
     }
 
-    protected async void Navigate(string uri, NavigationParameters navParams)
+    protected async Task Navigate(string uri, NavigationParameters navParams)
     {
-      await _navigationService.NavigateAsync(uri, navParams);
+      await CallAsync(() => _navigationService.NavigateAsync(uri, navParams));
     }
 
-    protected async void GoBack()
+    protected async Task GoBack()
     {
-      await _navigationService.GoBackAsync();
+      await CallAsync(() => _navigationService.GoBackAsync());
     }
 
     public virtual void OnNavigatedFrom(NavigationParameters parameters)
@@ -42,7 +46,14 @@ namespace StarMap.ViewModels.Core
     public virtual void OnNavigatedTo(NavigationParameters parameters)
     { }
 
-    public virtual void OnNavigatingTo(NavigationParameters parameters)
+    public virtual async void OnNavigatingTo(NavigationParameters parameters)
+    {
+      // Check if it works better on NavigatEDTo
+      await Restore();
+    }
+
+    // Logic to restore VM's properties
+    protected virtual async Task Restore()
     { }
   }
 }

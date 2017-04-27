@@ -9,6 +9,8 @@ using StarMap.Cll.Models;
 using Prism.Events;
 using StarMap.Events;
 using StarMap.ViewModels.Core;
+using System.Threading.Tasks;
+using Prism.Services;
 
 namespace StarMap.ViewModels
 {
@@ -24,7 +26,8 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _star, value); }
     }
 
-    public StarDetailPageViewModel(INavigationService navigationService, IStarManager starManager, IEventAggregator eventAggregator) : base(navigationService)
+    public StarDetailPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IEventAggregator eventAggregator) 
+      : base(navigationService, pageDialogService)
     {
       _starManager = starManager;
       // move this to some base class. For now it's just to show.

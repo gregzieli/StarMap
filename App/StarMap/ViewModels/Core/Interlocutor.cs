@@ -8,12 +8,11 @@ using Prism.Services;
 
 namespace StarMap.ViewModels.Core
 {
-  public abstract class Interlocutor : Navigator
+  public abstract class Interlocutor : Overseer
   {
     IPageDialogService _pageDialogService;
 
-    public Interlocutor(INavigationService navigationService, IPageDialogService pageDialogService)
-      : base(navigationService)
+    public Interlocutor(IPageDialogService pageDialogService)
     {
       _pageDialogService = pageDialogService;
     }
@@ -27,6 +26,12 @@ namespace StarMap.ViewModels.Core
     protected async Task<bool> DisplayDialogAsync(string title, string message, string acceptButton = "OK", string cancelButton = "Cancel")
     {
       return await _pageDialogService.DisplayAlertAsync(title, message, acceptButton, cancelButton);
+    }
+
+    // The basic one, can be overriden if a more detailed action is needed.
+    protected override async Task HandleException(Exception ex)
+    {
+      await DisplayAlertAsync("Exception", ex.Message);
     }
   }
 }

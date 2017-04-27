@@ -7,6 +7,8 @@ using System.Collections.ObjectModel;
 using Prism.Events;
 using StarMap.Events;
 using StarMap.ViewModels.Core;
+using System.Threading.Tasks;
+using Prism.Services;
 
 namespace StarMap.ViewModels
 {
@@ -31,7 +33,8 @@ namespace StarMap.ViewModels
     public DelegateCommand SelectStarCommand { get; private set; }    
     public DelegateCommand ShowStarDetailsCommand { get; private set; }
 
-    public MainPageViewModel(INavigationService navigationService, IEventAggregator eventAggregator, IStarManager starManager) : base(navigationService)
+    public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator, IStarManager starManager) 
+      : base(navigationService, pageDialogService)
     {
       _starManager = starManager;
       // TODO: maybe move to OnNavigat[ed/ing]To

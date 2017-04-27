@@ -23,13 +23,14 @@ namespace StarMap.Bll.Managers
       locator.DesiredAccuracy = 50;
 
       var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
+        //.ConfigureAwait(continueOnCapturedContext: false);
 
       StoreGpsPosition(position);
 
       return new ExtendedPosition(position);
     }
 
-    public async Task<ExtendedPosition> GetGpsPositionAsync()
+    public async Task<ExtendedPosition> CheckLocationAsync()
     {
       var p = Settings.Geolocation;
       if (p.IsNullOrEmpty())
