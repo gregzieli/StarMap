@@ -17,6 +17,7 @@ namespace StarMap
       TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
       try
       {
+        InitializeComponent();
         NavigationService.NavigateAsync("StartPage");
       }
       catch (Exception e)

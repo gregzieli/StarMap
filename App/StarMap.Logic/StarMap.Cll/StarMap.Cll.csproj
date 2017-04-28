@@ -47,6 +47,7 @@
     <Compile Include="Models\Geolocation\ExtendedPosition.cs" />
     <Compile Include="Models\Star.cs" />
     <Compile Include="Models\StarDetail.cs" />
+    <Compile Include="Utils\BooleanHelper.cs" />
     <Compile Include="Utils\MessagingCenterAlert.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

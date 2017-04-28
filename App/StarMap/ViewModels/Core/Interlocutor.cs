@@ -31,7 +31,7 @@ namespace StarMap.ViewModels.Core
     // The basic one, can be overriden if a more detailed action is needed.
     protected override async Task HandleException(Exception ex)
     {
-      await DisplayAlertAsync("Exception", ex.Message);
+      await DisplayAlertAsync("Error", ex.Message);
     }
   }
 }

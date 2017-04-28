@@ -1,6 +1,8 @@
 ﻿using StarMap.Cll.Abstractions;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models;
+using StarMap.Core.Extensions;
+using System;
 using System.Collections.Generic;
 
 namespace StarMap.Bll.Managers
@@ -17,6 +19,10 @@ namespace StarMap.Bll.Managers
     public IEnumerable<Constellation> GetConstellations()
     {
       var constellations = _provider.GetConstellations();
+
+      if (constellations.IsNullOrEmpty())
+        throw new Exception("Constellations missing from the database");
+
       return constellations;
     }
 

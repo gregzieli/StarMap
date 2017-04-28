@@ -14,6 +14,8 @@ namespace StarMap.Cll.Models
 
     public string Abbreviation { get; set; }
 
+    public bool IsSelected { get; set; } = true;
+
     public List<Star> Stars { get; set; }
   }
 }

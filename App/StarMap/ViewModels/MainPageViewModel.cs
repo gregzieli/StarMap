@@ -55,9 +55,9 @@ namespace StarMap.ViewModels
 
     }
 
-    private void ShowStarDetails()
+    private async void ShowStarDetails()
     {
-      Navigate("StarDetailPage", SelectedStar.Id);
+      await Navigate("StarDetailPage", SelectedStar.Id);
       //Another option
       //Navigate($"StarDetailPage?id={SelectedStar.Id}");
     }

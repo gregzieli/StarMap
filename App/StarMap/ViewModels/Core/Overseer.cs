@@ -22,17 +22,18 @@ namespace StarMap.ViewModels.Core
     /// <returns>true, if not busy; false otherwise.</returns>
     protected virtual bool CanExecute() => !IsBusy;
 
-    protected abstract Task HandleException(Exception ex);
+    protected abstract Task HandleException(Exception ex);        
 
-    #region Non-async (REMOVE?)
     /// <summary>
-    /// Executes a delegate that returns a value of the given type, 
-    /// catching any exception that may happen during execution.
+    /// Executes a delegate that returns void, 
+    /// catching any exceptions that may happen during the execution.
     /// </summary>
-    /// <typeparam name="A">Type returned by the delegate.</typeparam>
-    /// <param name="fn">Delegate to execute.</param>
-    /// <param name="onException">An action to execute upon catching an exception.</param>
-    protected void Call(Action fn, Action<Exception> onException = null)
+    /// <remarks>
+    /// Although the method call is executed synchronously, it is marked async, since 
+    /// global error handling is an asynchronous operation.
+    /// </remarks>
+    /// <param name="fn">a delegate to execute.</param>
+    protected async Task Call(Action fn)
     {
       try
       {
@@ -41,7 +42,7 @@ namespace StarMap.ViewModels.Core
       }
       catch (Exception ex)
       {
-        onException?.Invoke(ex);
+        await HandleException(ex);
       }
       finally
       {
@@ -51,12 +52,14 @@ namespace StarMap.ViewModels.Core
 
     /// <summary>
     /// Executes a delegate that returns a value of the given type, 
-    /// catching any exception that may happen during execution.
+    /// catching any exception that may happen during the execution.
     /// </summary>
-    /// <typeparam name="A">Type returned by the delegate.</typeparam>
+    /// <remarks>
+    /// Although the method call is executed synchronously, it is marked async, since 
+    /// global error handling is an asynchronous operation.
+    /// </remarks>
     /// <param name="fn">Delegate to execute.</param>
-    /// <param name="onException">An action to execute upon catching an exception.</param>
-    protected A Call<A>(Func<A> fn, Action<Exception> onException = null)
+    protected async Task<A> Call<A>(Func<A> fn)
     {
       try
       {
@@ -65,7 +68,8 @@ namespace StarMap.ViewModels.Core
       }
       catch (Exception ex)
       {
-        onException?.Invoke(ex);
+        await HandleException(ex);
+
         return default(A);
       }
       finally
@@ -74,9 +78,7 @@ namespace StarMap.ViewModels.Core
       }
     }
 
-    #endregion
 
-    
     /// <summary>
     /// Executes a delegate that returns a value of the given type asynchronously, 
     /// catching any exception that may happen during execution.
@@ -92,9 +94,9 @@ namespace StarMap.ViewModels.Core
       }
       catch (Exception ex)
       {
-        //if (onException != null)
-        //  await onException(ex).ConfigureAwait(continueOnCapturedContext: false);
         await HandleException(ex);
+        //if (onException != null)
+        //  await onException(ex);
       }
       finally
       {
@@ -117,9 +119,9 @@ namespace StarMap.ViewModels.Core
       }
       catch (Exception ex)
       {
-        await HandleException(ex).ConfigureAwait(continueOnCapturedContext: false);
+        await HandleException(ex);
         //if (onException != null)
-        //  await onException(ex).ConfigureAwait(continueOnCapturedContext: false);
+        //  await onException(ex);
 
         return default(A);
       }
