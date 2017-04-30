@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace StarMap
-{
-  [XamlCompilation(XamlCompilationOptions.Compile)]
+{  
   public partial class App : PrismApplication
   {
     public App(IPlatformInitializer initializer = null) : base(initializer) { }

@@ -38,6 +38,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Behaviors\BehaviorBase.cs" />
     <Compile Include="Events\MyEvent.cs" />
     <Compile Include="UnityBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
