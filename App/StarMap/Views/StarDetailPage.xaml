@@ -5,6 +5,8 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.StarDetailPage">
 
-  <Label Text="{Binding Star.Id}" />
+  <Grid>
+    <Label Text="{Binding Star.Id}" />
+  </Grid>
 
 </ContentPage>

@@ -33,12 +33,13 @@ namespace StarMap.ViewModels
 
     // Async void command handler
     private async void UpdateLocation()
-    {      
-      await CallAsync(async () =>
-      {
-        var currentPosition = GeoPosition;
-        GeoPosition = await _locationManager.GetNewGpsPositionAsync() ?? currentPosition;
-      });
+    {
+      await CallAsync(_locationManager.GetNewGpsPositionAsync,
+        position =>
+        {
+          if (position != null)
+            GeoPosition = position;
+        });
     }
 
     protected override async Task Restore()

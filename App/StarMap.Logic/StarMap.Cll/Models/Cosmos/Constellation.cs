@@ -1,20 +1,15 @@
-﻿using System;
+﻿using StarMap.Cll.Models.Core.Bindable;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace StarMap.Cll.Models
+namespace StarMap.Cll.Models.Cosmos
 {
-  public class Constellation
+  public class Constellation : MultiSelectable
   {
     public int Id { get; set; }
 
     public string Name { get; set; }
 
     public string Abbreviation { get; set; }
-
-    public bool IsSelected { get; set; } = true;
 
     public List<Star> Stars { get; set; }
   }

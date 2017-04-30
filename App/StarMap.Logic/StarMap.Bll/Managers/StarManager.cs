@@ -1,6 +1,7 @@
 ﻿using StarMap.Cll.Abstractions;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models;
+using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
 using System;
 using System.Collections.Generic;

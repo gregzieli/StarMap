@@ -59,24 +59,24 @@ namespace StarMap.ViewModels.Core
     /// global error handling is an asynchronous operation.
     /// </remarks>
     /// <param name="fn">Delegate to execute.</param>
-    protected async Task<A> Call<A>(Func<A> fn)
-    {
-      try
-      {
-        IsBusy = true;
-        return fn();
-      }
-      catch (Exception ex)
-      {
-        await HandleException(ex);
+    //protected async Task<A> Call<A>(Func<A> fn)
+    //{
+    //  try
+    //  {
+    //    IsBusy = true;
+    //    return fn();
+    //  }
+    //  catch (Exception ex)
+    //  {
+    //    await HandleException(ex);
 
-        return default(A);
-      }
-      finally
-      {
-        IsBusy = false;
-      }
-    }
+    //    return default(A);
+    //  }
+    //  finally
+    //  {
+    //    IsBusy = false;
+    //  }
+    //}
 
 
     /// <summary>
@@ -85,7 +85,7 @@ namespace StarMap.ViewModels.Core
     /// </summary>
     /// <param name="fn">Delegate to execute.</param>
     /// <param name="onException">An action to execute upon catching an exception.</param>
-    protected async Task CallAsync(Func<Task> fn, Func<Exception, Task> onException = null)
+    protected async Task CallAsync(Func<Task> fn)
     {
       try
       {
@@ -95,8 +95,32 @@ namespace StarMap.ViewModels.Core
       catch (Exception ex)
       {
         await HandleException(ex);
-        //if (onException != null)
-        //  await onException(ex);
+      }
+      finally
+      {
+        IsBusy = false;
+      }
+    }
+
+    /// <summary>
+    /// Calls an asynchronous method and executes the callback using the result.
+    /// </summary>
+    /// <typeparam name="A">Return type of the async call.</typeparam>
+    /// <param name="fn">Asynchronous delegate.</param>
+    /// <param name="callback">Delegate that operates on the data awaited.</param>
+    protected async Task CallAsync<A>(Func<Task<A>> fn, Action<A> callback)
+    {
+      try
+      {
+        IsBusy = true;
+        var result = await fn();
+        // In simple cases, instead of awaiting a long lambda (that needs the async await keywords),
+        // the call could be broken into two parameters.
+        callback(result);
+      }
+      catch (Exception ex)
+      {
+        await HandleException(ex);
       }
       finally
       {
@@ -110,25 +134,25 @@ namespace StarMap.ViewModels.Core
     /// </summary>
     /// <param name="fn">Delegate to execute.</param>
     /// <param name="onException">An action to execute upon catching an exception.</param>
-    protected async Task<A> CallAsync<A>(Func<Task<A>> fn, Func<Exception, Task> onException = null)
-    {
-      try
-      {
-        IsBusy = true;
-        return await fn();
-      }
-      catch (Exception ex)
-      {
-        await HandleException(ex);
-        //if (onException != null)
-        //  await onException(ex);
+    //protected async Task<A> CallAsync<A>(Func<Task<A>> fn, Func<Exception, Task> onException = null)
+    //{
+    //  try
+    //  {
+    //    IsBusy = true;
+    //    return await fn();
+    //  }
+    //  catch (Exception ex)
+    //  {
+    //    await HandleException(ex);
+    //    //if (onException != null)
+    //    //  await onException(ex);
 
-        return default(A);
-      }
-      finally
-      {
-        IsBusy = false;
-      }
-    }
+    //    return default(A);
+    //  }
+    //  finally
+    //  {
+    //    IsBusy = false;
+    //  }
+    //}
   }
 }

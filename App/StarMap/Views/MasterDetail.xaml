@@ -8,7 +8,7 @@
 
   <MasterDetailPage.Master>
     <ContentPage Title="Default" Opacity="0.8">
-      <StackLayout Padding="20">
+      <StackLayout Padding="20" Spacing="5">
         <Button Text="Constellations" Command="{Binding ShowHideConstellationMenuCommand}"/>
         <ListView ItemsSource="{Binding Constellations}" 
                   SelectedItem="{Binding SelectedConstellation}"

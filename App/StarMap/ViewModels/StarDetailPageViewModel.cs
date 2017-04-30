@@ -11,6 +11,7 @@ using StarMap.Events;
 using StarMap.ViewModels.Core;
 using System.Threading.Tasks;
 using Prism.Services;
+using StarMap.Cll.Models.Cosmos;
 
 namespace StarMap.ViewModels
 {

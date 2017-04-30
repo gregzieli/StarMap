@@ -4,10 +4,11 @@ using StarMap.Views;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace StarMap
 {
-  //[XamlCompilation(XamlCompilationOptions.Compile)]
+  [XamlCompilation(XamlCompilationOptions.Compile)]
   public partial class App : PrismApplication
   {
     public App(IPlatformInitializer initializer = null) : base(initializer) { }

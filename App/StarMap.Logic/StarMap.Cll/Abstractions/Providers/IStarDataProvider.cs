@@ -1,5 +1,6 @@
 ﻿using StarMap.Cll.Filters;
 using StarMap.Cll.Models;
+using StarMap.Cll.Models.Cosmos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

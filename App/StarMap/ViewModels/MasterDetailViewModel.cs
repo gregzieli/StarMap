@@ -10,6 +10,7 @@ using StarMap.ViewModels.Core;
 using System.Threading.Tasks;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
+using StarMap.Cll.Models.Cosmos;
 
 namespace StarMap.ViewModels
 {
@@ -51,15 +52,11 @@ namespace StarMap.ViewModels
 
     #endregion
 
-    private void ShowClearConstellations(string action)
+    private void ShowClearConstellations(string command)
     {
+      bool action = command == "show";
       foreach (var c in Constellations)
-        c.IsSelected = action == "show";
-
-      // This is obviously bad code, need to simply implement Bindablebase on the model classes :/
-      // Or posibly, keep CLL model separate from th MVVM model, so just this bindable model would extend
-      // the CLL one, and implement INotifyPropertyChanged - I cant use BindableBase with all that implemented though...
-      Constellations = new ObservableCollection<Constellation>(Constellations);
+        c.IsSelected = action;
     }
 
     private void ShowHideConstellationMenu()
@@ -83,7 +80,6 @@ namespace StarMap.ViewModels
 
       await Call(() =>
       {
-
         var constellations = StarManager.GetConstellations();
         Constellations = new ObservableCollection<Constellation>(constellations);
       });

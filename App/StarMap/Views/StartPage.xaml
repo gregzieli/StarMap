@@ -4,11 +4,11 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.StartPage">
-
-  <Button Text="Begin"
-          VerticalOptions="Center"
-          HorizontalOptions="Center"
-          Scale="1.1"
-          Command="{Binding NavigateCommand}" CommandParameter="MasterDetail/NavigationPage/SettingsPage" />
+  <AbsoluteLayout>
+    <Button AbsoluteLayout.LayoutBounds=".5, .5, .25, .25" 
+            AbsoluteLayout.LayoutFlags="All" 
+            Text="Begin" 
+            Command="{Binding NavigateCommand}" CommandParameter="MasterDetail/NavigationPage/SettingsPage"/>
+  </AbsoluteLayout>
 
 </ContentPage>

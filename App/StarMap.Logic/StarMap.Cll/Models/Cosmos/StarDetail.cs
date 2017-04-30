@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StarMap.Cll.Models
+namespace StarMap.Cll.Models.Cosmos
 {
   public class StarDetail
   {

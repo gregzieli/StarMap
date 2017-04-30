@@ -1,4 +1,4 @@
-﻿using StarMap.Cll.Models;
+﻿using StarMap.Cll.Models.Cosmos;
 using DbEntityConstellation = StarMap.Dal.Database.Contracts.Constellation;
 
 namespace StarMap.Dal.Mappers

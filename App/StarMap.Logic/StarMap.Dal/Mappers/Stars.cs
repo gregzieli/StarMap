@@ -1,4 +1,5 @@
 ﻿using StarMap.Cll.Models;
+using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
 using DbEntityStar = StarMap.Dal.Database.Contracts.Star;
 
