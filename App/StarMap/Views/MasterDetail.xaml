@@ -2,19 +2,25 @@
 <MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                   xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-                  xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                  xmlns:prism-bhv="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
                   prism:ViewModelLocator.AutowireViewModel="True"
                   x:Class="StarMap.Views.MasterDetail">
 
   <MasterDetailPage.Master>
     <ContentPage Title="Default" Opacity="0.8">
       <StackLayout Padding="20" Spacing="5">
-        <Button Text="Constellations" Command="{Binding ShowHideConstellationMenuCommand}"/>
-        <ListView ItemsSource="{Binding Constellations}" 
+        <Button x:Name="ConstellationsButton" Text="Constellations" Clicked="HideConstellations"/>
+        <ListView x:Name="constellations"
+                  ItemsSource="{Binding Constellations}" 
                   SelectedItem="{Binding SelectedConstellation}"
+                  IsVisible="False"
                   RowHeight="30" 
-                  IsVisible="{Binding ConstellationsVisible}"
-                  HeightRequest="150">
+                  HeightRequest="150" >
+          <!--<ListView.Behaviors>
+            <prism-bhv:EventToCommandBehavior EventName="ItemSelected" 
+                                              Command="{Binding ConstellationSelectedCommand}"
+                                              EventArgsParameterPath="SelectedItem" />
+          </ListView.Behaviors>-->
           <ListView.Header>
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
               <Button Text="Show all" Command="{Binding ShowClearConstellationsCommand}" 
@@ -25,13 +31,14 @@
           </ListView.Header>
           <ListView.ItemTemplate>
             <DataTemplate>
-              <SwitchCell Text="{Binding Name}" On="{Binding IsSelected}" />
+              <SwitchCell Text="{Binding Name}" On="{Binding IsSelected}" OnChanged="SwitchChanged" />
             </DataTemplate>
           </ListView.ItemTemplate>
         </ListView>
 
-        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/MainPage" />
+        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/MainPage"/>
         <Button Text="Settings" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/SettingsPage" />
+        <Button Text="About" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/AboutPage" />
 
       </StackLayout>
     </ContentPage>

@@ -40,20 +40,35 @@ namespace StarMap.ViewModels.Core
       await CallAsync(() => _navigationService.GoBackAsync());
     }
 
-    public virtual void OnNavigatedFrom(NavigationParameters parameters)
-    { }
-
-    public virtual void OnNavigatedTo(NavigationParameters parameters)
-    { }
-
-    public virtual async void OnNavigatingTo(NavigationParameters parameters)
+    public virtual async void OnNavigatedFrom(NavigationParameters parameters)
     {
-      // Check if it works better on NavigatEDTo
+      await CleanUp();
+    }
+
+    public virtual async void OnNavigatedTo(NavigationParameters parameters)
+    {
+      // Check if it works better on NavigatINGTo
       await Restore();
     }
 
-    // Logic to restore VM's properties
-    protected virtual async Task Restore()
+    public virtual void OnNavigatingTo(NavigationParameters parameters)
     { }
+
+    /// <summary>
+    /// Logic to restore VM's properties, and other actions done upon opening the page
+    /// </summary>
+    protected virtual async Task Restore() { }
+
+    /// <summary>
+    /// Logic to be executed upon exiting a view model.
+    /// </summary>
+    protected virtual async Task CleanUp() { }
+
+    //private bool _isBusy = false;
+    //public bool IsBusy
+    //{
+    //  get { return _isBusy; }
+    //  set { SetProperty(ref _isBusy, value); }
+    //}
   }
 }

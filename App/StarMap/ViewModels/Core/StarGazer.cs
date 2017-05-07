@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Prism.Navigation;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
+using Prism.Events;
 
 namespace StarMap.ViewModels.Core
 {

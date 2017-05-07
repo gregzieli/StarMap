@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
-using Prism.Navigation;
-using StarMap.ViewModels.Core;
+﻿using Prism.Navigation;
 using Prism.Services;
+using StarMap.ViewModels.Core;
 
 namespace StarMap.ViewModels
 {

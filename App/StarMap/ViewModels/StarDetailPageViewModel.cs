@@ -7,7 +7,6 @@ using Prism.Navigation;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Models;
 using Prism.Events;
-using StarMap.Events;
 using StarMap.ViewModels.Core;
 using System.Threading.Tasks;
 using Prism.Services;
@@ -41,7 +40,7 @@ namespace StarMap.ViewModels
       Star = _starManager.GetStarDetails((int)parameters["TODO"]);
 
       //TODO: just demo code (remove)
-      _eventAggregator.GetEvent<MyEvent>().Publish($"Hello from event {nameof(MyEvent)} publisher");
+      //_eventAggregator.GetEvent<MyEvent>().Publish($"Hello from event {nameof(MyEvent)} publisher");
 
     }
   }

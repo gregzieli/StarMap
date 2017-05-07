@@ -5,17 +5,18 @@ using StarMap.Cll.Abstractions;
 using StarMap.Cll.Models;
 using System.Collections.ObjectModel;
 using Prism.Events;
-using StarMap.Events;
 using StarMap.ViewModels.Core;
 using System.Threading.Tasks;
 using Prism.Services;
 using StarMap.Cll.Models.Cosmos;
+using System.Diagnostics;
+using StarMap.Events;
 
 namespace StarMap.ViewModels
 {
-  public class MainPageViewModel : Navigator
+  public class MainPageViewModel : StarGazer
   {
-    IStarManager _starManager;
+    IEventAggregator _eventAggregator;
 
     private Star _selectedStar;
     public Star SelectedStar
@@ -35,12 +36,11 @@ namespace StarMap.ViewModels
     public DelegateCommand ShowStarDetailsCommand { get; private set; }
 
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator, IStarManager starManager) 
-      : base(navigationService, pageDialogService)
+      : base(navigationService, pageDialogService, starManager)
     {
-      _starManager = starManager;
       // TODO: maybe move to OnNavigat[ed/ing]To
       VisibleStars = new ObservableCollection<Star>(
-        _starManager.GetStars(
+        StarManager.GetStars(
           new Cll.Filters.StarFilter() { Limit = 100, MaxDistance = 7000 }));
 
       SelectStarCommand = new DelegateCommand(SelectStar);
@@ -49,11 +49,12 @@ namespace StarMap.ViewModels
            // (That way I dont have to ShowStarDetailsCommand.RaiseCanExecuteChanged() in the SelectedStar setter)
            // And it's fluent, and u can observe as many props as u want
            .ObservesProperty(() => SelectedStar);
+    }
 
-      // For publish, we want to publish on a scenarion: not in constructor. 
-      // Subscribing in a constructor means we dont have to store the aggregator in a field.
-      eventAggregator.GetEvent<MyEvent>().Subscribe((payload) => { /*TODO: do sth*/});
+    void HandleConstellationRequest(Constellation constellation)
+    {
 
+      Debug.WriteLine($"Selected {constellation?.Name ?? "null"}");
     }
 
     private async void ShowStarDetails()
@@ -69,6 +70,14 @@ namespace StarMap.ViewModels
         SelectedStar = VisibleStars[new Random().Next(VisibleStars.Count)];
       else
         SelectedStar = null;
+    }
+
+    protected override async Task Restore()
+    {
+      await Call(() =>
+      {
+        _eventAggregator.GetEvent<ConstellationSelectedEvent>().Subscribe(HandleConstellationRequest);
+      });
     }
   }
 }

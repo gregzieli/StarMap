@@ -1,22 +1,21 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Prism.Events;
 using Prism.Navigation;
-using System.Collections.ObjectModel;
-using StarMap.Cll.Models;
-using StarMap.ViewModels.Core;
-using System.Threading.Tasks;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Models.Cosmos;
+using StarMap.Events;
+using StarMap.ViewModels.Core;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
   public class MasterDetailViewModel : StarGazer
   {
     #region members
+    IEventAggregator _eventAggregator;
+
     private ObservableCollection<Constellation> _constellations;
     public ObservableCollection<Constellation> Constellations
     {
@@ -29,7 +28,7 @@ namespace StarMap.ViewModels
     public Constellation SelectedConstellation
     {
       get { return _selectedConstellation; }
-      set { SetProperty(ref _selectedConstellation, value); }
+      set { SetProperty(ref _selectedConstellation, value, () => ConstellationSelected(value)); }
     }
 
     private bool _constellationsVisible;
@@ -41,16 +40,37 @@ namespace StarMap.ViewModels
     #endregion
 
     #region commands
-    private DelegateCommand _showHideConstellationMenuCommand;
-    public DelegateCommand ShowHideConstellationMenuCommand =>
-        _showHideConstellationMenuCommand ?? (_showHideConstellationMenuCommand = new DelegateCommand(ShowHideConstellationMenu));
 
-
+    // Setting individual switches should be handled maybe:
+    // extending the model here with an INotifyPropChanged implementation
+    // that could add/remove the value to some collection in this VM
+    // and each time that collection changes, GetStars is called with the filtered constellations.
     private DelegateCommand<string> _showClearConstellationsCommand;
     public DelegateCommand<string> ShowClearConstellationsCommand =>
         _showClearConstellationsCommand ?? (_showClearConstellationsCommand = new DelegateCommand<string>(ShowClearConstellations));
 
+
+
+
+    //http://prismlibrary.readthedocs.io/en/latest/Xamarin-Forms/6-EventToCommandBehavior/
+    // Why bother with this, if the same functionality I get in the SelectedConstellation setter?
+    private DelegateCommand<Constellation> _constellationSelectedCommand;
+    public DelegateCommand<Constellation> ConstellationSelectedCommand =>
+        _constellationSelectedCommand ?? (_constellationSelectedCommand = new DelegateCommand<Constellation>(ConstellationSelected));
+
     #endregion
+
+
+    // Async void, because either in the Command handler, or in the setter, can't be awaited.
+    // Which is fine, since only the exception handling is async, not the main execution.
+    // And main execution is publishing an event, so Void is the proper use here.
+    private async void ConstellationSelected(Constellation c)
+    {
+      await Call(() =>
+      {
+        _eventAggregator.GetEvent<ConstellationSelectedEvent>().Publish(c);
+      });
+    }
 
     private void ShowClearConstellations(string command)
     {
@@ -59,18 +79,10 @@ namespace StarMap.ViewModels
         c.IsSelected = action;
     }
 
-    private void ShowHideConstellationMenu()
-    {
-      var isVisible = !ConstellationsVisible;
-      ConstellationsVisible = isVisible;
-
-      if (!isVisible)
-        SelectedConstellation = null;
-    }
-
-    public MasterDetailViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager) 
+    public MasterDetailViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IEventAggregator eventAggregator) 
       : base(navigationService, pageDialogService, starManager)
     {
+      _eventAggregator = eventAggregator;
     }
 
     protected override async Task Restore()
@@ -83,18 +95,6 @@ namespace StarMap.ViewModels
         var constellations = StarManager.GetConstellations();
         Constellations = new ObservableCollection<Constellation>(constellations);
       });
-
-
-
-      // Since the SQLiteConnection I'm using is not async, the call shouldn't be async as well.
-      // TODO: remove
-      //await CallAsync(async () =>
-      //{
-      //  if (Constellations != null)
-      //    return;
-      //  var constellations = await Task.Run(() => StarManager.GetConstellations()).ConfigureAwait(false);
-      //  Constellations = new ObservableCollection<Constellation>(constellations);
-      //});
     }
   }
 }
