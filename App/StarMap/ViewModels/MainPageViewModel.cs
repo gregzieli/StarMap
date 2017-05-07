@@ -18,6 +18,8 @@ namespace StarMap.ViewModels
   {
     IEventAggregator _eventAggregator;
 
+    public SubscriptionToken ConstellationsSubscriptionToken { get; private set; }
+
     private Star _selectedStar;
     public Star SelectedStar
     {
@@ -38,6 +40,8 @@ namespace StarMap.ViewModels
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator, IStarManager starManager) 
       : base(navigationService, pageDialogService, starManager)
     {
+      _eventAggregator = eventAggregator;
+
       // TODO: maybe move to OnNavigat[ed/ing]To
       VisibleStars = new ObservableCollection<Star>(
         StarManager.GetStars(
@@ -74,9 +78,25 @@ namespace StarMap.ViewModels
 
     protected override async Task Restore()
     {
+      // TODO: Store the tokens in a dict or a list
       await Call(() =>
       {
-        _eventAggregator.GetEvent<ConstellationSelectedEvent>().Subscribe(HandleConstellationRequest);
+        if (ConstellationsSubscriptionToken == null)
+          ConstellationsSubscriptionToken = _eventAggregator.GetEvent<ConstellationSelectedEvent>().Subscribe(HandleConstellationRequest);
+      });
+    }
+
+    protected override async Task CleanUp()
+    {
+      await Call(() =>
+      {
+        // Prism handles unsubscribing for me, however, I want to do it explicitly, because I only want to listen when this VM is on.
+        // Alternatively I could put a filter to the Subscribe().
+        if (ConstellationsSubscriptionToken != null)
+        {
+          _eventAggregator.GetEvent<ConstellationSelectedEvent>().Unsubscribe(ConstellationsSubscriptionToken);
+          ConstellationsSubscriptionToken = null;
+        }
       });
     }
   }

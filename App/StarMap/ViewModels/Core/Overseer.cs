@@ -1,15 +1,12 @@
 ﻿using Prism.Mvvm;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace StarMap.ViewModels.Core
 {
   public abstract class Overseer : BindableBase
   {
-    private bool _isBusy = false;
+    private bool _isBusy;
     public bool IsBusy
     {
       get { return _isBusy; }

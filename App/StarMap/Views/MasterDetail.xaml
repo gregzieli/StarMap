@@ -9,34 +9,37 @@
   <MasterDetailPage.Master>
     <ContentPage Title="Default" Opacity="0.8">
       <StackLayout Padding="20" Spacing="5">
-        <Button x:Name="ConstellationsButton" Text="Constellations" Clicked="HideConstellations"/>
-        <ListView x:Name="constellations"
+        <StackLayout IsVisible="{Binding MainPageActive}">
+          <Button Text="Constellations" Clicked="HideConstellations" />
+          <ListView x:Name="constellations"
+                  IsVisible="False"
                   ItemsSource="{Binding Constellations}" 
                   SelectedItem="{Binding SelectedConstellation}"
-                  IsVisible="False"
                   RowHeight="30" 
                   HeightRequest="150" >
-          <!--<ListView.Behaviors>
+            <!--<ListView.Behaviors>
             <prism-bhv:EventToCommandBehavior EventName="ItemSelected" 
                                               Command="{Binding ConstellationSelectedCommand}"
                                               EventArgsParameterPath="SelectedItem" />
           </ListView.Behaviors>-->
-          <ListView.Header>
-            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-              <Button Text="Show all" Command="{Binding ShowClearConstellationsCommand}" 
+            <ListView.Header>
+              <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                <Button Text="Show all" Command="{Binding ShowClearConstellationsCommand}" 
                       CommandParameter="show" />
-              <Button Text="Clear all" Command="{Binding ShowClearConstellationsCommand}" 
+                <Button Text="Clear all" Command="{Binding ShowClearConstellationsCommand}" 
                       CommandParameter="clear" />
-            </StackLayout>
-          </ListView.Header>
-          <ListView.ItemTemplate>
-            <DataTemplate>
-              <SwitchCell Text="{Binding Name}" On="{Binding IsSelected}" OnChanged="SwitchChanged" />
-            </DataTemplate>
-          </ListView.ItemTemplate>
-        </ListView>
+              </StackLayout>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+              <DataTemplate>
+                <SwitchCell Text="{Binding Name}" On="{Binding IsSelected}" OnChanged="SwitchChanged" />
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </StackLayout>
+        
 
-        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/MainPage"/>
+        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="MainPage"/>
         <Button Text="Settings" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/SettingsPage" />
         <Button Text="About" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/AboutPage" />
 
