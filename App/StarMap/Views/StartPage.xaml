@@ -8,7 +8,7 @@
     <Button AbsoluteLayout.LayoutBounds=".5, .5, .25, .25" 
             AbsoluteLayout.LayoutFlags="All" 
             Text="Begin" 
-            Command="{Binding NavigateCommand}" CommandParameter="MasterDetail/NavigationPage/SettingsPage"/>
+            Command="{Binding StartCommand}" />
   </AbsoluteLayout>
 
 </ContentPage>

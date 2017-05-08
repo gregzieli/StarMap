@@ -4,6 +4,7 @@ using Prism.Navigation;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Models.Cosmos;
+using StarMap.Core.Extensions;
 using StarMap.Events;
 using StarMap.ViewModels.Core;
 using System.Collections.ObjectModel;
@@ -83,6 +84,11 @@ namespace StarMap.ViewModels
       : base(navigationService, pageDialogService, starManager)
     {
       _eventAggregator = eventAggregator;
+
+      // This is just a shortcut for now
+      // Prism doesn't really support the 'Detail' functionality, so I could simply look it up
+      // Or does it? Need to investigate
+      MainPageActive = !Bll.Helpers.Settings.Geolocation.IsNullOrEmpty();
     }
 
     protected override async Task Restore()

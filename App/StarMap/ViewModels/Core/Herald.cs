@@ -14,7 +14,7 @@ namespace StarMap.ViewModels.Core
   // says that 'The PubSubEvent<TPayload> is intended to be the base class for an application's or module's specific events'
   // So using this class would be against that. And to have generics using this custom event class would be an overkill, since 
   // the methods would need two type params (where TEventType : PubSubEvent<TPayload>).
-  // If there's time, and after deeper reading, if it turns out there is no need to use the custom event class, use this one.
+  // If it turns out I only use one TPayload per event, it's fine to use this class, otherwise custom events are required.
   public abstract class Herald : Navigator
   {
     IEventAggregator _eventAggregator;
@@ -37,8 +37,6 @@ namespace StarMap.ViewModels.Core
     /// <param name="payload">Message to pass to the subscribers.</param>
     protected async Task PublishEvent<TPayload>(TPayload payload)
     {
-      // I think having a generic publisher is OK, but a subscriber MUST be handled individually,
-     // so Prism can properly unsubscribe it.
       await Call(() =>
       {
         GetEvent<TPayload>().Publish(payload);

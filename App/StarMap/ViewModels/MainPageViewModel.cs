@@ -11,14 +11,13 @@ using Prism.Services;
 using StarMap.Cll.Models.Cosmos;
 using System.Diagnostics;
 using StarMap.Events;
+using System.Collections.Generic;
 
 namespace StarMap.ViewModels
 {
   public class MainPageViewModel : StarGazer
   {
     IEventAggregator _eventAggregator;
-
-    public SubscriptionToken ConstellationsSubscriptionToken { get; private set; }
 
     private Star _selectedStar;
     public Star SelectedStar
@@ -53,6 +52,8 @@ namespace StarMap.ViewModels
            // (That way I dont have to ShowStarDetailsCommand.RaiseCanExecuteChanged() in the SelectedStar setter)
            // And it's fluent, and u can observe as many props as u want
            .ObservesProperty(() => SelectedStar);
+
+      _eventAggregator.GetEvent<ConstellationSelectedEvent>().Subscribe(HandleConstellationRequest);
     }
 
     void HandleConstellationRequest(Constellation constellation)
@@ -62,11 +63,9 @@ namespace StarMap.ViewModels
     }
 
     private async void ShowStarDetails()
-    {
-      await Navigate("StarDetailPage", SelectedStar.Id);
-      //Another option
+      //Another option:
       //Navigate($"StarDetailPage?id={SelectedStar.Id}");
-    }
+      => await Navigate("StarDetailPage", "TODO", SelectedStar.Id);
 
     private void SelectStar()
     {
@@ -76,13 +75,41 @@ namespace StarMap.ViewModels
         SelectedStar = null;
     }
 
+
+
+
+    /*
+     * OK, so the options are two:
+     * 1. Don't worry about unsubscribing, just use the filter upon subscribing or do a check in the handler (remember to lock!)
+     *    - Subscription occurs in the constructor, so no additional check is required
+     *      - new instance is created upon direct prism navigation, so not when hardware back button is used, 
+     *        navigation page back button (probably, not checked), or when being on the main page and tapping MainPage in the MasterView.
+     *      -  References to the disposed subscribers remain until the publisher gets disposed (MasterDetailVM in this case, which is long)
+     *         - if keepSubscriberReferenceAlive is true, referenes stay even after that.
+     * 2. Subscribing upon OnNavigatEDTo (not INGTo, because hardwareback button doesn't trigger it), unscubscribing with OnNavigatingFrom
+     *    - keeps the subscribers in check, but I think it's the opposite to what prism's EventAggregator was made for in such scenario.
+     *    
+     *    I'm going with option 1 for now. But I think since the difference in publiser's and subscriber's lifespan, option 2 is better in this case.
+     *    
+     *    OPTION 2:
     protected override async Task Restore()
     {
-      // TODO: Store the tokens in a dict or a list
+      // Need to check if the event is already subscribed, otherwise I'm resubscribing
       await Call(() =>
       {
-        if (ConstellationsSubscriptionToken == null)
-          ConstellationsSubscriptionToken = _eventAggregator.GetEvent<ConstellationSelectedEvent>().Subscribe(HandleConstellationRequest);
+        // If there are many events, it would be nice to have a generic collection (dictionary extension), 
+        // that would allow to store <TEventType, Action<TPayload>> where TEventType : PubSubEvent<TPayload>
+        // and just iterate through that. Since it's only one, ore few more, there's no need. It's rather not event ment that way, 
+        // since to be perfectly thorough I would need two such collections, for events with and without the payload.
+        var conEvent = _eventAggregator.GetEvent<ConstellationSelectedEvent>();
+
+        // When the VM gets newed up by the Prism navigation, the action that this Contains checks differs from the previous one,
+        // so that the result is false. That's why in this scenario I unsubscribe manually.
+        //
+        // It's the desired behavior. If not specified otherwise (keepSubscriberReferenceAlive), 
+        // references to the subscriber (this) from the event are weak, which means, they get GC'd, along with this instance (eventually).
+        if (!conEvent.Contains(HandleConstellationRequest))
+          conEvent.Subscribe(HandleConstellationRequest);
       });
     }
 
@@ -90,14 +117,12 @@ namespace StarMap.ViewModels
     {
       await Call(() =>
       {
-        // Prism handles unsubscribing for me, however, I want to do it explicitly, because I only want to listen when this VM is on.
-        // Alternatively I could put a filter to the Subscribe().
-        if (ConstellationsSubscriptionToken != null)
-        {
-          _eventAggregator.GetEvent<ConstellationSelectedEvent>().Unsubscribe(ConstellationsSubscriptionToken);
-          ConstellationsSubscriptionToken = null;
-        }
+        _eventAggregator.GetEvent<ConstellationSelectedEvent>().Unsubscribe(HandleConstellationRequest);
       });
     }
+     *    
+     */
+
+
   }
 }

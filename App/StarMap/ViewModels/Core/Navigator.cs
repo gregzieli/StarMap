@@ -30,9 +30,9 @@ namespace StarMap.ViewModels.Core
       await Navigate(uri, null);
     }
 
-    protected async Task Navigate(string uri, object param)
+    protected async Task Navigate(string uri, string key, object param)
     {
-      var navParams = new NavigationParameters() { { "TODO", param } };
+      var navParams = new NavigationParameters() { { key, param } };
       await Navigate(uri, navParams);
     }
 
@@ -53,12 +53,14 @@ namespace StarMap.ViewModels.Core
 
     public virtual async void OnNavigatedTo(NavigationParameters parameters)
     {
+      // Check if it works better on NavigatINGTo
+      // 1. hardware back button calls only this one
+      await Restore();
     }
 
     public virtual async void OnNavigatingTo(NavigationParameters parameters)
     {
-      // Check if it works better on NavigatINGTo
-      await Restore();
+      
     }
 
     /// <summary>
