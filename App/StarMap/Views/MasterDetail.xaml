@@ -2,47 +2,15 @@
 <MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
                   xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                   xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-                  xmlns:prism-bhv="clr-namespace:Prism.Behaviors;assembly=Prism.Forms"
                   prism:ViewModelLocator.AutowireViewModel="True"
                   x:Class="StarMap.Views.MasterDetail">
 
   <MasterDetailPage.Master>
-    <ContentPage Title="Default" Opacity="0.8">
+    <ContentPage Title="Default" Opacity=".9">
       <StackLayout Padding="20" Spacing="5">
-        <StackLayout IsVisible="{Binding MainPageActive}">
-          <Button Text="Constellations" Clicked="HideConstellations" />
-          <ListView x:Name="constellations"
-                  IsVisible="False"
-                  ItemsSource="{Binding Constellations}" 
-                  SelectedItem="{Binding SelectedConstellation}"
-                  RowHeight="30" 
-                  HeightRequest="150" >
-            <!--<ListView.Behaviors>
-            <prism-bhv:EventToCommandBehavior EventName="ItemSelected" 
-                                              Command="{Binding ConstellationSelectedCommand}"
-                                              EventArgsParameterPath="SelectedItem" />
-          </ListView.Behaviors>-->
-            <ListView.Header>
-              <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-                <Button Text="Show all" Command="{Binding ShowClearConstellationsCommand}" 
-                      CommandParameter="show" />
-                <Button Text="Clear all" Command="{Binding ShowClearConstellationsCommand}" 
-                      CommandParameter="clear" />
-              </StackLayout>
-            </ListView.Header>
-            <ListView.ItemTemplate>
-              <DataTemplate>
-                <SwitchCell Text="{Binding Name}" On="{Binding IsSelected}" OnChanged="SwitchChanged" />
-              </DataTemplate>
-            </ListView.ItemTemplate>
-          </ListView>
-        </StackLayout>
-        
-
-        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="MainPage"/>
+        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="TestOverlayPage"/>
         <Button Text="Settings" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/SettingsPage" />
         <Button Text="About" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/AboutPage" />
-
       </StackLayout>
     </ContentPage>
   </MasterDetailPage.Master>

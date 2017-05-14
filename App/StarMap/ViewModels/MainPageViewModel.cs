@@ -90,6 +90,7 @@ namespace StarMap.ViewModels
      *    - keeps the subscribers in check, but I think it's the opposite to what prism's EventAggregator was made for in such scenario.
      *    
      *    I'm going with option 1 for now. But I think since the difference in publiser's and subscriber's lifespan, option 2 is better in this case.
+     *    Because now the references are kept untill MasterDetailVM gets disposed, which is almost NEVER.
      *    
      *    OPTION 2:
     protected override async Task Restore()

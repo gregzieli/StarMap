@@ -19,14 +19,14 @@ namespace StarMap
       try
       {
         InitializeComponent();
-        NavigationService.NavigateAsync("StartPage");
+        NavigationService.NavigateAsync("MasterDetail/TestOverlayPage");
       }
       catch (Exception e)
       {
         ShowCrashPage(e);
       }
     }
-
+    
     private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
     {
       if (e.Observed) return;
@@ -57,8 +57,9 @@ namespace StarMap
       Container.RegisterTypeForNavigation<StarDetailPage, StarDetailPageViewModel>();
       Container.RegisterTypeForNavigation<SettingsPage>();
       Container.RegisterTypeForNavigation<AboutPage>();
+      Container.RegisterTypeForNavigation<TestOverlayPage>();
     }
-
+    
     protected override void OnSleep()
     {
       base.OnSleep();

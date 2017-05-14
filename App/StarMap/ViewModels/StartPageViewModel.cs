@@ -25,7 +25,7 @@ namespace StarMap.ViewModels
       if (p.IsNullOrEmpty())
         Navigate("MasterDetail/NavigationPage/SettingsPage");
       else
-        Navigate("MasterDetail/MainPage");
+        Navigate("MasterDetail/TestOverlayPage");
     }
   }
 }

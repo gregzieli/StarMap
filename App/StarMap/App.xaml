@@ -13,6 +13,7 @@
       <Color x:Key="DarkBackgroundColor">#C0C0C0</Color>
       <Color x:Key="MediumGrayTextColor">#4d4d4d</Color>
       <Color x:Key="LightTextColor">#999999</Color>
+      <Color x:Key="OverlayBackground">#C0808080</Color>
 
       <x:Boolean x:Key="True">True</x:Boolean>
       <x:Boolean x:Key="False">False</x:Boolean>
