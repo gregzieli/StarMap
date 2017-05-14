@@ -15,17 +15,17 @@ namespace StarMap.ViewModels
     {
     }
 
-    private DelegateCommand _startCommand;
-    public DelegateCommand StartCommand =>
-        _startCommand ?? (_startCommand = new DelegateCommand(Start));
+    //private DelegateCommand _startCommand;
+    //public DelegateCommand StartCommand =>
+    //    _startCommand ?? (_startCommand = new DelegateCommand(Start));
 
-    void Start()
-    {
-      var p = Settings.Geolocation;
-      if (p.IsNullOrEmpty())
-        Navigate("MasterDetail/NavigationPage/SettingsPage");
-      else
-        Navigate("MasterDetail/TestOverlayPage");
-    }
+    //void Start()
+    //{
+    //  var p = Settings.Geolocation;
+    //  if (p.IsNullOrEmpty())
+    //    Navigate("MasterDetail/NavigationPage/SettingsPage");
+    //  else
+    //    Navigate("MasterDetail/TestOverlayPage");
+    //}
   }
 }

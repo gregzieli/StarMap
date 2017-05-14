@@ -4,11 +4,12 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.StartPage">
-  <AbsoluteLayout>
-    <Button AbsoluteLayout.LayoutBounds=".5, .5, .25, .25" 
-            AbsoluteLayout.LayoutFlags="All" 
-            Text="Begin" 
-            Command="{Binding StartCommand}" />
-  </AbsoluteLayout>
-
+  <Label VerticalOptions="Center" HorizontalOptions="Center"
+         Text="
+           Here I could have some instructions with arrows, like &#x0d;&#x0a;
+           &lt;- navigation &#x0d;&#x0a;
+           -&gt; filters &#x0d;&#x0a;
+           &#92;&#47; status
+           &#x0d;&#x0a;&#x0d;&#x0a;
+           And don't worry about having MasterDetail opened here" />
 </ContentPage>

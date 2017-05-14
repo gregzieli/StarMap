@@ -20,8 +20,8 @@ namespace StarMap.Views
       RightPanel = new Overlay(rightOverlay, DockSide.Right, rightPanelButton.Width + rightOverlay.Padding.Left * 2);
       BottomPanel = new Overlay(bottomOverlay, DockSide.Bottom, bottomOverlay.RowDefinitions[0].Height.Value);
 
-      RightPanel.Collapse();
-      BottomPanel.Collapse();
+      RightPanel.Collapse(length: 0);
+      BottomPanel.Collapse(length: 0);
 
       base.OnAppearing();
     }
