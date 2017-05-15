@@ -21,6 +21,7 @@ namespace StarMap.ViewModels.Core
     }
 
     //Probably that's too much. Just make the manager a property.
+    // Should this Get() call Call(), or Call() should call Get()?
     protected T Get<T>(Func<IStarManager, T> fn)
     {
       return fn(StarManager);

@@ -2,20 +2,107 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:custom="clr-namespace:StarMap.Controls"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.MainPage">
 
-  <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
-    <OpenGLView BackgroundColor="Aqua" HeightRequest="100" WidthRequest="100">
+  <AbsoluteLayout>
+    <OpenGLView AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                 AbsoluteLayout.LayoutFlags="All">
       <OpenGLView.GestureRecognizers>
         <TapGestureRecognizer
-          Command="{Binding SelectStarCommand}" />
+          Tapped="TapGestureRecognizer_Tapped" Command="{Binding SelectStarCommand}"  />
       </OpenGLView.GestureRecognizers>
     </OpenGLView>
+    
+    <!-- #region overlays-->
+    <Grid x:Name="rightOverlay"
+          AbsoluteLayout.LayoutBounds="1, 1, .4, 1" 
+          AbsoluteLayout.LayoutFlags="All" 
+          BackgroundColor="{StaticResource OverlayBackground}" 
+          Padding="1, 10, 5, 20">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="20" />
+        <ColumnDefinition Width="*"  />
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="40" />
+      </Grid.RowDefinitions>
 
-    <Button Text="Show details" Command="{Binding ShowStarDetailsCommand}" />
-    <Button Text="Move to star" />
-  </StackLayout>
+      <Button Grid.Row="1" Grid.Column="1" Text="Reset" Clicked="ResetFiltersButtonClicked" Command="{Binding ResetFiltersCommand}" FontSize="Micro" />
 
+      <StackLayout VerticalOptions="Start">
+        <Button x:Name="rightPanelButton" Text="" Clicked="OnButtonClicked" />
+        <Button x:Name="starsPanelButton" Text="" Clicked="OnStarFilterPanelButtonClicked" />
+      </StackLayout>
 
+      <TableView x:Name="starFilters" Intent="Settings" Grid.Column="1" IsVisible="False">
+        <TableRoot Title="Star filters">
+          <TableSection Title="Section title">
+            <EntryCell Label="Name/designation"
+                       Placeholder="Search..." />
+            <custom:SliderCell Minimum="0" Maximum="1000" Label="Distance" SelectedValue="{Binding FilteredDistance}"/>
+            <custom:SliderCell Minimum="0" Maximum="100" Label="Magnitude" SelectedValue="{Binding FilteredMagnitude}"/>
+          </TableSection>
+        </TableRoot>
+      </TableView>
+      
+      <ListView x:Name="constellationFilters"
+                CachingStrategy="RecycleElement"
+                ItemsSource="{Binding Constellations}" 
+                SelectedItem="{Binding SelectedConstellation}"
+                RowHeight="30" Grid.Column="1"
+                IsVisible="False">
+        <!--<ListView.Behaviors>
+            <prism-bhv:EventToCommandBehavior EventName="ItemSelected" 
+                                              Command="{Binding ConstellationSelectedCommand}"
+                                              EventArgsParameterPath="SelectedItem" />
+          </ListView.Behaviors>-->
+        <ListView.Header>
+          <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
+            <Button Text="Clear all" Command="{Binding ShowClearConstellationsCommand}" 
+                    CommandParameter="clear" />
+            <Button Text="Show all" Command="{Binding ShowClearConstellationsCommand}" 
+                    CommandParameter="show" />
+          </StackLayout>
+        </ListView.Header>
+        <ListView.ItemTemplate>
+          <DataTemplate>
+            <!-- Consider using a checkbox, I could bind a command to it then - example at Petzold's book, page 387 -->
+            <SwitchCell Text="{Binding Name}" On="{Binding IsSelected}" />
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+
+    </Grid>
+
+    <Grid x:Name="bottomOverlay" 
+          AbsoluteLayout.LayoutBounds="1, 1, 1, .25" 
+          AbsoluteLayout.LayoutFlags="All" 
+          BackgroundColor="{StaticResource OverlayBackground}" 
+          Padding="10, 0">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="20" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+
+      <Label FontSize="Micro" VerticalTextAlignment="Center" TextColor="AntiqueWhite"
+             Text="Here will be some data about the current environment: Coordinates, distance from earth, tapped star id, etc."  />
+
+      <!-- it's like second row is upside down. VerticalOptions don't work however o.O, so I'm using margin.-->
+      <StackLayout Orientation="Horizontal" Grid.Row="1" HorizontalOptions="End">
+        <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>
+        <Button Text="Travel" />
+      </StackLayout>
+
+    </Grid>
+    <!-- #endregion -->
+
+    
+
+    
+    
+  </AbsoluteLayout>
+  
 </ContentPage>

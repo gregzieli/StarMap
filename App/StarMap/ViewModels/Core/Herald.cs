@@ -14,6 +14,7 @@ namespace StarMap.ViewModels.Core
   // says that 'The PubSubEvent<TPayload> is intended to be the base class for an application's or module's specific events'
   // So using this class would be against that. And to have generics using this custom event class would be an overkill, since 
   // the methods would need two type params (where TEventType : PubSubEvent<TPayload>).
+  // OK, so really:
   // If it turns out I only use one TPayload per event, it's fine to use this class, otherwise custom events are required.
   public abstract class Herald : Navigator
   {

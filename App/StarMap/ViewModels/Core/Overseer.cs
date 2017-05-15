@@ -14,7 +14,7 @@ namespace StarMap.ViewModels.Core
     }
 
     /// <summary>
-    /// Ensures that no command is executed when a VM is busy.
+    /// Ensures that no command is executed when the current VM is busy. Can be overriden.
     /// </summary>
     /// <returns>true, if not busy; false otherwise.</returns>
     protected virtual bool CanExecute() => !IsBusy;
@@ -32,6 +32,8 @@ namespace StarMap.ViewModels.Core
     /// <param name="fn">a delegate to execute.</param>
     protected async Task Call(Action fn)
     {
+      if (!CanExecute())
+        return;
       try
       {
         IsBusy = true;
@@ -84,6 +86,9 @@ namespace StarMap.ViewModels.Core
     /// <param name="onException">An action to execute upon catching an exception.</param>
     protected async Task CallAsync(Func<Task> fn)
     {
+      if (!CanExecute())
+        return;
+
       try
       {
         IsBusy = true;
@@ -107,6 +112,9 @@ namespace StarMap.ViewModels.Core
     /// <param name="callback">Delegate that operates on the data awaited.</param>
     protected async Task CallAsync<A>(Func<Task<A>> fn, Action<A> callback)
     {
+      if (!CanExecute())
+        return;
+
       try
       {
         IsBusy = true;

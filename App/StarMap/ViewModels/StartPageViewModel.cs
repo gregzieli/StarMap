@@ -15,6 +15,8 @@ namespace StarMap.ViewModels
     {
     }
 
+    // Old implementation - the concept has changed.
+
     //private DelegateCommand _startCommand;
     //public DelegateCommand StartCommand =>
     //    _startCommand ?? (_startCommand = new DelegateCommand(Start));
@@ -25,7 +27,7 @@ namespace StarMap.ViewModels
     //  if (p.IsNullOrEmpty())
     //    Navigate("MasterDetail/NavigationPage/SettingsPage");
     //  else
-    //    Navigate("MasterDetail/TestOverlayPage");
+    //    Navigate("MasterDetail/MainPage");
     //}
   }
 }

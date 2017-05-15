@@ -21,12 +21,6 @@ namespace StarMap.ViewModels.Core
 
     protected async void Navigate(string uri)
     {
-      // I dont like how this logicis handled here...
-      // But I wanted to avoid using some singleton to keep state for IsMainPage across VMs
-      // TODO: CONSTANTS!!!!!!
-
-      // TODO: Actually, move this to MasterDetailVM, just to navigate to main page use a dedicated command, not this global one.
-      MainPageActive = uri == "MainPage";
       await Navigate(uri, null);
     }
 
@@ -63,6 +57,10 @@ namespace StarMap.ViewModels.Core
       
     }
 
+    // Could make those two abstract to lose the async and the green underline, but then, 
+    // since Navigator is direct parent of more than one class, I would have to
+    // implement it a couple of times. This is just less code.
+
     /// <summary>
     /// Logic to restore VM's properties, and other actions done upon opening the page
     /// </summary>
@@ -73,12 +71,5 @@ namespace StarMap.ViewModels.Core
     /// Logic to be executed upon exiting a view model.
     /// </summary>
     protected virtual async Task CleanUp() { }
-
-    private bool _mainPageActive;
-    public bool MainPageActive
-    {
-      get { return _mainPageActive; }
-      set { SetProperty(ref _mainPageActive, value); }
-    }
   }
 }

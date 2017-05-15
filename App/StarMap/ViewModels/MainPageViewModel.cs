@@ -1,23 +1,42 @@
-﻿using System;
-using Prism.Commands;
-using Prism.Navigation;
-using StarMap.Cll.Abstractions;
-using StarMap.Cll.Models;
-using System.Collections.ObjectModel;
-using Prism.Events;
+﻿using Prism.Commands;
+using Prism.Mvvm;
 using StarMap.ViewModels.Core;
-using System.Threading.Tasks;
-using Prism.Services;
-using StarMap.Cll.Models.Cosmos;
-using System.Diagnostics;
-using StarMap.Events;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Prism.Navigation;
+using Prism.Services;
+using StarMap.Cll.Abstractions;
+using StarMap.Cll.Models.Cosmos;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
   public class MainPageViewModel : StarGazer
   {
-    IEventAggregator _eventAggregator;
+    private ObservableCollection<Constellation> _constellations;
+    public ObservableCollection<Constellation> Constellations
+    {
+      get { return _constellations; }
+      set { SetProperty(ref _constellations, value); }
+    }
+
+
+    private double _distance = 100;
+    public double FilteredDistance
+    {
+      get { return _distance; }
+      set { SetProperty(ref _distance, value, () => Debug.WriteLine($"Distance changed to: {value}")); }
+    }
+
+    private double _magnitude = 50;
+    public double FilteredMagnitude
+    {
+      get { return _magnitude; }
+      set { SetProperty(ref _magnitude, value, () => Debug.WriteLine($"Magnitude changed to: {value}")); }
+    }
 
     private Star _selectedStar;
     public Star SelectedStar
@@ -26,6 +45,7 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _selectedStar, value); }
     }
 
+
     private ObservableCollection<Star> _visibleStars;
     public ObservableCollection<Star> VisibleStars
     {
@@ -33,13 +53,31 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _visibleStars, value); }
     }
 
-    public DelegateCommand SelectStarCommand { get; private set; }    
+    //  give this one a different color.
+    private Constellation _selectedConstellation;
+    public Constellation SelectedConstellation
+    {
+      get { return _selectedConstellation; }
+      set { SetProperty(ref _selectedConstellation, value, () => ConstellationSelected(value)); }
+    }
+
+    private DelegateCommand _resetFiltersCommandCommand;
+    public DelegateCommand ResetFiltersCommand =>
+        _resetFiltersCommandCommand ?? (_resetFiltersCommandCommand = new DelegateCommand(() => { }));
+
+    // Setting individual switches should be handled maybe:
+    // extending the model here with an INotifyPropChanged implementation
+    // that could add/remove the value to some collection in this VM
+    // and each time that collection changes, GetStars is called with the filtered constellations.
+    private DelegateCommand<string> _showClearConstellationsCommand;
+    public DelegateCommand<string> ShowClearConstellationsCommand =>
+        _showClearConstellationsCommand ?? (_showClearConstellationsCommand = new DelegateCommand<string>(ShowClearConstellations));
+
+    public DelegateCommand SelectStarCommand { get; private set; }
     public DelegateCommand ShowStarDetailsCommand { get; private set; }
 
-    public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator, IStarManager starManager) 
-      : base(navigationService, pageDialogService, starManager)
+    public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager) : base(navigationService, pageDialogService, starManager)
     {
-      _eventAggregator = eventAggregator;
 
       // TODO: maybe move to OnNavigat[ed/ing]To
       VisibleStars = new ObservableCollection<Star>(
@@ -52,14 +90,6 @@ namespace StarMap.ViewModels
            // (That way I dont have to ShowStarDetailsCommand.RaiseCanExecuteChanged() in the SelectedStar setter)
            // And it's fluent, and u can observe as many props as u want
            .ObservesProperty(() => SelectedStar);
-
-      _eventAggregator.GetEvent<ConstellationSelectedEvent>().Subscribe(HandleConstellationRequest);
-    }
-
-    void HandleConstellationRequest(Constellation constellation)
-    {
-
-      Debug.WriteLine($"Selected {constellation?.Name ?? "null"}");
     }
 
     private async void ShowStarDetails()
@@ -75,55 +105,28 @@ namespace StarMap.ViewModels
         SelectedStar = null;
     }
 
+    private void ConstellationSelected(Constellation c)
+    {
+      Debug.WriteLine(c?.Name ?? "null");
+    }
 
+    private void ShowClearConstellations(string command)
+    {
+      bool action = command == "show";
+      foreach (var c in Constellations)
+        c.IsSelected = action;
+    }
 
-
-    /*
-     * OK, so the options are two:
-     * 1. Don't worry about unsubscribing, just use the filter upon subscribing or do a check in the handler (remember to lock!)
-     *    - Subscription occurs in the constructor, so no additional check is required
-     *      - new instance is created upon direct prism navigation, so not when hardware back button is used, 
-     *        navigation page back button (probably, not checked), or when being on the main page and tapping MainPage in the MasterView.
-     *      -  References to the disposed subscribers remain until the publisher gets disposed (MasterDetailVM in this case, which is long)
-     *         - if keepSubscriberReferenceAlive is true, referenes stay even after that.
-     * 2. Subscribing upon OnNavigatEDTo (not INGTo, because hardwareback button doesn't trigger it), unscubscribing with OnNavigatingFrom
-     *    - keeps the subscribers in check, but I think it's the opposite to what prism's EventAggregator was made for in such scenario.
-     *    
-     *    I'm going with option 1 for now. But I think since the difference in publiser's and subscriber's lifespan, option 2 is better in this case.
-     *    Because now the references are kept untill MasterDetailVM gets disposed, which is almost NEVER.
-     *    
-     *    OPTION 2:
     protected override async Task Restore()
     {
-      // Need to check if the event is already subscribed, otherwise I'm resubscribing
+      if (Constellations != null)
+        return;
+
       await Call(() =>
       {
-        // If there are many events, it would be nice to have a generic collection (dictionary extension), 
-        // that would allow to store <TEventType, Action<TPayload>> where TEventType : PubSubEvent<TPayload>
-        // and just iterate through that. Since it's only one, ore few more, there's no need. It's rather not event ment that way, 
-        // since to be perfectly thorough I would need two such collections, for events with and without the payload.
-        var conEvent = _eventAggregator.GetEvent<ConstellationSelectedEvent>();
-
-        // When the VM gets newed up by the Prism navigation, the action that this Contains checks differs from the previous one,
-        // so that the result is false. That's why in this scenario I unsubscribe manually.
-        //
-        // It's the desired behavior. If not specified otherwise (keepSubscriberReferenceAlive), 
-        // references to the subscriber (this) from the event are weak, which means, they get GC'd, along with this instance (eventually).
-        if (!conEvent.Contains(HandleConstellationRequest))
-          conEvent.Subscribe(HandleConstellationRequest);
+        var constellations = StarManager.GetConstellations();
+        Constellations = new ObservableCollection<Constellation>(constellations);
       });
     }
-
-    protected override async Task CleanUp()
-    {
-      await Call(() =>
-      {
-        _eventAggregator.GetEvent<ConstellationSelectedEvent>().Unsubscribe(HandleConstellationRequest);
-      });
-    }
-     *    
-     */
-
-
   }
 }
