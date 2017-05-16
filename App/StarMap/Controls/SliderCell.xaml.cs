@@ -24,7 +24,6 @@ namespace StarMap.Controls
         //slider.ValueChanged?.Invoke(slider, (double)newValue);
       });
     //public event EventHandler<double> ValueChanged;
-    BindableProperty.BindingPropertyChangedDelegate<double> del;
 
     public string Label
     {

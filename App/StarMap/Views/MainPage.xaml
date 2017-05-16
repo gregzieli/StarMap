@@ -37,13 +37,19 @@
         <Button x:Name="starsPanelButton" Text="" Clicked="OnStarFilterPanelButtonClicked" />
       </StackLayout>
 
-      <TableView x:Name="starFilters" Intent="Settings" Grid.Column="1" IsVisible="False">
-        <TableRoot Title="Star filters">
-          <TableSection Title="Section title">
+      <TableView x:Name="starFilters" Grid.Column="1" IsVisible="False"> <!-- There's no difference which intent. -->
+        <TableRoot>
+          <TableSection Title="Star filters" BindingContext="{Binding StarFilter}">
             <EntryCell Label="Name/designation"
-                       Placeholder="Search..." />
-            <custom:SliderCell Minimum="0" Maximum="1000" Label="Distance" SelectedValue="{Binding FilteredDistance}"/>
-            <custom:SliderCell Minimum="0" Maximum="100" Label="Magnitude" SelectedValue="{Binding FilteredMagnitude}"/>
+                       Placeholder="Search..."
+                       Text="{Binding DesignationQuery}"/>
+            <custom:SliderCell Minimum="0" Maximum="10000" Label="Distance" SelectedValue="{Binding MaxDistance}"/>
+            <custom:SliderCell Minimum="0" Maximum="100" Label="Magnitude" SelectedValue="{Binding MaxMagnitude}"/>
+          </TableSection>
+          <TableSection>
+            <ViewCell>
+              <Button Text="Filter" FontSize="Micro" Command="{Binding GetStarsCommand}"/>
+            </ViewCell>
           </TableSection>
         </TableRoot>
       </TableView>
@@ -61,10 +67,12 @@
           </ListView.Behaviors>-->
         <ListView.Header>
           <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
-            <Button Text="Clear all" Command="{Binding ShowClearConstellationsCommand}" 
-                    CommandParameter="clear" />
-            <Button Text="Show all" Command="{Binding ShowClearConstellationsCommand}" 
-                    CommandParameter="show" />
+            <Button Text="Clear all" 
+                    Command="{Binding ShowClearConstellationsCommand}"
+                    CommandParameter="{StaticResource False}" />
+            <Button Text="Show all" 
+                    Command="{Binding ShowClearConstellationsCommand}" 
+                    CommandParameter="{StaticResource True}" />
           </StackLayout>
         </ListView.Header>
         <ListView.ItemTemplate>
@@ -90,7 +98,6 @@
       <Label FontSize="Micro" VerticalTextAlignment="Center" TextColor="AntiqueWhite"
              Text="Here will be some data about the current environment: Coordinates, distance from earth, tapped star id, etc."  />
 
-      <!-- it's like second row is upside down. VerticalOptions don't work however o.O, so I'm using margin.-->
       <StackLayout Orientation="Horizontal" Grid.Row="1" HorizontalOptions="End">
         <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>
         <Button Text="Travel" />
@@ -98,10 +105,6 @@
 
     </Grid>
     <!-- #endregion -->
-
-    
-
-    
     
   </AbsoluteLayout>
   

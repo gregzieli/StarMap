@@ -1,7 +1,5 @@
 TODO: 
  - checkbox zamiast switchcell dla konstelacji
- - tableview w settingsach (s.604)
-   - textcell i imagecell mają Command
  - startPage będzie miał instrukcje, co jest gdzie
 	- nowa logika do sprawdzania współrzędnych
  ? searchBar dla listy konstelacji https://forums.xamarin.com/discussion/28899/listview-search-bar

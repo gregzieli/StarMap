@@ -79,6 +79,17 @@ namespace StarMap.Dal.Providers
       {
         var query = context.Table<StarEntity>();
 
+        if (!filter.DesignationQuery.IsNullOrWhiteSpace())
+        {
+          var search = filter.DesignationQuery;
+          query = query.Where(x => x.ProperName.Contains(search)
+            || x.BayerName.Contains(search)
+            || x.FlamsteedName.Contains(search)
+            || search.Contains(x.ProperName)
+            || search.Contains(x.BayerName)
+            || search.Contains(x.FlamsteedName));
+        }         
+
         if (!filter.ConstellationsIds.IsNullOrEmpty())
           query = query.Where(x => filter.ConstellationsIds.Contains(x.ConstellationId.GetValueOrDefault()));
 

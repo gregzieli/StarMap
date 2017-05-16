@@ -14,6 +14,8 @@ namespace StarMap.Cll.Filters
 
     public double? MaxMagnitude { get; set; }
 
-    public int? Limit { get; set; }
+    public int? Limit { get; set; } = 1000;
+
+    public string DesignationQuery { get; set; }
   }
 }
