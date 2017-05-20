@@ -1,6 +1,6 @@
 ﻿using Microsoft.Practices.Unity;
 using NUnit.Framework;
-using StarMap.LogicTest.Objects;
+using StarMap.LogicTest.Classes;
 using System;
 
 namespace StarMap.Common.Test

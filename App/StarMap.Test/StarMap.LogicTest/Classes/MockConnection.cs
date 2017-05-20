@@ -2,7 +2,7 @@
 using StarMap.Cll.Abstractions;
 using System.IO;
 
-namespace StarMap.LogicTest.Objects
+namespace StarMap.LogicTest.Classes
 {
   public class MockConnection : IDatabaseConnection
   {    

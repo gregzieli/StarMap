@@ -3,7 +3,7 @@ using StarMap.Bll.Managers;
 using StarMap.Cll.Abstractions;
 using StarMap.Dal.Providers;
 
-namespace StarMap.LogicTest.Objects
+namespace StarMap.LogicTest.Classes
 {
   public static class UnityBootstrapper
   {

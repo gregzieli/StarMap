@@ -81,13 +81,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Core\RandomGenerator.cs" />
+    <Compile Include="Collections.cs" />
     <Compile Include="Configuration\SetupFixture.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Mappers.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="Objects\MockConnection.cs" />
-    <Compile Include="Objects\UnityBootstrapper.cs" />
+    <Compile Include="Classes\Dog.cs" />
+    <Compile Include="Classes\MockConnection.cs" />
+    <Compile Include="Classes\Core\ObservableImplementation.cs" />
+    <Compile Include="Classes\Core\UnityBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

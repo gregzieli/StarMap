@@ -39,6 +39,7 @@
     <Compile Include="Abstractions\Services\IDatabaseConnection.cs" />
     <Compile Include="Abstractions\Managers\IStarManager.cs" />
     <Compile Include="Abstractions\Providers\IStarDataProvider.cs" />
+    <Compile Include="Abstractions\Services\IDeviceRotation.cs" />
     <Compile Include="Constants\Filters.cs" />
     <Compile Include="Constants\Names.cs" />
     <Compile Include="Filters\StarFilter.cs" />

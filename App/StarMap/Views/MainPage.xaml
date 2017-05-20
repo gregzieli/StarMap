@@ -25,15 +25,9 @@
         <ColumnDefinition Width="20" />
         <ColumnDefinition Width="*"  />
       </Grid.ColumnDefinitions>
-      <Grid.RowDefinitions>
-        <RowDefinition Height="*" />
-        <RowDefinition Height="40" />
-      </Grid.RowDefinitions>
 
-      <Button Grid.Row="1" Grid.Column="1" Text="Reset" Clicked="ResetFiltersButtonClicked" Command="{Binding ResetFiltersCommand}" FontSize="Micro" />
-
-      <StackLayout VerticalOptions="Start">
-        <Button x:Name="rightPanelButton" Text="" Clicked="OnButtonClicked" />
+      <StackLayout x:Name="rightPanelButtons" VerticalOptions="Start">
+        <Button x:Name="constellationsPanelButton" Text="" Clicked="OnConstellationsButtonClicked" />
         <Button x:Name="starsPanelButton" Text="" Clicked="OnStarFilterPanelButtonClicked" />
       </StackLayout>
 
@@ -48,7 +42,10 @@
           </TableSection>
           <TableSection>
             <ViewCell>
-              <Button Text="Filter" FontSize="Micro" Command="{Binding GetStarsCommand}"/>
+              <Button Text="Filter" Command="{Binding GetStarsCommand}" FontSize="Micro"/>
+            </ViewCell>
+            <ViewCell>
+              <Button Text="Reset" Command="{Binding ResetFiltersCommand}" FontSize="Micro" />
             </ViewCell>
           </TableSection>
         </TableRoot>
@@ -57,7 +54,7 @@
       <ListView x:Name="constellationFilters"
                 CachingStrategy="RecycleElement"
                 ItemsSource="{Binding Constellations}" 
-                SelectedItem="{Binding SelectedConstellation}"
+                SelectedItem="{Binding SelectedConstellation, Mode=TwoWay}"
                 RowHeight="30" Grid.Column="1"
                 IsVisible="False">
         <!--<ListView.Behaviors>
@@ -67,17 +64,16 @@
           </ListView.Behaviors>-->
         <ListView.Header>
           <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
-            <Button Text="Clear all" 
-                    Command="{Binding ShowClearConstellationsCommand}"
+            <Button Text="Hide all" 
+                    Command="{Binding FilterConstellationsCommand}"
                     CommandParameter="{StaticResource False}" />
             <Button Text="Show all" 
-                    Command="{Binding ShowClearConstellationsCommand}" 
+                    Command="{Binding FilterConstellationsCommand}" 
                     CommandParameter="{StaticResource True}" />
           </StackLayout>
         </ListView.Header>
         <ListView.ItemTemplate>
           <DataTemplate>
-            <!-- Consider using a checkbox, I could bind a command to it then - example at Petzold's book, page 387 -->
             <SwitchCell Text="{Binding Name}" On="{Binding IsSelected}" />
           </DataTemplate>
         </ListView.ItemTemplate>

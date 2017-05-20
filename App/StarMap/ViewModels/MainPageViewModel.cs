@@ -13,38 +13,18 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using StarMap.Cll.Constants;
 using StarMap.Cll.Filters;
+using StarMap.Core.Models;
+using System.ComponentModel;
 
 namespace StarMap.ViewModels
 {
   public class MainPageViewModel : StarGazer
   {
-    private ObservableCollection<Constellation> _constellations;
-    public ObservableCollection<Constellation> Constellations
+    private ObservantCollection<Constellation> _constellations;
+    public ObservantCollection<Constellation> Constellations
     {
       get { return _constellations; }
       set { SetProperty(ref _constellations, value); }
-    }
-
-
-    private double _distance;
-    public double FilteredDistance
-    {
-      get { return _distance; }
-      set { SetProperty(ref _distance, value, () => Debug.WriteLine($"Distance changed to: {value}")); }
-    }
-
-    private double _magnitude;
-    public double FilteredMagnitude
-    {
-      get { return _magnitude; }
-      set { SetProperty(ref _magnitude, value, () => Debug.WriteLine($"Magnitude changed to: {value}")); }
-    }
-
-    private string _designation;
-    public string FilteredDesignation
-    {
-      get { return _designation; }
-      set { SetProperty(ref _designation, value, () => Debug.WriteLine($"Designation changed to: {value}")); }
     }
 
     private Star _selectedStar;
@@ -61,7 +41,6 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _starFilter, value); }
     }
 
-
     private ObservableCollection<Star> _visibleStars;
     public ObservableCollection<Star> VisibleStars
     {
@@ -74,7 +53,7 @@ namespace StarMap.ViewModels
     public Constellation SelectedConstellation
     {
       get { return _selectedConstellation; }
-      set { SetProperty(ref _selectedConstellation, value, () => ConstellationSelected(value)); }
+      set { SetProperty(ref _selectedConstellation, value, () => OnConstellationSelected(value)); }
     }
 
     private DelegateCommand _resetFiltersCommandCommand;
@@ -85,10 +64,10 @@ namespace StarMap.ViewModels
     // extending the model here with an INotifyPropChanged implementation
     // that could add/remove the value to some collection in this VM
     // and each time that collection changes, GetStars is called with the filtered constellations.
-    private DelegateCommand<object> _showClearConstellationsCommand;
-    public DelegateCommand<object> ShowClearConstellationsCommand =>
+    private DelegateCommand<object> _filterConstellationsCommand;
+    public DelegateCommand<object> FilterConstellationsCommand =>
       // T could not be bool, weird.
-        _showClearConstellationsCommand ?? (_showClearConstellationsCommand = new DelegateCommand<object>(ShowClearConstellations));
+        _filterConstellationsCommand ?? (_filterConstellationsCommand = new DelegateCommand<object>(FilterConstellations));
 
     private DelegateCommand _getStarsCommand;
     public DelegateCommand GetStarsCommand =>
@@ -107,25 +86,26 @@ namespace StarMap.ViewModels
            .ObservesProperty(() => SelectedStar);
     }
 
+    #region methods
+
     private async void ShowStarDetails()
       //Another option:
       //Navigate($"StarDetailPage?id={SelectedStar.Id}");
       => await Navigate("StarDetailPage", "TODO", SelectedStar.Id);
 
-    private void SelectStar()
+    private void OnConstellationSelected(Constellation c)
     {
-      if (SelectedStar == null)
-        SelectedStar = VisibleStars[new Random().Next(VisibleStars.Count)];
-      else
-        SelectedStar = null;
-    }
-
-    private void ConstellationSelected(Constellation c)
-    {
+      // TODO: All the stars in this constellation should be highlighted somehow.
       Debug.WriteLine(c?.Name ?? "null");
     }
 
-    private void ShowClearConstellations(object command)
+    private void OnConstellationFiltered(object sender, PropertyChangedEventArgs e)
+    {
+      Constellation c = sender as Constellation;
+      Debug.WriteLine($"{c.Name} is {(c.IsSelected ? "visible" : "hidden")}");
+    }
+
+    private void FilterConstellations(object command)
     {
       bool action = (bool)command;
       foreach (var c in Constellations)
@@ -144,9 +124,16 @@ namespace StarMap.ViewModels
       Debug.WriteLine($"    Name {StarFilter.DesignationQuery}");
     }
 
+    private void GetConstellations()
+    {
+      var constellations = StarManager.GetConstellations();
+      Constellations = new ObservantCollection<Constellation>(constellations);
+      Constellations.ElementChanged += OnConstellationFiltered;
+    }
+
     private void ResetFilter()
     {
-      ShowClearConstellations(true);
+      FilterConstellations(true);
       SelectedStar = null;
 
       StarFilter = new StarFilter()
@@ -157,6 +144,22 @@ namespace StarMap.ViewModels
         MaxMagnitude = Filters.DEF_MAG
       };
     }
+    #endregion
+
+
+
+    // TODO: this one is a mock functionality. Remove.
+    private void SelectStar()
+    {
+      if (SelectedStar == null)
+        SelectedStar = VisibleStars[new Random().Next(VisibleStars.Count)];
+      else
+        SelectedStar = null;
+    }
+
+    
+
+    
 
     protected override async Task Restore()
     {
@@ -165,11 +168,20 @@ namespace StarMap.ViewModels
 
       await Call(() =>
       {
-        var constellations = StarManager.GetConstellations();
-        Constellations = new ObservableCollection<Constellation>(constellations);
-
+        GetConstellations();
         ResetFilter();
         GetStars();
+      });
+    }
+
+    protected override async Task CleanUp()
+    {
+      await Call(() =>
+      {
+        Constellations.Clear();
+        Constellations = null;
+        VisibleStars.Clear();
+        VisibleStars = null;
       });
     }
   }

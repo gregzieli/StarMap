@@ -3,9 +3,6 @@ using Plugin.Geolocator.Abstractions;
 using StarMap.Cll.Models.Geolocation;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StarMap.LogicTest
 {

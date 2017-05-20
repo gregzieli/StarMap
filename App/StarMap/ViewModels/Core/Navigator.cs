@@ -12,16 +12,24 @@ namespace StarMap.ViewModels.Core
 
     public virtual DelegateCommand<string> NavigateCommand { get; private set; }
 
+    public virtual DelegateCommand GoBackCommand { get; private set; }
+
     public Navigator(INavigationService navigationService, IPageDialogService pageDialogService)
       : base(pageDialogService)
     {
       _navigationService = navigationService;
       NavigateCommand = new DelegateCommand<string>(Navigate);
+      GoBackCommand = new DelegateCommand(GoBack);
     }
 
     protected async void Navigate(string uri)
     {
       await Navigate(uri, null);
+    }
+
+    public async void GoBack()
+    {
+      await CallAsync(() => _navigationService.GoBackAsync());
     }
 
     protected async Task Navigate(string uri, string key, object param)
@@ -34,12 +42,7 @@ namespace StarMap.ViewModels.Core
     {
       await CallAsync(() => _navigationService.NavigateAsync(uri, navParams));
     }
-
-    protected async Task GoBack()
-    {
-      await CallAsync(() => _navigationService.GoBackAsync());
-    }
-
+    
     public virtual async void OnNavigatedFrom(NavigationParameters parameters)
     {
       await CleanUp();

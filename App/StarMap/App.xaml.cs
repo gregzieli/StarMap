@@ -19,7 +19,7 @@ namespace StarMap
       try
       {
         InitializeComponent();
-        NavigationService.NavigateAsync("MasterDetail/StartPage");
+        NavigationService.NavigateAsync("MasterDetail/NavigationPage/StartPage");
       }
       catch (Exception e)
       {
