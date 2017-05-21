@@ -9,7 +9,7 @@ namespace StarMap.Droid
 {
   [Activity(Label = "@string/app_name", 
     Theme = "@style/MyTheme", 
-    ScreenOrientation = ScreenOrientation.SensorLandscape,
+    ScreenOrientation = ScreenOrientation.Landscape,
     MainLauncher = true, 
     ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
   public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity

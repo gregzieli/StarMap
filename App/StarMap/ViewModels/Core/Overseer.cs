@@ -32,8 +32,8 @@ namespace StarMap.ViewModels.Core
     /// <param name="fn">a delegate to execute.</param>
     protected async Task Call(Action fn)
     {
-      if (!CanExecute())
-        return;
+      //if (!CanExecute())
+      //  return;
       try
       {
         IsBusy = true;

@@ -8,9 +8,9 @@
   <MasterDetailPage.Master>
     <ContentPage Title="Default" Opacity=".9">
       <StackLayout Padding="20" Spacing="5">
-        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/MainPage"/>
-        <Button Text="Settings" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/SettingsPage" />
-        <Button Text="About" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/AboutPage" />
+        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="MainPage"/>
+        <Button Text="Settings" Command="{Binding NavigateCommand}" CommandParameter="SettingsPage" />
+        <Button Text="About" Command="{Binding NavigateCommand}" CommandParameter="AboutPage" />
       </StackLayout>
     </ContentPage>
   </MasterDetailPage.Master>

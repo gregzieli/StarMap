@@ -15,11 +15,15 @@ using StarMap.Cll.Constants;
 using StarMap.Cll.Filters;
 using StarMap.Core.Models;
 using System.ComponentModel;
+using StarMap.Cll.Abstractions.Services;
+using Prism.AppModel;
 
 namespace StarMap.ViewModels
 {
-  public class MainPageViewModel : StarGazer
+  public class MainPageViewModel : StarGazer, IApplicationLifecycle
   {
+    IDeviceRotation _motionDetector;
+
     private ObservantCollection<Constellation> _constellations;
     public ObservantCollection<Constellation> Constellations
     {
@@ -76,8 +80,11 @@ namespace StarMap.ViewModels
     public DelegateCommand SelectStarCommand { get; private set; }
     public DelegateCommand ShowStarDetailsCommand { get; private set; }
 
-    public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager) : base(navigationService, pageDialogService, starManager)
+    public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IDeviceRotation motionDetector) 
+      : base(navigationService, pageDialogService, starManager)
     {
+      _motionDetector = motionDetector;
+
       SelectStarCommand = new DelegateCommand(SelectStar);
       ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
            // Cannot use ObservesCanExecute extension here, but it's OK to use ObservesProperty
@@ -163,6 +170,9 @@ namespace StarMap.ViewModels
 
     protected override async Task Restore()
     {
+      _motionDetector.Start();
+      _motionDetector.RotationChanged += OnRotationChanged;
+
       if (Constellations != null)
         return;
 
@@ -174,15 +184,40 @@ namespace StarMap.ViewModels
       });
     }
 
+    
+
     protected override async Task CleanUp()
     {
+      // Since I call Navigate using the CallAsync, which sets IsBusy to true, and this method gets executed 
+      // BEFORE the awaited navigation, it would never be executed (canExecute => !isBusy)
+      // For now I just disabled the check for canExecute on the Call  method.
       await Call(() =>
       {
+        _motionDetector.Stop();
+        _motionDetector.RotationChanged -= OnRotationChanged;
+        Constellations.ElementChanged -= OnConstellationFiltered;
         Constellations.Clear();
         Constellations = null;
         VisibleStars.Clear();
         VisibleStars = null;
       });
+    }
+
+    private void OnRotationChanged(object sender, RotationChangedEventArgs e)
+    {
+      Debug.WriteLine($"{e.Azimuth}, {e.Pitch}, {e.Roll}");
+    }
+
+    public void OnResume()
+    {
+      _motionDetector.Start();
+      _motionDetector.RotationChanged += OnRotationChanged;
+    }
+
+    public void OnSleep()
+    {
+      _motionDetector.Stop();
+      _motionDetector.RotationChanged -= OnRotationChanged;
     }
   }
 }

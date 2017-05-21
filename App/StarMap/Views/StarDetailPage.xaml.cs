@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace StarMap.Views
 {
@@ -8,5 +9,10 @@ namespace StarMap.Views
     {
       InitializeComponent();
     }
+    
+    //protected override bool OnBackButtonPressed()
+    //{
+    //  return true;
+    //}
   }
 }
