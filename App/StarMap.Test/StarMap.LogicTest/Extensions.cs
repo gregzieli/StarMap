@@ -8,7 +8,7 @@ namespace StarMap.LogicTest
   public class Extensions
   {
     [Test]
-    public void Collections()
+    public void CollectionBasics()
     {
       var foo = new object[] { 3, 1, 5 };
       var boo = new object[3];
@@ -28,6 +28,16 @@ namespace StarMap.LogicTest
       Assert.IsFalse(list.IsNullOrEmpty());
       list.Clear();
       Assert.IsTrue(list.IsNullOrEmpty());
+    }
+
+    [Test]
+    public void Copying()
+    {
+      IList<float> a = new List<float>() { 5, 2, 1, 6, 123, 890 };
+      float[] dest = new float[6];
+
+      a.CopyTo(dest, 0);
+      a.ShallowCopy(dest);
     }
   }
 }

@@ -7,6 +7,6 @@ namespace StarMap.Views
     public SettingsPage()
     {
       InitializeComponent();
-    }
+    }    
   }
 }

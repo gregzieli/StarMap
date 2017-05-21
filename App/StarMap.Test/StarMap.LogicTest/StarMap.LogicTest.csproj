@@ -85,6 +85,7 @@
     <Compile Include="Collections.cs" />
     <Compile Include="Configuration\SetupFixture.cs" />
     <Compile Include="Connection.cs" />
+    <Compile Include="Doodles.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Mappers.cs" />
     <Compile Include="Extensions.cs" />

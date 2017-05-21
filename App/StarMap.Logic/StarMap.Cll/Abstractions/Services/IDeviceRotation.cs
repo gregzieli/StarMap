@@ -1,19 +1,14 @@
-﻿namespace StarMap.Cll.Abstractions.Services
+﻿using StarMap.Core.Models;
+using System;
+
+namespace StarMap.Cll.Abstractions.Services
 {
-  public interface IDeviceRotation
+  public interface IDeviceRotation : IDisposable
   {
-    Rotation GetDeviceRotation();
-  }
+    void Start();
 
-  // Move this class to Core
-  public class Rotation
-  {
-    public float[] Values { get; set; }
+    void Stop();
 
-    public float Azimuth => Values[0];
-
-    public float Pitch => Values[1];
-
-    public float Roll => Values[2];
+    event EventHandler<RotationChangedEventArgs> RotationChanged;
   }
 }

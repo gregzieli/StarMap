@@ -46,6 +46,12 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeviceMotion.Plugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.DeviceMotion.1.1.2\lib\MonoAndroid10\DeviceMotion.Plugin.dll</HintPath>
+    </Reference>
+    <Reference Include="DeviceMotion.Plugin.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.DeviceMotion.1.1.2\lib\MonoAndroid10\DeviceMotion.Plugin.Abstractions.dll</HintPath>
+    </Reference>
     <Reference Include="ExifLib, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\ExifLib.PCL.1.0.1\lib\portable-net45+sl50+win+WindowsPhoneApp81+wp80+Xamarin.iOS10+MonoAndroid10+MonoTouch10\ExifLib.dll</HintPath>
     </Reference>
@@ -161,6 +167,7 @@
     <Compile Include="MainApplication.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sensors\DeviceRotationImplementation.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="..\..\StarMap.Logic\StarMap.Dal\Database\Universe.db3">
@@ -186,6 +193,10 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\StarMap.Core\StarMap.Core.csproj">
+      <Project>{460A7F1E-A1C2-41A1-A570-C858ACB232C9}</Project>
+      <Name>StarMap.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\StarMap.Logic\StarMap.Cll\StarMap.Cll.csproj">
       <Project>{FD438FA4-9F7A-44EB-8238-6EE411EF9E0A}</Project>
       <Name>StarMap.Cll</Name>
@@ -221,9 +232,7 @@
       <Link>Resources\drawable\refresh.png</Link>
     </AndroidResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Sensors\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

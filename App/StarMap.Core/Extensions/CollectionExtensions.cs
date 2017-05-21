@@ -20,5 +20,20 @@ namespace StarMap.Core.Extensions
     {
       Array.Clear(source, 0, source.Length);
     }
+
+    // I know there is ICollection.CopyTo, but this is just in case that one is slower.
+    public static void ShallowCopy<T>(this IList<T> source, T[] destination)
+    {
+      for (int i = 0; i < source.Count; i++)
+        destination[i] = source[i];
+    }
+
+    public static void ShallowCopy<T>(this IEnumerable<T> source, T[] destination)
+    {
+      var enumerator = source.GetEnumerator();
+      int i = 0;
+      while (enumerator.MoveNext())
+        destination[i++] = enumerator.Current;
+    }
   }
 }
