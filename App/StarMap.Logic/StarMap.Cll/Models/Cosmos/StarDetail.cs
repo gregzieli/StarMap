@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Xamarin.Forms;
 
 namespace StarMap.Cll.Models.Cosmos
 {
-  public class StarDetail
+  public class StarDetail : StarBase
   {
-    public int Id { get; set; }
 
     public int? HipparcosId { get; set; }
 
@@ -21,17 +16,7 @@ namespace StarMap.Cll.Models.Cosmos
     /// </summary>
     public string Base { get; set; }
 
-    public string ProperName { get; set; }
-
-    public string FlamsteedName { get; set; }
-
-    public string BayerName { get; set; }
-
     public Constellation Constellation { get; set; }
-
-    public double ParsecDistance { get; set; }
-
-    public double LightYearDistance { get; set; }
 
     /// <summary>
     /// Gets or sets the star's brightness as visible from Earth.

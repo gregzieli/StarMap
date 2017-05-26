@@ -1,6 +1,8 @@
-﻿using StarMap.Cll.Models;
+﻿//using StarMap.Cll.Models;
 using StarMap.Core.Extensions;
-using static StarMap.Cll.Models.Color;
+using Xamarin.Forms;
+using static Xamarin.Forms.Color;
+//using static StarMap.Cll.Models.Color;
 
 namespace StarMap.Dal.Mappers
 {

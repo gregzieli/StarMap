@@ -1,3 +1,4 @@
-TODO: 
+﻿TODO: 
  - startPage będzie miał instrukcje, co jest gdzie
-	- nowa logika do sprawdzania współrzędnych
+ - nowa logika do sprawdzania współrzędnych
+ - jeżeli przy przejściu na detale usuwamy główną stronę, trzeba dodać zapisanie filtrów.

@@ -1,16 +1,8 @@
 ﻿namespace StarMap.Cll.Models.Cosmos
 {
-  public class Star
+  public class Star : StarBase
   {
-    public int Id { get; set; }
-
-    public string Designation { get; set; }
-
     public int? ConstellationId { get; set; }
-
-    public double ParsecDistance { get; set; }
-
-    public double LightYearDistance { get; set; }
 
     /// <summary>
     /// Gets or sets the star's brightness as visible from Earth.
@@ -23,9 +15,9 @@
 
     public double Declination { get; set; }
 
-    public double RightAscensionRad { get; set; }
+    public double RightAscensionRad { get; set; } // Probably TBR
 
-    public double DeclinationRad { get; set; }
+    public double DeclinationRad { get; set; } // Probably TBR
 
     public double X { get; set; }
 

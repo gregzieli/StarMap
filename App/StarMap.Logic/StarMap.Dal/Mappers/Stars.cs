@@ -1,6 +1,4 @@
-﻿using StarMap.Cll.Models;
-using StarMap.Cll.Models.Cosmos;
-using StarMap.Core.Extensions;
+﻿using StarMap.Cll.Models.Cosmos;
 using DbEntityStar = StarMap.Dal.Database.Contracts.Star;
 
 namespace StarMap.Dal.Mappers
@@ -17,31 +15,52 @@ namespace StarMap.Dal.Mappers
         Id = source.Id,
         AbsoluteMagnitude = source.AbsoluteMagnitude,
         ApparentMagnitude = source.ApparentMagnitude,
-        Designation = GetStarDesignation(source.ProperName, source.BayerName, source.FlamsteedName),
+        Name = source.ProperName,
+        Bayer = source.BayerName,
+        Flamsteed = source.FlamsteedName,
         // probably constellation not needed here also
         ConstellationId = source.ConstellationId,
         Declination = source.Declination,
-        DeclinationRad = source.DeclinationRad,
+        DeclinationRad = source.DeclinationRad, // Probably TBR
         ParsecDistance = source.ParsecDistance,
-        LightYearDistance = GetLightYears(source.ParsecDistance),
         RightAscension = source.RightAscension,
-        RightAscensionRad = source.RightAscensionRad,
+        RightAscensionRad = source.RightAscensionRad, // Probably TBR
         X = source.X,
         Y = source.Y,
         Z = source.Z
       };
     }
 
-    public static string GetStarDesignation(string proper, string bayer, string flamsteed)
+    public static StarDetail MapDetail(DbEntityStar source)
     {
-      return proper ?? (!flamsteed.IsNullOrEmpty()
-        ? flamsteed + " " + bayer : bayer);
-    }
+      if (source == null)
+        return null;
 
-    // TODO: Move this to some calculator/utils class
-    public static double GetLightYears(double parsecs)
-    {
-      return parsecs * 3.262;
+      return new StarDetail()
+      {
+        Id = source.Id,
+        HipparcosId = source.HipparcosId,
+        HenryDraperId = source.HenryDraperId,
+        GlieseId = source.GlieseId,
+        Base = source.Base,
+        AbsoluteMagnitude = source.AbsoluteMagnitude,
+        ApparentMagnitude = source.ApparentMagnitude,
+        Bayer = source.BayerName,
+        Color = Colors.MapColor(source.SpectralType),
+        SpectralType = source.SpectralType,
+        Declination = source.Declination,
+        DeclinationRad = source.DeclinationRad,
+        Flamsteed = source.FlamsteedName,
+        ParsecDistance = source.ParsecDistance,
+        Luminosity = source.Luminosity,
+        Name = source.ProperName,
+        RightAscension = source.RightAscension,
+        RightAscensionRad = source.RightAscensionRad,
+        X = source.X,
+        Y = source.Y,
+        Z = source.Z,
+        Constellation = Constellations.Map(source.Constellation)
+      };
     }
   }
 }

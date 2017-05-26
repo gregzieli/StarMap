@@ -7,7 +7,7 @@ namespace StarMap.Cll.Abstractions
 {
   public interface IStarManager
   {
-    IEnumerable<Constellation> GetConstellations();
+    IList<Constellation> GetConstellations();
 
     IEnumerable<Star> GetStars(StarFilter filter);
 

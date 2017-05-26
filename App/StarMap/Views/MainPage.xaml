@@ -92,7 +92,7 @@
       </Grid.RowDefinitions>
 
       <Label FontSize="Micro" VerticalTextAlignment="Center" TextColor="AntiqueWhite"
-             Text="Here will be some data about the current environment: Coordinates, distance from earth, tapped star id, etc."  />
+             Text="{Binding StatusTextTemplate}"  />
 
       <StackLayout Orientation="Horizontal" Grid.Row="1" HorizontalOptions="End">
         <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>

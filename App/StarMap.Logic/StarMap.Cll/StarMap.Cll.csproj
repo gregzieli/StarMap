@@ -43,9 +43,9 @@
     <Compile Include="Constants\Filters.cs" />
     <Compile Include="Constants\Names.cs" />
     <Compile Include="Filters\StarFilter.cs" />
-    <Compile Include="Models\Color.cs" />
     <Compile Include="Models\Cosmos\Constellation.cs" />
     <Compile Include="Models\Core\Bindable\MultiSelectable.cs" />
+    <Compile Include="Models\Cosmos\StarBase.cs" />
     <Compile Include="Models\Geolocation\DegreeCoordinate.cs" />
     <Compile Include="Models\Geolocation\ExtendedPosition.cs" />
     <Compile Include="Models\Cosmos\Star.cs" />

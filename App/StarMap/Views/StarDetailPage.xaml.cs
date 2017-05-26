@@ -9,9 +9,11 @@ namespace StarMap.Views
     {
       InitializeComponent();
     }
-    
+
     //protected override bool OnBackButtonPressed()
     //{
+    //  var a = (ViewModels.Core.Navigator)BindingContext;
+    //  a.NavigateTest(new Uri("ms-app:///MasterDetail/MainPage", UriKind.Absolute));
     //  return true;
     //}
   }

@@ -5,8 +5,42 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.StarDetailPage">
 
-  <StackLayout>
-    <Label Text="{Binding Star.Id}" />
-  </StackLayout>
+  <Grid Padding="10" ColumnSpacing="10" RowSpacing="10" BindingContext="{Binding Star}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="3*" />
+    </Grid.ColumnDefinitions>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+      <RowDefinition Height="2*" />
+    </Grid.RowDefinitions>
+
+    <BoxView Color="{Binding Color}" />
+
+    <StackLayout  Grid.Column="1">
+      <StackLayout Orientation="Horizontal">
+        <Label Text="{Binding HipparcosId, StringFormat='Hipparcos: {0}'}" />
+        <Label Text="{Binding HenryDraperId, StringFormat='Henry-Draper: {0}'}" />
+        <Label Text="{Binding GlieseId, StringFormat='Gliese: {0}'}" />
+        </StackLayout>
+      <StackLayout Orientation="Horizontal">
+        <Label Text="{Binding Name, StringFormat='Proper name: {0}'}" />
+        <Label Text="{Binding Bayer, StringFormat='Bayer name: {0}'}" />
+        <Label Text="{Binding Flamsteed, StringFormat='Flamsteed name: {0}'}" />
+      </StackLayout>
+
+      <Label Text="{Binding Constellation.Name, StringFormat='Constellation: {0}'}" />
+    </StackLayout>
+
+    <StackLayout Grid.Row="1">
+      <Label Text="{Binding ParsecDistance, StringFormat='Distance from Earth: {0} pc'}" />
+      <Label Text="{Binding ApparentMagnitude, StringFormat='Apparent magnitude: {0}'}" />
+      <Label Text="{Binding AbsoluteMagnitude, StringFormat='Absolute magnitude: {0}'}" />
+      <Label Text="{Binding SpectralType, StringFormat='Spectral type: {0}'}" />
+      <Label Text="{Binding Luminosity, StringFormat='Luminosity: {0}'}" />
+    </StackLayout>
+
+
+  </Grid>
 
 </ContentPage>

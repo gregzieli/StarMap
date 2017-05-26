@@ -17,7 +17,7 @@ namespace StarMap.Bll.Managers
       _provider = provider;
     }
 
-    public IEnumerable<Constellation> GetConstellations()
+    public IList<Constellation> GetConstellations()
     {
       var constellations = _provider.GetConstellations();
 

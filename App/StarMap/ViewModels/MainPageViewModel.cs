@@ -38,6 +38,13 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _selectedStar, value); }
     }
 
+    private string _statusTextTemplate;
+    public string StatusTextTemplate
+    {
+      get { return _statusTextTemplate; }
+      set { SetProperty(ref _statusTextTemplate, value); }
+    }
+
     private StarFilter _starFilter;
     public StarFilter StarFilter
     {
@@ -96,9 +103,10 @@ namespace StarMap.ViewModels
     #region methods
 
     private async void ShowStarDetails()
-      //Another option:
-      //Navigate($"StarDetailPage?id={SelectedStar.Id}");
-      => await Navigate("StarDetailPage", "TODO", SelectedStar.Id);
+    //Another option:
+    //Navigate($"StarDetailPage?id={SelectedStar.Id}");
+    //=> await Navigate("StarDetailPage", "id", SelectedStar.Id);
+    => await Navigate(new Uri($"ms-app:///MasterDetail/StarDetailPage", UriKind.Absolute), "id", SelectedStar.Id);
 
     private void OnConstellationSelected(Constellation c)
     {
@@ -159,9 +167,17 @@ namespace StarMap.ViewModels
     private void SelectStar()
     {
       if (SelectedStar == null)
+      {
         SelectedStar = VisibleStars[new Random().Next(VisibleStars.Count)];
+        StatusTextTemplate = $"{(SelectedStar.ConstellationId != null ? Constellations.First(x => x.Id == SelectedStar.ConstellationId.Value).Abbreviation + " | " : "")}" +
+          $"Star: {SelectedStar.Designation ?? "No designation"} | Distance: {SelectedStar.ParsecDistance} pc"; 
+      }        
       else
+      {
         SelectedStar = null;
+        StatusTextTemplate = null;
+      }
+        
     }
 
     

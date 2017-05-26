@@ -1,8 +1,10 @@
 ﻿using DeviceMotion.Plugin;
 using DeviceMotion.Plugin.Abstractions;
+using System;
 
 namespace StarMap.Bll.Managers
 {
+  [Obsolete("I went with the full on-platform implementation to get the device rotation.")]
   public class SensorManager
   {
     const MotionSensorType ACCELEROMETER = MotionSensorType.Accelerometer;

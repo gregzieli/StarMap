@@ -84,7 +84,7 @@
     <Compile Include="Classes\Core\RandomGenerator.cs" />
     <Compile Include="Collections.cs" />
     <Compile Include="Configuration\SetupFixture.cs" />
-    <Compile Include="Connection.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="Doodles.cs" />
     <Compile Include="Location.cs" />
     <Compile Include="Mappers.cs" />

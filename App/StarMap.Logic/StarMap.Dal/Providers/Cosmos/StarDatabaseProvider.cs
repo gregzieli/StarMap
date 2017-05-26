@@ -17,7 +17,7 @@ namespace StarMap.Dal.Providers
     // Inject the context (supports mock)
     public StarDatabaseProvider(IDatabaseConnection context) : base(context) { }
 
-    public IEnumerable<Constellation> GetConstellations()
+    public IList<Constellation> GetConstellations()
     {
       return Read(context =>
       {
@@ -36,39 +36,11 @@ namespace StarMap.Dal.Providers
         var entity = context.Find<StarEntity>(id);
 
         if (entity == null)
-          // TODO: Custom ex, Ex strategy!
           throw new Exception("Element missing from the DB!");
 
-        var constellation = entity.ConstellationId != null
-          ? context.Find<ConstellationEntity>(entity.ConstellationId)
-          : null;
+        entity.Constellation = context.Find<ConstellationEntity>(entity.ConstellationId);
 
-        var retVal = new StarDetail()
-        {
-          Id = entity.Id,
-          HipparcosId = entity.HipparcosId,
-          HenryDraperId = entity.HenryDraperId,
-          GlieseId = entity.GlieseId,
-          Base = entity.Base,
-          AbsoluteMagnitude = entity.AbsoluteMagnitude,
-          ApparentMagnitude = entity.ApparentMagnitude,
-          BayerName = entity.BayerName,
-          Color = Colors.MapColor(entity.SpectralType),
-          SpectralType = entity.SpectralType,
-          Declination = entity.Declination,
-          DeclinationRad = entity.DeclinationRad,
-          FlamsteedName = entity.FlamsteedName,
-          ParsecDistance = entity.ParsecDistance,
-          LightYearDistance = Stars.GetLightYears(entity.ParsecDistance),
-          Luminosity = entity.Luminosity,
-          ProperName = entity.ProperName,
-          RightAscension = entity.RightAscension,
-          RightAscensionRad = entity.RightAscensionRad,
-          X = entity.X,
-          Y = entity.Y,
-          Z = entity.Z,
-          Constellation = Constellations.Map(constellation)
-        };
+        var retVal = Stars.MapDetail(entity);
         return retVal;
       });
     }
@@ -79,16 +51,14 @@ namespace StarMap.Dal.Providers
       {
         var query = context.Table<StarEntity>();
 
-        if (!filter.DesignationQuery.IsNullOrWhiteSpace())
-        {
-          var search = filter.DesignationQuery;
+        string search = filter.DesignationQuery;
+        if (!search.IsNullOrWhiteSpace())
           query = query.Where(x => x.ProperName.Contains(search)
-            || x.BayerName.Contains(search)
-            || x.FlamsteedName.Contains(search)
-            || search.Contains(x.ProperName)
-            || search.Contains(x.BayerName)
-            || search.Contains(x.FlamsteedName));
-        }         
+           || x.BayerName.Contains(search)
+           || x.FlamsteedName.Contains(search)
+           || search.Contains(x.ProperName)
+           || search.Contains(x.BayerName)
+           || search.Contains(x.FlamsteedName));
 
         if (!filter.ConstellationsIds.IsNullOrEmpty())
           query = query.Where(x => filter.ConstellationsIds.Contains(x.ConstellationId.GetValueOrDefault()));

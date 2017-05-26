@@ -22,31 +22,35 @@ namespace StarMap.ViewModels.Core
       GoBackCommand = new DelegateCommand(GoBack);
     }
 
-    protected async void Navigate(string uri)
-    {
-      await Navigate(uri, null);
-    }
-
     public async void GoBack()
+     => await CallAsync(() => _navigationService.GoBackAsync());
+
+    protected async void Navigate(string path) 
+      => await Navigate(path, null);
+
+    protected async void Navigate(Uri uri)
+      => await Navigate(uri, null);   
+
+    protected async Task Navigate(string path, string key, object param)
     {
-      await CallAsync(() => _navigationService.GoBackAsync());
+      var navParams = new NavigationParameters() { { key, param } };
+      await Navigate(path, navParams);
     }
 
-    protected async Task Navigate(string uri, string key, object param)
+    protected async Task Navigate(Uri uri, string key, object param)
     {
       var navParams = new NavigationParameters() { { key, param } };
       await Navigate(uri, navParams);
     }
 
-    protected async Task Navigate(string uri, NavigationParameters navParams)
-    {
-      await CallAsync(() => _navigationService.NavigateAsync(uri, navParams));
-    }
-    
+    protected async Task Navigate(string path, NavigationParameters navParams)
+      => await CallAsync(() => _navigationService.NavigateAsync(path, navParams));
+
+    protected async Task Navigate(Uri uri, NavigationParameters navParams)
+      => await CallAsync(() => _navigationService.NavigateAsync(uri, navParams));
+
     public virtual async void OnNavigatedFrom(NavigationParameters parameters)
-    {
-      await CleanUp();
-    }
+      => await CleanUp();
 
     public virtual async void OnNavigatedTo(NavigationParameters parameters)
     {

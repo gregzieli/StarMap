@@ -1,4 +1,5 @@
-﻿using Prism.Navigation;
+﻿using System;
+using Prism.Navigation;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Models.Cosmos;
@@ -26,7 +27,7 @@ namespace StarMap.ViewModels
     public override void OnNavigatingTo(NavigationParameters parameters)
     {
       base.OnNavigatingTo(parameters);
-      Star = _starManager.GetStarDetails((int)parameters["TODO"]);
+      Star = _starManager.GetStarDetails((int)parameters["id"]);
     }
   }
 }
