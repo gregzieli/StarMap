@@ -1,8 +1,6 @@
-﻿using StarMap.Core.Extensions;
-using NUnit.Framework;
-using System.Collections.Generic;
-using StarMap.Cll.Models;
+﻿using NUnit.Framework;
 using StarMap.Dal.Mappers;
+using Xamarin.Forms;
 
 namespace StarMap.LogicTest
 {
