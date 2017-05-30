@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace StarMap.LogicTest.Classes
+namespace StarMap.Core.Utils
 {
-  public static class RandomGenerator
+  public static class Randomizer
   {
     static Random random = new Random();
     const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";

@@ -1,12 +1,14 @@
-﻿namespace StarMap.LogicTest.Classes
+﻿using StarMap.Core.Utils;
+
+namespace StarMap.LogicTest.Classes
 {
   public class Dog : ObservableImplementation
   {
     public Dog()
     {
-      Name = RandomGenerator.RandomString(5);
-      Breed = RandomGenerator.RandomString(8);
-      Age = RandomGenerator.RandomInt(1, 15);
+      Name = Randomizer.RandomString(5);
+      Breed = Randomizer.RandomString(8);
+      Age = Randomizer.RandomInt(1, 15);
     }
 
     private string _name;

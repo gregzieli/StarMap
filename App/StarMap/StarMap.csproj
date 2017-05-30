@@ -45,6 +45,7 @@
     <Compile Include="Converters\StringToDoubleConverter.cs" />
     <Compile Include="Events\ConstellationSelectedEvent.cs" />
     <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Models\ThreeDee\Detail.cs" />
     <Compile Include="UnityBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\Core\Herald.cs" />
@@ -114,6 +115,9 @@
     <Reference Include="Prism.Unity.Forms, Version=6.3.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Unity.Forms.6.3.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Prism.Unity.Forms.dll</HintPath>
     </Reference>
+    <Reference Include="Urho.Forms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\UrhoSharp.Forms.1.4.47\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Urho.Forms.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Xamarin.Forms.2.3.4.247\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
     </Reference>
@@ -177,6 +181,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Icons\refresh.png" />
+    <Content Include="Assets\Textures\space1.png" />
+    <Content Include="Assets\Textures\space2.png" />
+    <Content Include="Assets\Textures\space3.png" />
+    <Content Include="Assets\Textures\star1.jpg" />
+    <Content Include="Assets\Textures\star2.jpg" />
+    <Content Include="Assets\Textures\star3.jpg" />
+    <Content Include="Assets\Textures\star4.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\AboutPage.xaml">
