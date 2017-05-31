@@ -18,7 +18,6 @@ namespace StarMap.Dal.Mappers
         Name = source.ProperName,
         Bayer = source.BayerName,
         Flamsteed = source.FlamsteedName,
-        // probably constellation not needed here also
         ConstellationId = source.ConstellationId,
         Declination = source.Declination,
         DeclinationRad = source.DeclinationRad, // Probably TBR
@@ -46,7 +45,6 @@ namespace StarMap.Dal.Mappers
         AbsoluteMagnitude = source.AbsoluteMagnitude,
         ApparentMagnitude = source.ApparentMagnitude,
         Bayer = source.BayerName,
-        Color = Colors.MapColor(source.SpectralType),
         SpectralType = source.SpectralType,
         Declination = source.Declination,
         DeclinationRad = source.DeclinationRad,

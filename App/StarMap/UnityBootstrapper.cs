@@ -1,6 +1,8 @@
 ﻿using Microsoft.Practices.Unity;
+using StarMap.Bll.Helpers;
 using StarMap.Bll.Managers;
 using StarMap.Cll.Abstractions;
+using StarMap.Cll.Abstractions.Services;
 using StarMap.Dal.Providers;
 using Xamarin.Forms;
 
@@ -13,6 +15,7 @@ namespace StarMap
       // Nice fluent syntax
       container
         .RegisterType<ILocationManager, LocationManager>()
+        .RegisterType<IStarPainter, StarPainter>()
         .RegisterType<IStarManager, StarManager>()
         .RegisterType<IStarDataProvider, StarDatabaseProvider>(
         // Thanks to Prism, the  xamarin DependencyService registrations are done automatically

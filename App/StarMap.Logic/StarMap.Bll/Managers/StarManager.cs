@@ -1,6 +1,6 @@
 ﻿using StarMap.Cll.Abstractions;
+using StarMap.Cll.Abstractions.Services;
 using StarMap.Cll.Filters;
-using StarMap.Cll.Models;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
 using System;
@@ -11,10 +11,12 @@ namespace StarMap.Bll.Managers
   public class StarManager : BaseManager, IStarManager
   {
     IStarDataProvider _provider;
+    IStarPainter _painter;
 
-    public StarManager(IStarDataProvider provider)
+    public StarManager(IStarDataProvider provider, IStarPainter painter)
     {
       _provider = provider;
+      _painter = painter;
     }
 
     public IList<Constellation> GetConstellations()
@@ -36,6 +38,7 @@ namespace StarMap.Bll.Managers
     public StarDetail GetStarDetails(int id)
     {
       var star = _provider.GetStarDetails(id);
+      star.Color = _painter.GetColor(star);
       return star;
     }
   }

@@ -247,23 +247,83 @@
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\StarMap\Assets\Textures\space3.png">
-      <Link>Assets\Data\Textures\space3.png</Link>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_darkblue_dark.png">
+      <Link>Assets\Data\Textures\star_darkblue_dark.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star1.jpg">
-      <Link>Assets\Data\Textures\star1.jpg</Link>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_darkblue_light.png">
+      <Link>Assets\Data\Textures\star_darkblue_light.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star2.jpg">
-      <Link>Assets\Data\Textures\star2.jpg</Link>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_lightblue_dark.png">
+      <Link>Assets\Data\Textures\star_lightblue_dark.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star3.jpg">
-      <Link>Assets\Data\Textures\star3.jpg</Link>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_lightblue_light.png">
+      <Link>Assets\Data\Textures\star_lightblue_light.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_orange_dark1.jpg">
+      <Link>Assets\Data\Textures\star_orange_dark1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_orange_dark2.png">
+      <Link>Assets\Data\Textures\star_orange_dark2.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_orange_light1.jpg">
+      <Link>Assets\Data\Textures\star_orange_light1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_orange_light2.png">
+      <Link>Assets\Data\Textures\star_orange_light2.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_red_dark1.jpg">
+      <Link>Assets\Data\Textures\star_red_dark1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_red_dark2.jpg">
+      <Link>Assets\Data\Textures\star_red_dark2.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_red_light1.jpg">
+      <Link>Assets\Data\Textures\star_red_light1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_red_light2.png">
+      <Link>Assets\Data\Textures\star_red_light2.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_red_light3.png">
+      <Link>Assets\Data\Textures\star_red_light3.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_white1.jpg">
+      <Link>Assets\Data\Textures\star_white1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_yellow_dark.png">
+      <Link>Assets\Data\Textures\star_yellow_dark.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap\Assets\Textures\star_yellow_light.png">
+      <Link>Assets\Data\Textures\star_yellow_light.png</Link>
     </AndroidAsset>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />

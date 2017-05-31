@@ -181,12 +181,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Icons\refresh.png" />
+    <Content Include="Assets\Textures\star_yellow_light.png" />
+    <Content Include="Assets\Textures\star_yellow_dark.png" />
+    <Content Include="Assets\Textures\star_lightblue_light.png" />
+    <Content Include="Assets\Textures\star_lightblue_dark.png" />
+    <Content Include="Assets\Textures\star_darkblue_light.png" />
+    <Content Include="Assets\Textures\star_darkblue_dark.png" />
+    <Content Include="Assets\Textures\star_white1.jpg" />
+    <Content Include="Assets\Textures\star_orange_light1.jpg" />
+    <Content Include="Assets\Textures\star_orange_dark1.jpg" />
+    <Content Include="Assets\Textures\star_orange_light2.png" />
+    <Content Include="Assets\Textures\star_orange_dark2.png" />
+    <Content Include="Assets\Textures\star_red_light3.png" />
+    <Content Include="Assets\Textures\star_red_light2.png" />
+    <Content Include="Assets\Textures\star_red_dark1.jpg" />
+    <Content Include="Assets\Textures\star_red_light1.jpg" />
+    <Content Include="Assets\Textures\star_red_dark2.jpg" />
     <Content Include="Assets\Textures\space1.png" />
     <Content Include="Assets\Textures\space2.png" />
-    <Content Include="Assets\Textures\space3.png" />
-    <Content Include="Assets\Textures\star1.jpg" />
-    <Content Include="Assets\Textures\star2.jpg" />
-    <Content Include="Assets\Textures\star3.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\AboutPage.xaml">

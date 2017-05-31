@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers\Settings.cs" />
+    <Compile Include="Helpers\StarPainter.cs" />
     <Compile Include="Managers\BaseManager.cs" />
     <Compile Include="Managers\LocationManager.cs" />
     <Compile Include="Managers\SensorManager.cs" />

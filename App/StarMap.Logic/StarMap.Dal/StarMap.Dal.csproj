@@ -37,7 +37,6 @@
   <ItemGroup>
     <Compile Include="Database\Contracts\Constellation.cs" />
     <Compile Include="Database\Contracts\Star.cs" />
-    <Compile Include="Mappers\Colors.cs" />
     <Compile Include="Mappers\Constellations.cs" />
     <Compile Include="Mappers\Stars.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -27,7 +27,7 @@ namespace StarMap.Models.ThreeDee
     Node _cameraNode;
     Node _starNode;
 
-    public IDictionary<XFColor, Material> StarTextures { get; set; }
+    public IDictionary<XFColor, IList<Material>> StarTextures { get; set; }
 
     private StarDetail _star;
     public StarDetail Star
@@ -47,13 +47,49 @@ namespace StarMap.Models.ThreeDee
     void GetTextures()
     {
       // TODO
-      StarTextures = new Dictionary<XFColor, Material>()
+      StarTextures = new Dictionary<XFColor, IList<Material>>()
       {
-        { Red, Material.FromImage("Textures/star1.jpg") },
-        { Orange, Material.FromImage("Textures/star2.jpg") },
-        { Yellow, Material.FromImage("Textures/star3.jpg") },
-        { White, Material.FromImage("Textures/star2.jpg") },
-        { Blue, Material.FromImage("Textures/star3.jpg") }
+        {
+          Red, new List<Material>()
+            {
+              Material.FromImage("Textures/star_red_dark1.jpg"),
+              Material.FromImage("Textures/star_red_dark2.jpg"),
+              Material.FromImage("Textures/star_red_light1.jpg"),
+              Material.FromImage("Textures/star_red_light2.png"),
+              Material.FromImage("Textures/star_red_light3.png")
+            }
+        },
+        {
+          Orange, new List<Material>
+            {
+              Material.FromImage("Textures/star_orange_dark1.jpg"),
+              Material.FromImage("Textures/star_orange_dark2.png"),
+              Material.FromImage("Textures/star_orange_light1.jpg"),
+              Material.FromImage("Textures/star_orange_light2.png")
+            }
+        },
+        {
+          Yellow, new List<Material>
+            {
+              Material.FromImage("Textures/star_yellow_dark.png"),
+              Material.FromImage("Textures/star_yellow_light.png")
+            }
+        },
+        {
+          White, new List<Material>
+            {
+              Material.FromImage("Textures/star_white1.jpg")
+            }
+        },
+        {
+          Blue, new List<Material>
+            {
+              Material.FromImage("Textures/star_darkblue_dark.png"),
+              Material.FromImage("Textures/star_darkblue_light.png"),
+              Material.FromImage("Textures/star_lightblue_light.png"),
+              Material.FromImage("Textures/star_lightblue_dark.png")
+            }
+        }
       };
     }
 
@@ -73,7 +109,7 @@ namespace StarMap.Models.ThreeDee
       skyboxNode.SetScale(100);
       Skybox skybox = skyboxNode.CreateComponent<Skybox>();
       skybox.Model = CoreAssets.Models.Box;
-      skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 3)}.png"));
+      skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 2)}.png"));
 
       _starNode.Position = new Vector3(0, 0, 2);
       Sphere star = _starNode.CreateComponent<Sphere>();
@@ -96,8 +132,11 @@ namespace StarMap.Models.ThreeDee
     void SetStar(StarDetail star)
     {
       _star = star;
+
+      var colorTextures = StarTextures[star.Color];
+
       var a = _starNode.GetComponent<Sphere>();
-      a.SetMaterial(StarTextures[star.Color]);
+      a.SetMaterial(colorTextures[Randomizer.RandomInt(0, colorTextures.Count - 1)]);
     }
   }
 }
