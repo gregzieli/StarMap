@@ -20,7 +20,6 @@
 
     <urho:UrhoSurface x:Name="surface" Margin="10, 40" />
 
-
     <StackLayout Grid.Column="1" Margin="10">
       <StackLayout Orientation="Horizontal">
         <Label Text="{Binding HipparcosId, StringFormat='Hipparcos: {0}'}" />

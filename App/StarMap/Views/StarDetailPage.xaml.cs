@@ -1,4 +1,5 @@
-﻿using StarMap.Models.ThreeDee;
+﻿using StarMap.Cll.Models.Cosmos;
+using StarMap.Models.ThreeDee;
 using System;
 using Urho.Forms;
 using Xamarin.Forms;
@@ -23,7 +24,9 @@ namespace StarMap.Views
         //  if (mWidth < mHeight) skip = true;
         // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
       };
-      await surface.Show<Detail>(options);
+
+      var urho = await surface.Show<Detail>(options).ConfigureAwait(continueOnCapturedContext: false);
+      urho.Star = (StarDetail)surface.BindingContext;
     }
 
     protected override void OnDisappearing()

@@ -187,7 +187,6 @@
     <Content Include="Assets\Textures\star1.jpg" />
     <Content Include="Assets\Textures\star2.jpg" />
     <Content Include="Assets\Textures\star3.jpg" />
-    <Content Include="Assets\Textures\star4.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\AboutPage.xaml">
