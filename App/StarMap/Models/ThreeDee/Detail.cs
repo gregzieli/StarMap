@@ -11,6 +11,7 @@ using Urho.Actions;
 using Urho.Shapes;
 using XFColor = Xamarin.Forms.Color;
 using static Xamarin.Forms.Color;
+using System;
 
 namespace StarMap.Models.ThreeDee
 {
@@ -39,21 +40,34 @@ namespace StarMap.Models.ThreeDee
 
     protected override async void Start()
     {
-      base.Start();
-      GetTextures();
-      await CreateScene();
+      try
+      {
+        base.Start();
+        GetTextures();
+        await CreateScene();
+      }
+      catch (System.Exception e)
+      {
+        // TODO: perfect place for prism's pubsub event
+        throw;
+      }
     }
 
     void GetTextures()
     {
-      // TODO
+      // TODO: Not final
       StarTextures = new Dictionary<XFColor, IList<Material>>()
       {
         {
-          Red, new List<Material>()
+          DarkRed, new List<Material>()
             {
               Material.FromImage("Textures/star_red_dark1.jpg"),
               Material.FromImage("Textures/star_red_dark2.jpg"),
+            }
+        },
+        {
+          Red, new List<Material>()
+            {
               Material.FromImage("Textures/star_red_light1.jpg"),
               Material.FromImage("Textures/star_red_light2.png"),
               Material.FromImage("Textures/star_red_light3.png")
@@ -84,10 +98,15 @@ namespace StarMap.Models.ThreeDee
         {
           Blue, new List<Material>
             {
-              Material.FromImage("Textures/star_darkblue_dark.png"),
-              Material.FromImage("Textures/star_darkblue_light.png"),
               Material.FromImage("Textures/star_lightblue_light.png"),
               Material.FromImage("Textures/star_lightblue_dark.png")
+            }
+        },
+        {
+          DarkBlue, new List<Material>
+            {
+              Material.FromImage("Textures/star_darkblue_dark.png"),
+              Material.FromImage("Textures/star_darkblue_light.png")
             }
         }
       };
@@ -133,10 +152,14 @@ namespace StarMap.Models.ThreeDee
     {
       _star = star;
 
+      var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 8, 1.2, 0.5);
+      _starNode.SetScale(Convert.ToSingle(scale));
+
       var colorTextures = StarTextures[star.Color];
 
       var a = _starNode.GetComponent<Sphere>();
       a.SetMaterial(colorTextures[Randomizer.RandomInt(0, colorTextures.Count - 1)]);
+      
     }
   }
 }

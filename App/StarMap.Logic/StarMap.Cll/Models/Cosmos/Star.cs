@@ -1,4 +1,6 @@
-﻿namespace StarMap.Cll.Models.Cosmos
+﻿using StarMap.Core.Extensions;
+
+namespace StarMap.Cll.Models.Cosmos
 {
   public class Star : StarBase
   {
@@ -24,5 +26,7 @@
     public double Y { get; set; }
 
     public double Z { get; set; }
+
+    public string Designation => Name ?? (!Flamsteed.IsNullOrEmpty() ? $"{Flamsteed} {Bayer}" : Bayer);
   }
 }

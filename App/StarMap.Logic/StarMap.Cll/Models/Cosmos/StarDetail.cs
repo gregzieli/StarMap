@@ -4,7 +4,6 @@ namespace StarMap.Cll.Models.Cosmos
 {
   public class StarDetail : StarBase
   {
-
     public int? HipparcosId { get; set; }
 
     public int? HenryDraperId { get; set; }
@@ -27,22 +26,20 @@ namespace StarMap.Cll.Models.Cosmos
 
     public string SpectralType { get; set; }
 
+    public double? ColorIndex { get; set; }
+
     public Color Color { get; set; }
 
     public double RightAscension { get; set; }
 
     public double Declination { get; set; }
 
-    public double RightAscensionRad { get; set; }
-
-    public double DeclinationRad { get; set; }
-
-    public double X { get; set; }
-
-    public double Y { get; set; }
-
-    public double Z { get; set; }
-
+    // from https://github.com/astronexus/HYG-Database:
+    // Star's luminosity as a multiple of Solar luminosity
     public double Luminosity { get; set; }
+
+    public double? TemperatureKelvin { get; set; }
+
+    public double? TemperatureCelcius => TemperatureKelvin.HasValue ? TemperatureKelvin - 273.15 : null;
   }
 }

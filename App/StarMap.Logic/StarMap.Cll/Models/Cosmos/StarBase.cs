@@ -14,8 +14,6 @@ namespace StarMap.Cll.Models.Cosmos
 
     public double ParsecDistance { get; set; }
 
-    public string Designation => Name ?? (!Flamsteed.IsNullOrEmpty() ? $"{Flamsteed} {Bayer}" : Bayer);
-
     public double LightYearDistance => ParsecDistance * 3.262;
 
     // Keep it in case I dont want it here, but in manager or some utils class in CLL.

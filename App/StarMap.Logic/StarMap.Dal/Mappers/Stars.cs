@@ -47,16 +47,12 @@ namespace StarMap.Dal.Mappers
         Bayer = source.BayerName,
         SpectralType = source.SpectralType,
         Declination = source.Declination,
-        DeclinationRad = source.DeclinationRad,
         Flamsteed = source.FlamsteedName,
         ParsecDistance = source.ParsecDistance,
         Luminosity = source.Luminosity,
+        ColorIndex = source.ColorIndex,
         Name = source.ProperName,
         RightAscension = source.RightAscension,
-        RightAscensionRad = source.RightAscensionRad,
-        X = source.X,
-        Y = source.Y,
-        Z = source.Z,
         Constellation = Constellations.Map(source.Constellation)
       };
     }

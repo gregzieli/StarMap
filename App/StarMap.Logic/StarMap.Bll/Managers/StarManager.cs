@@ -11,12 +11,13 @@ namespace StarMap.Bll.Managers
   public class StarManager : BaseManager, IStarManager
   {
     IStarDataProvider _provider;
-    IStarPainter _painter;
+    // There really is no reason to not store the logic in Astronomer just here, in another method.
+    IAstronomer _astronomer;
 
-    public StarManager(IStarDataProvider provider, IStarPainter painter)
+    public StarManager(IStarDataProvider provider, IAstronomer astronomer)
     {
       _provider = provider;
-      _painter = painter;
+      _astronomer = astronomer;
     }
 
     public IList<Constellation> GetConstellations()
@@ -38,7 +39,9 @@ namespace StarMap.Bll.Managers
     public StarDetail GetStarDetails(int id)
     {
       var star = _provider.GetStarDetails(id);
-      star.Color = _painter.GetColor(star);
+      star.Color = _astronomer.GetColor(star.SpectralType);
+      if (star.ColorIndex.HasValue)
+        star.TemperatureKelvin = _astronomer.GetTemperature(star.ColorIndex.Value);
       return star;
     }
   }
