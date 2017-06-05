@@ -25,8 +25,7 @@ namespace StarMap.Models.ThreeDee
     public Detail(ApplicationOptions options) : base(options) { }
 
     Scene _scene;
-    Node _cameraNode;
-    Node _starNode;
+    Node _lightNode, _cameraNode, _starNode;
 
     public IDictionary<XFColor, IList<Material>> StarTextures { get; set; }
 
@@ -121,8 +120,8 @@ namespace StarMap.Models.ThreeDee
 
       Camera camera = _cameraNode.CreateComponent<Camera>();
 
-      Node lightNode = _cameraNode.CreateChild();
-      Light light = lightNode.CreateComponent<Light>();
+      _lightNode = _cameraNode.CreateChild();
+      Light light = _lightNode.CreateComponent<Light>();
 
       Node skyboxNode = _scene.CreateChild();
       skyboxNode.SetScale(100);
@@ -159,7 +158,8 @@ namespace StarMap.Models.ThreeDee
 
       var a = _starNode.GetComponent<Sphere>();
       a.SetMaterial(colorTextures[Randomizer.RandomInt(0, colorTextures.Count - 1)]);
-      
+
+      var light = _lightNode.GetComponent<Light>();
     }
   }
 }

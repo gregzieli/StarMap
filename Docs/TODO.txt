@@ -3,3 +3,5 @@
  - nowa logika do sprawdzania współrzędnych
  - jeżeli przy przejściu na detale usuwamy główną stronę, trzeba dodać zapisanie filtrów.
  - na mainPage - eventToCommandBehavior - event Appear czy jakiś taki jak jest (no ten, co ma handler onAppearing) -- dzięki temu będę mógł zrobić uhroapp.start w VM, a nie .xaml.cs
+ ? prism pubsub na exception w urho
+ - lepsze filtry domyślne
