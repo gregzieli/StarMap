@@ -5,7 +5,7 @@
              xmlns:custom="clr-namespace:StarMap.Controls"
              xmlns:const="clr-namespace:StarMap.Cll.Constants;assembly=StarMap.Cll"
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="StarMap.Views.MainPage">
+             x:Class="StarMap.Views.MainPage" >
 
   <AbsoluteLayout>
     <OpenGLView AbsoluteLayout.LayoutBounds="0, 0, 1, 1"

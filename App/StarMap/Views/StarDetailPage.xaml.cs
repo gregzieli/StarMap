@@ -1,6 +1,4 @@
-﻿using StarMap.Cll.Models.Cosmos;
-using StarMap.Models.ThreeDee;
-using System;
+﻿using StarMap.ViewModels;
 using Urho.Forms;
 using Xamarin.Forms;
 
@@ -15,18 +13,9 @@ namespace StarMap.Views
 
     protected override async void OnAppearing()
     {
-      var options = new Urho.ApplicationOptions(assetsFolder: "Data")
-      {
-        //Orientation = Urho.ApplicationOptions.OrientationType.LandscapeAndPortrait,
-        // iOS only - which is a shame, because now I have to ensure the view height < width
-        // from https://github.com/xamarin/urho/blob/master/Urho3D/Urho3D_Android/Sdl/SDLSurface.java
-        // if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) 
-        //  if (mWidth < mHeight) skip = true;
-        // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
-      };
-
-      var urho = await surface.Show<Detail>(options).ConfigureAwait(continueOnCapturedContext: false);
-      urho.Star = (StarDetail)surface.BindingContext;
+      // Need to do it here like that, because from the VM I cannot access the surface view.
+      // This is actually the best compromise I could think of.
+      await ((StarDetailPageViewModel)BindingContext).GenerateUrho(surface).ConfigureAwait(false);      
     }
 
     protected override void OnDisappearing()

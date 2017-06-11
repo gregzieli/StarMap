@@ -44,9 +44,10 @@
     </Compile>
     <Compile Include="Converters\StringToDoubleConverter.cs" />
     <Compile Include="Events\ConstellationSelectedEvent.cs" />
-    <Compile Include="Models\ThreeDee\Detail.cs" />
     <Compile Include="UnityBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Urho\SingleStar.cs" />
+    <Compile Include="Urho\UrhoBase.cs" />
     <Compile Include="ViewModels\Core\Herald.cs" />
     <Compile Include="ViewModels\Core\Overseer.cs" />
     <Compile Include="ViewModels\Core\Interlocutor.cs" />

@@ -43,6 +43,7 @@
     <Compile Include="Abstractions\Services\IAstronomer.cs" />
     <Compile Include="Constants\Filters.cs" />
     <Compile Include="Constants\Names.cs" />
+    <Compile Include="Constants\Navigation.cs" />
     <Compile Include="Filters\StarFilter.cs" />
     <Compile Include="Models\Cosmos\Constellation.cs" />
     <Compile Include="Models\Core\Bindable\MultiSelectable.cs" />

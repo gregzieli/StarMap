@@ -5,6 +5,7 @@ using Prism.Services;
 using StarMap.Bll.Helpers;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Abstractions.Services;
+using StarMap.Cll.Constants;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Models;
@@ -104,7 +105,7 @@ namespace StarMap.ViewModels
     //Another option:
     //Navigate($"StarDetailPage?id={SelectedStar.Id}");
     //=> await Navigate("StarDetailPage", "id", SelectedStar.Id);
-    => await Navigate(new Uri($"ms-app:///MasterDetail/StarDetailPage", UriKind.Absolute), "id", SelectedStar.Id);
+    => await Navigate(new Uri(Navigation.DetailAbsolute, UriKind.Absolute), Navigation.Keys.StarId, SelectedStar.Id);
 
     private void OnConstellationSelected(Constellation c)
     {

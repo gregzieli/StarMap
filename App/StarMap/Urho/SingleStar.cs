@@ -1,34 +1,26 @@
 ﻿using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Utils;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Actions;
 using Urho.Shapes;
-using XFColor = Xamarin.Forms.Color;
 using static Xamarin.Forms.Color;
-using System;
+using XFColor = Xamarin.Forms.Color;
 
-namespace StarMap.Models.ThreeDee
+namespace StarMap.Urho
 {
-  public class Detail : Application
+  // TODO: if in the sky mode the multi-star system is in fact rendered as few spheres close to one another,
+  //       add a functionality to display more than one star here.
+  // Because of that 'cant add component not on the main thread', the quickest solution would be to use a different class, like 'MultiDetail',
+  // and in the view decide which one to use.
+  public class SingleStar : UrhoBase
   {
-    // TODO: if in the sky mode the multi-star system is in fact rendered as few spheres close to one another,
-    //       add a functionality to display more than one star here.
-    // Because of that 'cant add component not on the main thread', the quickest solution would be to use a different class, like 'MultiDetail',
-    // and in the view decide which one to use.
-    [Preserve]
-    public Detail(ApplicationOptions options) : base(options) { }
+    public SingleStar(ApplicationOptions options) : base(options) { }
 
-    Scene _scene;
-    Node _lightNode, _cameraNode, _starNode;
+    Node _starNode;
 
-    [Obsolete]
-    public IDictionary<XFColor, IList<Material>> StarTextures2 { get; set; }
     public IList<Material> StarTextures { get; set; }
 
     private StarDetail _star;
@@ -36,21 +28,6 @@ namespace StarMap.Models.ThreeDee
     {
       get { return _star; }
       set { SetStar(value); }
-    }
-
-    protected override async void Start()
-    {
-      try
-      {
-        base.Start();
-        GetTextures();
-        await CreateScene();
-      }
-      catch (System.Exception e)
-      {
-        // TODO: perfect place for prism's pubsub event
-        throw;
-      }
     }
 
     void GetTextures()
@@ -62,6 +39,8 @@ namespace StarMap.Models.ThreeDee
       };
     }
 
+    [Obsolete]
+    public IDictionary<XFColor, IList<Material>> StarTextures2 { get; set; }
     [Obsolete]
     void GetTextures2()
     {
@@ -122,6 +101,43 @@ namespace StarMap.Models.ThreeDee
       };
     }
 
+
+    void SetStar(StarDetail star)
+    {
+      _star = star;
+
+      var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 10, 1.25, 0.5);
+      _starNode.SetScale(Convert.ToSingle(scale));
+
+      var a = _starNode.GetComponent<Sphere>();
+      a.SetMaterial(StarTextures[Randomizer.RandomInt(0, StarTextures.Count - 1)]);
+
+      var light = _lightNode.GetComponent<Light>();
+      light.Color = new Color((float)star.Color.R, (float)star.Color.G, (float)star.Color.B);
+    }
+
+    protected override async void Start()
+    {
+      await RhunAsync(async () =>
+      {
+        base.Start();
+        var task = CreateScene().ConfigureAwait(false);
+        GetTextures();
+
+        await task;
+      });
+    }
+
+    protected override void OnUpdate(float timeStep)
+    {
+      if (Input.NumTouches >= 1)
+      {
+        var touch = Input.GetTouch(0);
+        _cameraNode.RotateAround(_starNode.Position, new Quaternion(-touch.Delta.Y, -touch.Delta.X, 0), TransformSpace.World);
+      }
+      base.OnUpdate(timeStep);
+    }
+
     async Task CreateScene()
     {
       _scene = new Scene();
@@ -146,30 +162,6 @@ namespace StarMap.Models.ThreeDee
       Renderer.SetViewport(0, new Viewport(Context, _scene, camera, null));
 
       await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 1, deltaAngleZ: 0)));
-    }
-
-    protected override void OnUpdate(float timeStep)
-    {
-      if (Input.NumTouches >= 1)
-      {
-        var touch = Input.GetTouch(0);
-        _cameraNode.RotateAround(_starNode.Position, new Quaternion(-touch.Delta.Y, -touch.Delta.X, 0), TransformSpace.World);
-      }
-      base.OnUpdate(timeStep);
-    }
-    
-    void SetStar(StarDetail star)
-    {
-      _star = star;
-
-      var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 10, 1.25, 0.5);
-      _starNode.SetScale(Convert.ToSingle(scale));
-
-      var a = _starNode.GetComponent<Sphere>();
-      a.SetMaterial(StarTextures[Randomizer.RandomInt(0, StarTextures.Count - 1)]);
-
-      var light = _lightNode.GetComponent<Light>();
-      light.Color = new Color((float)star.Color.R, (float)star.Color.G, (float)star.Color.B);
     }
   }
 }

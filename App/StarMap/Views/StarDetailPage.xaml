@@ -15,9 +15,7 @@
       <RowDefinition Height="*" />
       <RowDefinition Height="2*" />
     </Grid.RowDefinitions>-->
-
-    <!--<BoxView Color="{Binding Color}" />-->
-
+    
     <urho:UrhoSurface x:Name="surface" Margin="10, 40" />
 
     <StackLayout Grid.Column="1" Margin="10">
@@ -38,6 +36,7 @@
       <Label Text="{Binding AbsoluteMagnitude, StringFormat='Absolute magnitude: {0}'}" />
       <Label Text="{Binding SpectralType, StringFormat='Spectral type: {0}'}" />
       <Label Text="{Binding Luminosity, StringFormat='Luminosity: {0}'}" />
+      <Label Text="{Binding TemperatureKelvin, StringFormat='Temperature: {0} K'}" />
     </StackLayout>
 
 
