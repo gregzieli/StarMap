@@ -1,4 +1,7 @@
-﻿using StarMap.Cll.Models.Cosmos;
+﻿using Prism.Events;
+using StarMap.Cll.Events;
+using StarMap.Cll.Exceptions;
+using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Utils;
 using System;
 using System.Collections.Generic;
@@ -17,7 +20,7 @@ namespace StarMap.Urho
   // and in the view decide which one to use.
   public class SingleStar : UrhoBase
   {
-    public SingleStar(ApplicationOptions options) : base(options) { }
+    public SingleStar(ApplicationOptions options, IEventAggregator eventAggregator) : base(options, eventAggregator) { }
 
     Node _starNode;
 
@@ -163,5 +166,8 @@ namespace StarMap.Urho
 
       await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 1, deltaAngleZ: 0)));
     }
+
+    protected override void HandleException(Exception ex)
+      => PublishError(new StarDetailUrhoException($"{nameof(SingleStar)}", ex));
   }
 }

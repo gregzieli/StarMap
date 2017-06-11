@@ -1,13 +1,17 @@
-﻿using Prism.Navigation;
+﻿using Prism.Events;
+using Prism.Navigation;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Constants;
+using StarMap.Cll.Events;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Urho;
 using StarMap.ViewModels.Core;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Forms;
+using System;
+using StarMap.Cll.Exceptions;
 
 namespace StarMap.ViewModels
 {
@@ -22,10 +26,11 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _star, value); }
     }
     
-    public StarDetailPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager) 
+    public StarDetailPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator, IStarManager starManager) 
       : base(navigationService, pageDialogService)
     {
       _starManager = starManager;
+      eventAggregator.GetEvent<UrhoErrorEvent<StarDetailUrhoException>>().Subscribe(async(ex) => await HandleException(ex), ThreadOption.BackgroundThread);
     }
 
     public override void OnNavigatedTo(NavigationParameters parameters)

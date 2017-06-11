@@ -49,6 +49,7 @@
     <Compile Include="Urho\SingleStar.cs" />
     <Compile Include="Urho\UrhoBase.cs" />
     <Compile Include="ViewModels\Core\Herald.cs" />
+    <Compile Include="ViewModels\Core\Listener.cs" />
     <Compile Include="ViewModels\Core\Overseer.cs" />
     <Compile Include="ViewModels\Core\Interlocutor.cs" />
     <Compile Include="ViewModels\Core\Navigator.cs" />

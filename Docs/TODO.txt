@@ -1,6 +1,6 @@
 ﻿TODO: 
  - startPage będzie miał instrukcje, co jest gdzie
  - nowa logika do sprawdzania współrzędnych
- - prism pubsub na exception w urho
+ - prism pubsub na exception w urho - tyle, że nie działa Unity jak wstawiam do konstruktora IEventAggregator
  - add setting: choose dist in ly/pc
  - round all doubles
