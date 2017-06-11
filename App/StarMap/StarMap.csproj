@@ -44,7 +44,6 @@
     </Compile>
     <Compile Include="Converters\StringToDoubleConverter.cs" />
     <Compile Include="Events\ConstellationSelectedEvent.cs" />
-    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Models\ThreeDee\Detail.cs" />
     <Compile Include="UnityBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

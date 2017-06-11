@@ -38,7 +38,6 @@ namespace StarMap.Models.ThreeDee
       set { SetStar(value); }
     }
 
-
     protected override async void Start()
     {
       try

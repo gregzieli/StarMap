@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              xmlns:custom="clr-namespace:StarMap.Controls"
+             xmlns:const="clr-namespace:StarMap.Cll.Constants;assembly=StarMap.Cll"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.MainPage">
 
@@ -37,8 +38,14 @@
             <EntryCell Label="Name/designation"
                        Placeholder="Search..."
                        Text="{Binding DesignationQuery}"/>
-            <custom:SliderCell Minimum="0" Maximum="10000" Label="Distance" SelectedValue="{Binding MaxDistance}"/>
-            <custom:SliderCell Minimum="0" Maximum="100" Label="Magnitude" SelectedValue="{Binding MaxMagnitude}"/>
+            <custom:SliderCell Minimum="{x:Static const:Filters.MIN_DIST}" 
+                               Maximum="{x:Static const:Filters.MAX_DIST}" 
+                               Label="Distance" 
+                               SelectedValue="{Binding DistanceTo}"/>
+            <custom:SliderCell Minimum="{x:Static const:Filters.MIN_MAG}" 
+                               Maximum="{x:Static const:Filters.MAX_MAG}" 
+                               Label="Magnitude" 
+                               SelectedValue="{Binding MagnitudeTo}"/>
           </TableSection>
           <TableSection>
             <ViewCell>

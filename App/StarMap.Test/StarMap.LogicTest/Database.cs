@@ -22,9 +22,11 @@ namespace StarMap.LogicTest
     public void StarDetailMapping()
     {
       var prov = Container.Resolve<IStarDataProvider>();
-      var f = new Cll.Filters.StarFilter();
-      f.Limit = null; // It takes a few minutes for all
-      var all = prov.GetStars(f);
+      var all = prov.GetStars(new Cll.Filters.StarFilter()
+      {
+        DistanceTo = 100000,
+        MagnitudeTo = 100000
+      });// It takes a few minutes for all
 
       var e = all.GetEnumerator();
       Assert.DoesNotThrow(new TestDelegate(() => 

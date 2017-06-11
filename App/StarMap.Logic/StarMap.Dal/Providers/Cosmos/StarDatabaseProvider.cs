@@ -49,7 +49,10 @@ namespace StarMap.Dal.Providers
     {
       return Read(context =>
       {
-        var query = context.Table<StarEntity>();
+        var query = context.Table<StarEntity>()
+          .Where(x => 
+            x.ParsecDistance <= filter.DistanceTo 
+            && x.ApparentMagnitude <= filter.MagnitudeTo);
 
         string search = filter.DesignationQuery;
         if (!search.IsNullOrWhiteSpace())
@@ -62,12 +65,6 @@ namespace StarMap.Dal.Providers
 
         if (!filter.ConstellationsIds.IsNullOrEmpty())
           query = query.Where(x => filter.ConstellationsIds.Contains(x.ConstellationId.GetValueOrDefault()));
-
-        if (filter.MaxDistance.HasValue)
-          query = query.Where(x => x.ParsecDistance < filter.MaxDistance.Value);
-
-        if (filter.MaxMagnitude.HasValue)
-          query = query.Where(x => x.ApparentMagnitude < filter.MaxMagnitude.Value);
 
         if (filter.Limit.HasValue)
           query = query.Take(filter.Limit.Value);

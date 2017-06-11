@@ -12,5 +12,7 @@ namespace StarMap.Cll.Abstractions
     IEnumerable<Star> GetStars(StarFilter filter);
 
     StarDetail GetStarDetails(int id);
+
+    StarFilter LoadFilter();
   }
 }

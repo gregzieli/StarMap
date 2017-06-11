@@ -1,22 +1,20 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using StarMap.ViewModels.Core;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Prism.AppModel;
+using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
+using StarMap.Bll.Helpers;
 using StarMap.Cll.Abstractions;
-using StarMap.Cll.Models.Cosmos;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using StarMap.Cll.Constants;
-using StarMap.Cll.Filters;
-using StarMap.Core.Models;
-using System.ComponentModel;
 using StarMap.Cll.Abstractions.Services;
-using Prism.AppModel;
+using StarMap.Cll.Filters;
+using StarMap.Cll.Models.Cosmos;
+using StarMap.Core.Models;
+using StarMap.ViewModels.Core;
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
@@ -127,16 +125,20 @@ namespace StarMap.ViewModels
         c.IsSelected = action;
     }
 
-    private void GetStars()
+    private async void GetStars()
     {
-      var stars = StarManager.GetStars(StarFilter);
-      // TODO: verify if newing up is OK, or mabe Clear(), or something else.
-      VisibleStars = new ObservableCollection<Star>(stars);
+      await Call(() =>
+      {
+        var stars = StarManager.GetStars(StarFilter);
+        // TODO: verify if newing up is OK, or maybe Clear(), or something else.
+        VisibleStars = new ObservableCollection<Star>(stars);
 
-      Debug.WriteLine($"New visible stars, count = {VisibleStars.Count}");
-      Debug.WriteLine($"    Mag {StarFilter.MaxMagnitude}");
-      Debug.WriteLine($"    Dist {StarFilter.MaxDistance}");
-      Debug.WriteLine($"    Name {StarFilter.DesignationQuery}");
+        Debug.WriteLine($"    Count {VisibleStars.Count}");
+        Debug.WriteLine($"    Mag   {StarFilter.MagnitudeTo}");
+        Debug.WriteLine($"    Dist  {StarFilter.DistanceTo}");
+        Debug.WriteLine($"    Name  {StarFilter.DesignationQuery}");
+      });
+      
     }
 
     private void GetConstellations()
@@ -148,16 +150,11 @@ namespace StarMap.ViewModels
 
     private void ResetFilter()
     {
-      FilterConstellations(true);
+      //FilterConstellations(true);
       SelectedStar = null;
-
-      StarFilter = new StarFilter()
-      {
-        DesignationQuery = null,
-        ConstellationsIds = null,
-        MaxDistance = Filters.DEF_DIST,
-        MaxMagnitude = Filters.DEF_MAG
-      };
+      Settings.Filter = null;
+      StarFilter = new StarFilter();
+      GetStars();
     }
     #endregion
 
@@ -194,8 +191,8 @@ namespace StarMap.ViewModels
 
       await Call(() =>
       {
+        StarFilter = StarManager.LoadFilter();
         GetConstellations();
-        ResetFilter();
         GetStars();
       });
     }
@@ -221,7 +218,7 @@ namespace StarMap.ViewModels
 
     private void OnRotationChanged(object sender, RotationChangedEventArgs e)
     {
-      Debug.WriteLine($"{e.Azimuth}, {e.Pitch}, {e.Roll}");
+      //Debug.WriteLine($"{e.Azimuth}, {e.Pitch}, {e.Roll}");
     }
 
     public void OnResume()

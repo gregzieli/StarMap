@@ -16,7 +16,6 @@ namespace StarMap.Bll.Managers
     {
       var locator = CrossGeolocator.Current;
       if (!locator.IsGeolocationEnabled)
-        // TODO: custom ex
         throw new Exception("Location must be enabled.");
 
       // In meters
@@ -36,14 +35,14 @@ namespace StarMap.Bll.Managers
       if (p.IsNullOrEmpty())
         return await GetNewGpsPositionAsync();
 
-      var position = JsonConvert.DeserializeObject<Position>(p);
+      var position = Deserialize<Position>(p);
 
       return new ExtendedPosition(position);
     }
 
     public void StoreGpsPosition(Position position)
     {
-      Settings.Geolocation = JsonConvert.SerializeObject(position);
+      Settings.Geolocation = Serialize(position);
     }
   }
 }

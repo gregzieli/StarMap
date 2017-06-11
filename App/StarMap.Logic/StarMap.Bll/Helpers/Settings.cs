@@ -11,11 +11,13 @@ namespace StarMap.Bll.Helpers
   /// </summary>
   public static class Settings
   {
-    private static ISettings AppSettings => CrossSettings.Current;
+    static ISettings AppSettings => CrossSettings.Current;
 
     #region Setting Constants
 
-    private const string GeolocationKey = "loc_key";
+    const string GeolocationKey = "loc_key";
+
+    const string FilterKey = "filter_key";
 
     #endregion
 
@@ -23,6 +25,12 @@ namespace StarMap.Bll.Helpers
     {
       get { return AppSettings.GetValueOrDefault<string>(GeolocationKey); }
       set { AppSettings.AddOrUpdateValue(GeolocationKey, value); }
+    }
+
+    public static string Filter
+    {
+      get { return AppSettings.GetValueOrDefault<string>(FilterKey); }
+      set { AppSettings.AddOrUpdateValue(FilterKey, value); }
     }
   }
 }
