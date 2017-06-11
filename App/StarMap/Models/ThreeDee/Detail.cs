@@ -27,7 +27,9 @@ namespace StarMap.Models.ThreeDee
     Scene _scene;
     Node _lightNode, _cameraNode, _starNode;
 
-    public IDictionary<XFColor, IList<Material>> StarTextures { get; set; }
+    [Obsolete]
+    public IDictionary<XFColor, IList<Material>> StarTextures2 { get; set; }
+    public IList<Material> StarTextures { get; set; }
 
     private StarDetail _star;
     public StarDetail Star
@@ -55,7 +57,17 @@ namespace StarMap.Models.ThreeDee
     void GetTextures()
     {
       // TODO: Not final
-      StarTextures = new Dictionary<XFColor, IList<Material>>()
+      StarTextures = new List<Material>
+      {
+        Material.FromImage("Textures/star_white1.jpg")
+      };
+    }
+
+    [Obsolete]
+    void GetTextures2()
+    {
+      // TODO: Not final
+      StarTextures2 = new Dictionary<XFColor, IList<Material>>()
       {
         {
           DarkRed, new List<Material>()
@@ -151,15 +163,14 @@ namespace StarMap.Models.ThreeDee
     {
       _star = star;
 
-      var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 8, 1.2, 0.5);
+      var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 10, 1.25, 0.5);
       _starNode.SetScale(Convert.ToSingle(scale));
 
-      var colorTextures = StarTextures[star.Color];
-
       var a = _starNode.GetComponent<Sphere>();
-      a.SetMaterial(colorTextures[Randomizer.RandomInt(0, colorTextures.Count - 1)]);
+      a.SetMaterial(StarTextures[Randomizer.RandomInt(0, StarTextures.Count - 1)]);
 
       var light = _lightNode.GetComponent<Light>();
+      light.Color = new Color((float)star.Color.R, (float)star.Color.G, (float)star.Color.B);
     }
   }
 }
