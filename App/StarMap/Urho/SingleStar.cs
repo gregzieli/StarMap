@@ -20,7 +20,7 @@ namespace StarMap.Urho
   // and in the view decide which one to use.
   public class SingleStar : UrhoBase
   {
-    public SingleStar(ApplicationOptions options, IEventAggregator eventAggregator) : base(options, eventAggregator) { }
+    public SingleStar(ApplicationOptions options) : base(options) { }
 
     Node _starNode;
 
@@ -153,6 +153,7 @@ namespace StarMap.Urho
       _lightNode = _cameraNode.CreateChild();
       Light light = _lightNode.CreateComponent<Light>();
 
+      throw new Exception();
       Node skyboxNode = _scene.CreateChild();
       skyboxNode.SetScale(100);
       Skybox skybox = skyboxNode.CreateComponent<Skybox>();

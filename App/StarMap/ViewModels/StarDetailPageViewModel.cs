@@ -26,11 +26,12 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _star, value); }
     }
     
-    public StarDetailPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator, IStarManager starManager) 
+    public StarDetailPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService,/* IEventAggregator eventAggregator,*/ IStarManager starManager) 
       : base(navigationService, pageDialogService)
     {
       _starManager = starManager;
-      eventAggregator.GetEvent<UrhoErrorEvent<StarDetailUrhoException>>().Subscribe(async(ex) => await HandleException(ex), ThreadOption.BackgroundThread);
+      Xamarin.Forms.MessagingCenter.Subscribe<StarDetailUrhoException>(this, "", async (ex) => await HandleException(ex));
+      //eventAggregator.GetEvent<UrhoErrorEvent<StarDetailUrhoException>>().Subscribe(async(ex) => await HandleException(ex)/*, ThreadOption.BackgroundThread*/);
     }
 
     public override void OnNavigatedTo(NavigationParameters parameters)
