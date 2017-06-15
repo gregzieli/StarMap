@@ -1,4 +1,8 @@
-﻿using StarMap.ViewModels;
+﻿using StarMap.Cll.Abstractions.Urho;
+using StarMap.Cll.Exceptions;
+using StarMap.Urho;
+using StarMap.ViewModels;
+using StarMap.ViewModels.Core;
 using Urho.Forms;
 using Xamarin.Forms;
 
@@ -15,7 +19,7 @@ namespace StarMap.Views
     {
       // Need to do it here like that, because from the VM I cannot access the surface view.
       // This is actually the best compromise I could think of.
-      await ((StarDetailPageViewModel)BindingContext).GenerateUrho(surface).ConfigureAwait(false);      
+      await ((IUrhoHandler)BindingContext).GenerateUrho(surface).ConfigureAwait(false);      
     }
 
     protected override void OnDisappearing()

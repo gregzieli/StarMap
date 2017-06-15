@@ -56,10 +56,10 @@ namespace StarMap.ViewModels.Core
     {
       // Check if it works better on NavigatINGTo
       // 1. hardware back button calls only this one
-      await Restore();
+      await Restore(parameters);
     }
 
-    public virtual async void OnNavigatingTo(NavigationParameters parameters)
+    public virtual void OnNavigatingTo(NavigationParameters parameters)
     {
       
     }
@@ -71,7 +71,7 @@ namespace StarMap.ViewModels.Core
     /// <summary>
     /// Logic to restore VM's properties, and other actions done upon opening the page
     /// </summary>
-    protected virtual async Task Restore() { }
+    protected virtual async Task Restore(NavigationParameters parameters) { }
 
     /// <summary>
     /// 

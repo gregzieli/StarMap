@@ -41,6 +41,7 @@
     <Compile Include="Abstractions\Providers\IStarDataProvider.cs" />
     <Compile Include="Abstractions\Services\IDeviceRotation.cs" />
     <Compile Include="Abstractions\Services\IAstronomer.cs" />
+    <Compile Include="Abstractions\Urho\IUrhoHandler.cs" />
     <Compile Include="Constants\Filters.cs" />
     <Compile Include="Constants\Names.cs" />
     <Compile Include="Constants\Navigation.cs" />
@@ -88,6 +89,9 @@
     </Reference>
     <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SQLitePCLRaw.core.1.1.0\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
+    </Reference>
+    <Reference Include="Urho.Forms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\UrhoSharp.Forms.1.4.47\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Urho.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.4.247\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>

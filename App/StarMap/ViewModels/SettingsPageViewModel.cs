@@ -42,7 +42,7 @@ namespace StarMap.ViewModels
         });
     }
 
-    protected override async Task Restore()
+    protected override async Task Restore(NavigationParameters parameters)
     {
       await CallAsync(async () =>
       {

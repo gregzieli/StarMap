@@ -1,6 +1,4 @@
-﻿using Prism.Events;
-using StarMap.Cll.Events;
-using StarMap.Cll.Exceptions;
+﻿using StarMap.Cll.Exceptions;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Utils;
 using System;
@@ -25,13 +23,8 @@ namespace StarMap.Urho
     Node _starNode;
 
     public IList<Material> StarTextures { get; set; }
-
-    private StarDetail _star;
-    public StarDetail Star
-    {
-      get { return _star; }
-      set { SetStar(value); }
-    }
+    
+    public StarDetail Star { get; set; }
 
     void GetTextures()
     {
@@ -105,18 +98,19 @@ namespace StarMap.Urho
     }
 
 
-    void SetStar(StarDetail star)
+    public async Task SetStar(StarDetail star)
     {
-      _star = star;
+      Star = star;
 
       var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 10, 1.25, 0.5);
-      _starNode.SetScale(Convert.ToSingle(scale));
+      _starNode?.SetScale(Convert.ToSingle(scale));
 
-      var a = _starNode.GetComponent<Sphere>();
-      a.SetMaterial(StarTextures[Randomizer.RandomInt(0, StarTextures.Count - 1)]);
+      var a = _starNode?.GetComponent<Sphere>();
+      a?.SetMaterial(StarTextures?[Randomizer.RandomInt(0, StarTextures.Count - 1)]);
 
-      var light = _lightNode.GetComponent<Light>();
-      light.Color = new Color((float)star.Color.R, (float)star.Color.G, (float)star.Color.B);
+      var light = _lightNode?.GetComponent<Light>();
+      if (light != null)
+        light.Color =  new Color((float)star.Color.R, (float)star.Color.G, (float)star.Color.B);
     }
 
     protected override async void Start()
@@ -136,7 +130,7 @@ namespace StarMap.Urho
       if (Input.NumTouches >= 1)
       {
         var touch = Input.GetTouch(0);
-        _cameraNode.RotateAround(_starNode.Position, new Quaternion(-touch.Delta.Y, -touch.Delta.X, 0), TransformSpace.World);
+        _cameraNode?.RotateAround(_starNode.Position, new Quaternion(-touch.Delta.Y, -touch.Delta.X, 0), TransformSpace.World);
       }
       base.OnUpdate(timeStep);
     }
@@ -153,7 +147,6 @@ namespace StarMap.Urho
       _lightNode = _cameraNode.CreateChild();
       Light light = _lightNode.CreateComponent<Light>();
 
-      throw new Exception();
       Node skyboxNode = _scene.CreateChild();
       skyboxNode.SetScale(100);
       Skybox skybox = skyboxNode.CreateComponent<Skybox>();
@@ -169,6 +162,6 @@ namespace StarMap.Urho
     }
 
     protected override void HandleException(Exception ex)
-      => PublishError(new StarDetailUrhoException($"{nameof(SingleStar)}", ex));
+      => PublishError(new StarDetailUrhoException(ex));
   }
 }

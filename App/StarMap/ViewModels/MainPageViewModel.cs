@@ -19,9 +19,9 @@ using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
-  public class MainPageViewModel : StarGazer, IApplicationLifecycle
+  public class MainPageViewModel : Navigator, IApplicationLifecycle
   {
-    IDeviceRotation _motionDetector;
+    IDeviceRotation _motionDetector; IStarManager _starManager;
 
     private ObservantCollection<Constellation> _constellations;
     public ObservantCollection<Constellation> Constellations
@@ -87,9 +87,10 @@ namespace StarMap.ViewModels
     public DelegateCommand ShowStarDetailsCommand { get; private set; }
 
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IDeviceRotation motionDetector) 
-      : base(navigationService, pageDialogService, starManager)
+      : base(navigationService, pageDialogService)
     {
       _motionDetector = motionDetector;
+      _starManager = starManager;
 
       SelectStarCommand = new DelegateCommand(SelectStar);
       ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
@@ -130,7 +131,7 @@ namespace StarMap.ViewModels
     {
       await Call(() =>
       {
-        var stars = StarManager.GetStars(StarFilter);
+        var stars = _starManager.GetStars(StarFilter);
         // TODO: verify if newing up is OK, or maybe Clear(), or something else.
         VisibleStars = new ObservableCollection<Star>(stars);
 
@@ -144,7 +145,7 @@ namespace StarMap.ViewModels
 
     private void GetConstellations()
     {
-      var constellations = StarManager.GetConstellations();
+      var constellations = _starManager.GetConstellations();
       Constellations = new ObservantCollection<Constellation>(constellations);
       Constellations.ElementChanged += OnConstellationFiltered;
     }
@@ -176,13 +177,9 @@ namespace StarMap.ViewModels
         StatusTextTemplate = null;
       }
         
-    }
+    }   
 
-    
-
-    
-
-    protected override async Task Restore()
+    protected override async Task Restore(NavigationParameters parameters)
     {
       _motionDetector.Start();
       _motionDetector.RotationChanged += OnRotationChanged;
@@ -192,13 +189,11 @@ namespace StarMap.ViewModels
 
       await Call(() =>
       {
-        StarFilter = StarManager.LoadFilter();
+        StarFilter = _starManager.LoadFilter();
         GetConstellations();
         GetStars();
       });
-    }
-
-    
+    }    
 
     protected override async Task CleanUp()
     {

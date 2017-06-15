@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
-  public class MasterDetailViewModel : StarGazer
+  public class MasterDetailViewModel : Navigator
   {
     #region Just for show - no need for it here, nor anywhere in the application for now
     // Two separate functionalities here: 
@@ -39,8 +39,8 @@ namespace StarMap.ViewModels
 
     #endregion
 
-    public MasterDetailViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IEventAggregator eventAggregator) 
-      : base(navigationService, pageDialogService, starManager)
+    public MasterDetailViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator) 
+      : base(navigationService, pageDialogService)
     {
       _eventAggregator = eventAggregator;
     }
