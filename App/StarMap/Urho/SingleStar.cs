@@ -113,18 +113,6 @@ namespace StarMap.Urho
         light.Color =  new Color((float)star.Color.R, (float)star.Color.G, (float)star.Color.B);
     }
 
-    protected override async void Start()
-    {
-      await RhunAsync(async () =>
-      {
-        base.Start();
-        var task = CreateScene().ConfigureAwait(false);
-        GetTextures();
-
-        await task;
-      });
-    }
-
     protected override void OnUpdate(float timeStep)
     {
       if (Input.NumTouches >= 1)
@@ -135,17 +123,11 @@ namespace StarMap.Urho
       base.OnUpdate(timeStep);
     }
 
-    async Task CreateScene()
+    protected override async Task FillScene()
     {
-      _scene = new Scene();
-      _cameraNode = _scene.CreateChild();
+      GetTextures();
+
       _starNode = _scene.CreateChild();
-      _scene.CreateComponent<Octree>();
-
-      Camera camera = _cameraNode.CreateComponent<Camera>();
-
-      _lightNode = _cameraNode.CreateChild();
-      Light light = _lightNode.CreateComponent<Light>();
 
       Node skyboxNode = _scene.CreateChild();
       skyboxNode.SetScale(100);
@@ -156,9 +138,7 @@ namespace StarMap.Urho
       _starNode.Position = new Vector3(0, 0, 2);
       Sphere star = _starNode.CreateComponent<Sphere>();
 
-      Renderer.SetViewport(0, new Viewport(Context, _scene, camera, null));
-
-      await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 1, deltaAngleZ: 0)));
+      await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0))).ConfigureAwait(false);
     }
 
     protected override void HandleException(Exception ex)

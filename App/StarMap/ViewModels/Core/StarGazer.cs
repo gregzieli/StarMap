@@ -58,17 +58,5 @@ namespace StarMap.ViewModels.Core
     }
 
     public abstract Task OnUrhoGenerated();
-
-
-
-
-
-
-    //Probably that's too much. Just make the manager a property.
-    // Should this Get() call Call(), or Call() should call Get()?
-    protected TT Get<TT>(Func<IStarManager, TT> fn)
-    {
-      return fn(_starManager);
-    }
   }
 }

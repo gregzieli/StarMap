@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System.Reflection;
 
 namespace UhroTest
 {
@@ -13,6 +14,7 @@ namespace UhroTest
     {
       InitializeComponent();
       butt.Clicked += (s, e) => Navigation.PushAsync(new UrhoPage());
+      colorButt.Clicked += (s, e) => Navigation.PushAsync(new ColorPage());
     }
   }
 }

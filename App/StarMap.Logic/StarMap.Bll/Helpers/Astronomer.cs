@@ -26,27 +26,30 @@ namespace StarMap.Bll.Helpers
       switch (c)
       {      
         case 'W':
-          return DarkBlue;
         case 'O':
-          return DarkBlue;
+          return DodgerBlue;
         case 'B':
-          return i < 3 ? DarkBlue : Blue;
+          return i < 4 ? DeepSkyBlue : LightSkyBlue;
         case 'A':
-          return White;
+          return i < 3 ? AliceBlue : White;
         case 'F':
-          return i < 4 ? White : Yellow;
+          if (i < 3)
+            return Ivory;
+          return i < 6 ? LightYellow : LemonChiffon;
         case 'G':
-          return Yellow;
+          return i < 6 ? Yellow : Gold;
         case 'K':
-          return Orange;
+          if (i < 3)
+            return Orange;
+          return i < 7 ? DarkOrange : OrangeRed;
         case 'M':
         case 'R':
-          return Red;
+          return i < 6 ? Tomato : Red;
         case 'N':
         case 'S':
-          return DarkRed;
+          return Firebrick;
         default:
-          return Red;
+          return OrangeRed;
       }
     }
 
