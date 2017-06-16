@@ -6,9 +6,11 @@ using StarMap.Bll.Helpers;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Abstractions.Services;
 using StarMap.Cll.Constants;
+using StarMap.Cll.Exceptions;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Models;
+using StarMap.Urho;
 using StarMap.ViewModels.Core;
 using System;
 using System.Collections.ObjectModel;
@@ -19,9 +21,9 @@ using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
-  public class MainPageViewModel : Navigator, IApplicationLifecycle
+  public class MainPageViewModel :  StarGazer<Universe, UniverseUrhoException>, IApplicationLifecycle
   {
-    IDeviceRotation _motionDetector; IStarManager _starManager;
+    IDeviceRotation _motionDetector;
 
     private ObservantCollection<Constellation> _constellations;
     public ObservantCollection<Constellation> Constellations
@@ -87,10 +89,9 @@ namespace StarMap.ViewModels
     public DelegateCommand ShowStarDetailsCommand { get; private set; }
 
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IDeviceRotation motionDetector) 
-      : base(navigationService, pageDialogService)
+      : base(navigationService, pageDialogService, starManager)
     {
       _motionDetector = motionDetector;
-      _starManager = starManager;
 
       SelectStarCommand = new DelegateCommand(SelectStar);
       ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
@@ -176,11 +177,11 @@ namespace StarMap.ViewModels
         SelectedStar = null;
         StatusTextTemplate = null;
       }
-        
     }   
 
     protected override async Task Restore(NavigationParameters parameters)
     {
+      await base.Restore(parameters);
       _motionDetector.Start();
       _motionDetector.RotationChanged += OnRotationChanged;
 
@@ -197,6 +198,7 @@ namespace StarMap.ViewModels
 
     protected override async Task CleanUp()
     {
+      await base.CleanUp();
       // Since I call Navigate using the CallAsync, which sets IsBusy to true, and this method gets executed 
       // BEFORE the awaited navigation, it would never be executed (canExecute => !isBusy)
       // For now I just disabled the check for canExecute on the Call  method.
@@ -227,6 +229,11 @@ namespace StarMap.ViewModels
     {
       _motionDetector.Stop();
       _motionDetector.RotationChanged -= OnRotationChanged;
+    }
+
+    public override async Task OnUrhoGenerated()
+    {
+      
     }
   }
 }

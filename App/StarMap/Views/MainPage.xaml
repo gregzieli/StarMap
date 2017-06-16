@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:urho="clr-namespace:Urho.Forms;assembly=Urho.Forms"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              xmlns:custom="clr-namespace:StarMap.Controls"
              xmlns:const="clr-namespace:StarMap.Cll.Constants;assembly=StarMap.Cll"
@@ -8,13 +9,17 @@
              x:Class="StarMap.Views.MainPage" >
 
   <AbsoluteLayout>
-    <OpenGLView AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+    <urho:UrhoSurface x:Name="surface" 
+                      AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                      AbsoluteLayout.LayoutFlags="All" />
+    
+    <!--<OpenGLView AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                  AbsoluteLayout.LayoutFlags="All">
       <OpenGLView.GestureRecognizers>
         <TapGestureRecognizer
           Tapped="TapGestureRecognizer_Tapped" Command="{Binding SelectStarCommand}"  />
       </OpenGLView.GestureRecognizers>
-    </OpenGLView>
+    </OpenGLView>-->
     
     <!-- #region overlays-->
     <Grid x:Name="rightOverlay"

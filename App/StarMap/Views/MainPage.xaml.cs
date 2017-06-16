@@ -1,6 +1,8 @@
-﻿using StarMap.Controls;
+﻿using StarMap.Cll.Abstractions.Urho;
+using StarMap.Controls;
 using System;
 using System.Diagnostics;
+using Urho.Forms;
 using Xamarin.Forms;
 
 namespace StarMap.Views
@@ -16,15 +18,25 @@ namespace StarMap.Views
       InitializeComponent();
     }
 
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
+      var urhoTask = ((IUrhoHandler)BindingContext).GenerateUrho(surface);
+
       RightPanel = new Overlay(rightOverlay, DockSide.Right, rightPanelButtons.Width + rightOverlay.Padding.Left * 2);
       BottomPanel = new Overlay(bottomOverlay, DockSide.Bottom, bottomOverlay.RowDefinitions[0].Height.Value);
 
       RightPanel.Collapse(length: 0);
       BottomPanel.Collapse(length: 0);
-      
-      base.OnAppearing();
+
+      await urhoTask.ConfigureAwait(false);
+
+      //base.OnAppearing();
+    }
+
+    protected override void OnDisappearing()
+    {
+      UrhoSurface.OnDestroy();
+      base.OnDisappearing();
     }
 
     void OnConstellationsButtonClicked(object sender, EventArgs args)
