@@ -24,10 +24,10 @@ namespace StarMap.Dal.Providers
           } 
         }
       }
-      catch (Exception e)
+      catch (Exception)
       {
         // TODO: maybe throw a wrapper custom exc.
-        throw e;
+        throw;
       }
       return data;
     }

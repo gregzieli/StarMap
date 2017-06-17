@@ -21,7 +21,7 @@ using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
-  public class MainPageViewModel :  StarGazer<Universe, UniverseUrhoException>, IApplicationLifecycle
+  public class MainPageViewModel : StarGazer<Universe, UniverseUrhoException>, IApplicationLifecycle
   {
     IDeviceRotation _motionDetector;
 
@@ -182,8 +182,7 @@ namespace StarMap.ViewModels
     protected override async Task Restore(NavigationParameters parameters)
     {
       await base.Restore(parameters);
-      _motionDetector.Start();
-      _motionDetector.RotationChanged += OnRotationChanged;
+      SensorStart();
 
       if (Constellations != null)
         return;
@@ -204,8 +203,7 @@ namespace StarMap.ViewModels
       // For now I just disabled the check for canExecute on the Call  method.
       await Call(() =>
       {
-        _motionDetector.Stop();
-        _motionDetector.RotationChanged -= OnRotationChanged;
+        SensorStop();
         Constellations.ElementChanged -= OnConstellationFiltered;
         Constellations.Clear();
         Constellations = null;
@@ -221,14 +219,30 @@ namespace StarMap.ViewModels
 
     public void OnResume()
     {
-      _motionDetector.Start();
-      _motionDetector.RotationChanged += OnRotationChanged;
+      SensorStart();
     }
 
     public void OnSleep()
     {
-      _motionDetector.Stop();
-      _motionDetector.RotationChanged -= OnRotationChanged;
+      SensorStop();
+    }
+
+    void SensorStart()
+    {
+      if (Settings.SensorsOn)
+      {
+        _motionDetector.Start();
+        _motionDetector.RotationChanged += OnRotationChanged;
+      }
+    }
+
+    void SensorStop()
+    {
+      if (Settings.SensorsOn)
+      {
+        _motionDetector.Stop();
+        _motionDetector.RotationChanged -= OnRotationChanged;
+      }
     }
 
     public override async Task OnUrhoGenerated()

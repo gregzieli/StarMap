@@ -19,6 +19,8 @@ namespace StarMap.Bll.Helpers
 
     const string FilterKey = "filter_key";
 
+    const string SensorsKey = "sensor_key";
+
     #endregion
 
     public static string Geolocation
@@ -31,6 +33,12 @@ namespace StarMap.Bll.Helpers
     {
       get { return AppSettings.GetValueOrDefault<string>(FilterKey); }
       set { AppSettings.AddOrUpdateValue(FilterKey, value); }
+    }
+
+    public static bool SensorsOn
+    {
+      get { return AppSettings.GetValueOrDefault<bool>(SensorsKey, false); } // now to false, but on release should be true.
+      set { AppSettings.AddOrUpdateValue(SensorsKey, value); }
     }
   }
 }

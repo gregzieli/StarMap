@@ -12,6 +12,7 @@ namespace StarMap.Urho
     { }
         
     protected Scene _scene;
+    protected Octree _octree;
     protected Node _lightNode, _cameraNode;
 
     protected abstract void HandleException(Exception ex);
@@ -34,7 +35,7 @@ namespace StarMap.Urho
     void CreateScene()
     {
       _scene = new Scene();
-      _scene.CreateComponent<Octree>();
+      _octree = _scene.CreateComponent<Octree>();
       _cameraNode = _scene.CreateChild();
       _cameraNode.CreateComponent<Camera>();
       _lightNode = _cameraNode.CreateChild();

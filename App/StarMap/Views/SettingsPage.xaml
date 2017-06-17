@@ -18,6 +18,9 @@
           </StackLayout>
         </ViewCell>
       </TableSection>
+      <TableSection Title="Sensors">
+        <SwitchCell Text="On" On="{Binding SensorsOn}" />
+      </TableSection>
       
     </TableRoot>
   </TableView>

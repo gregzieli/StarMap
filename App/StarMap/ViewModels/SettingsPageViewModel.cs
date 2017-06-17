@@ -22,6 +22,13 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _geoPosition, value); }
     }
 
+    public bool SensorsOn
+    {
+      get { return Bll.Helpers.Settings.SensorsOn; }
+      // No time to create a manager for that. 
+      set { Bll.Helpers.Settings.SensorsOn = value; }
+    }
+
     public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, 
       ILocationManager locationManager) 
       : base(navigationService, pageDialogService)
