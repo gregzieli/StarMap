@@ -19,7 +19,7 @@
         </ViewCell>
       </TableSection>
       <TableSection Title="Sensors">
-        <SwitchCell Text="On" On="{Binding SensorsOn}" />
+        <SwitchCell Text="Use sensors" On="{Binding SensorsOn}" />
       </TableSection>
       
     </TableRoot>

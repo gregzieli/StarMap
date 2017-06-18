@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Urho;
 
 namespace StarMap.ViewModels
 {
@@ -92,8 +93,9 @@ namespace StarMap.ViewModels
       : base(navigationService, pageDialogService, starManager)
     {
       _motionDetector = motionDetector;
+      
 
-      SelectStarCommand = new DelegateCommand(SelectStar);
+      //SelectStarCommand = new DelegateCommand(SelectStar);
       ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
            // Cannot use ObservesCanExecute extension here, but it's OK to use ObservesProperty
            // (That way I dont have to ShowStarDetailsCommand.RaiseCanExecuteChanged() in the SelectedStar setter)
@@ -163,21 +165,7 @@ namespace StarMap.ViewModels
 
 
 
-    // TODO: this one is a mock functionality. Remove.
-    private void SelectStar()
-    {
-      if (SelectedStar == null)
-      {
-        SelectedStar = VisibleStars[new Random().Next(VisibleStars.Count)];
-        StatusTextTemplate = $"{(SelectedStar.ConstellationId != null ? Constellations.First(x => x.Id == SelectedStar.ConstellationId.Value).Abbreviation + " | " : "")}" +
-          $"Star: {SelectedStar.Designation ?? "No designation"} | Distance: {SelectedStar.ParsecDistance} pc"; 
-      }        
-      else
-      {
-        SelectedStar = null;
-        StatusTextTemplate = null;
-      }
-    }   
+    
 
     protected override async Task Restore(NavigationParameters parameters)
     {
@@ -247,7 +235,24 @@ namespace StarMap.ViewModels
 
     public override async Task OnUrhoGenerated()
     {
-      
+      UrhoApplication.Input.TouchEnd += SelectStar;
+      await Application.InvokeOnMainAsync(() => UrhoApplication.AddStars(VisibleStars));
+    }
+
+    private void SelectStar(TouchEndEventArgs obj)
+    {
+      SelectedStar = UrhoApplication.OnTouched(obj);
+
+      if (SelectedStar != null)
+      {
+        // Setting this template seems a bit conflicted with the whole mvvm binding goodies. Just put few labels to bind to star properties.
+        StatusTextTemplate = $"{(SelectedStar.ConstellationId != null ? Constellations.First(x => x.Id == SelectedStar.ConstellationId.Value).Abbreviation + " | " : "")}" +
+          $"Star: {SelectedStar.Designation ?? "No designation"} | Distance: {SelectedStar.ParsecDistance} pc";
+      }
+      else
+      {
+        StatusTextTemplate = null;
+      }
     }
   }
 }

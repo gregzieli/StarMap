@@ -17,8 +17,6 @@ namespace StarMap.Views
 
     protected override async void OnAppearing()
     {
-      // Need to do it here like that, because from the VM I cannot access the surface view.
-      // This is actually the best compromise I could think of.
       await ((IUrhoHandler)BindingContext).GenerateUrho(surface).ConfigureAwait(false);      
     }
 

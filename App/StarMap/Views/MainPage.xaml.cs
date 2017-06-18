@@ -20,15 +20,13 @@ namespace StarMap.Views
 
     protected override async void OnAppearing()
     {
-      var urhoTask = ((IUrhoHandler)BindingContext).GenerateUrho(surface);
-
       RightPanel = new Overlay(rightOverlay, DockSide.Right, rightPanelButtons.Width + rightOverlay.Padding.Left * 2);
       BottomPanel = new Overlay(bottomOverlay, DockSide.Bottom, bottomOverlay.RowDefinitions[0].Height.Value);
 
       RightPanel.Collapse(length: 0);
       BottomPanel.Collapse(length: 0);
 
-      await urhoTask.ConfigureAwait(false);
+      await ((IUrhoHandler)BindingContext).GenerateUrho(surface);
 
       //base.OnAppearing();
     }

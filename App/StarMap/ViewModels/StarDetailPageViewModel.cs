@@ -33,8 +33,6 @@ namespace StarMap.ViewModels
     }
 
     public override async Task OnUrhoGenerated()
-    {
-      await UrhoApplication.SetStar(Star);
-    }
+      => UrhoApplication.SetStar(Star);
   }
 }

@@ -46,6 +46,7 @@
     <Compile Include="Events\ConstellationSelectedEvent.cs" />
     <Compile Include="UnityBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Urho\Components\StarComponent.cs" />
     <Compile Include="Urho\Universe.cs" />
     <Compile Include="Urho\SingleStar.cs" />
     <Compile Include="Urho\UrhoBase.cs" />

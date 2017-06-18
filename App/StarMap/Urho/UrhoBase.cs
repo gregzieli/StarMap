@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Urho;
+using Urho.Gui;
 using XF = Xamarin.Forms;
 
 namespace StarMap.Urho
@@ -9,8 +10,8 @@ namespace StarMap.Urho
   {
     [Preserve]
     public UrhoBase(ApplicationOptions options) : base(options)
-    { }
-        
+    { } 
+
     protected Scene _scene;
     protected Octree _octree;
     protected Node _lightNode, _cameraNode;
@@ -24,12 +25,13 @@ namespace StarMap.Urho
       {
         base.Start();
         CreateScene();
-        await FillScene();
+        await FillScene().ConfigureAwait(false);
       }
       catch (Exception e)
       {
         HandleException(e);
-      }      
+        await Exit();
+      }
     }
 
     void CreateScene()
@@ -63,6 +65,7 @@ namespace StarMap.Urho
       catch (Exception e)
       {
         HandleException(e);
+        await Exit();
       }
     }
   }

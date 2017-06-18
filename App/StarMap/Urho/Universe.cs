@@ -9,12 +9,16 @@ using Urho.Actions;
 using Urho.Shapes;
 using static Xamarin.Forms.Color;
 using XFColor = Xamarin.Forms.Color;
+using System.Collections.ObjectModel;
+using StarMap.Urho.Components;
 
 namespace StarMap.Urho
 {
   public class Universe : UrhoBase
   {
     public Universe(ApplicationOptions options) : base(options) { }
+
+    public StarComponent SelectedStar { get; set; }
 
     Node _plotNode;
     Camera _camera;
@@ -23,7 +27,7 @@ namespace StarMap.Urho
 
     protected override async Task FillScene()
     {
-      Input.TouchEnd += OnTouched;
+      //Input.TouchEnd += OnTouched;
       _camera = _cameraNode.GetComponent<Camera>();
 
       _plotNode = _scene.CreateChild();
@@ -34,9 +38,27 @@ namespace StarMap.Urho
       light.Brightness = 1.3f;
     }
 
-    private void OnTouched(TouchEndEventArgs obj)
+    public Star OnTouched(TouchEndEventArgs e)
     {
-      throw new NotImplementedException();
+      Ray cameraRay = _camera.GetScreenRay((float)e.X / Graphics.Width, (float)e.Y / Graphics.Height);
+      var results = _octree.RaycastSingle(cameraRay, RayQueryLevel.Triangle, 100000, DrawableFlags.Geometry);
+      if (results != null)
+      {
+        var star = results.Value.Node?.GetComponent<StarComponent>();
+        if (SelectedStar != star)
+        {
+          SelectedStar?.Deselect();
+          SelectedStar = star;
+          SelectedStar?.Select();
+        }
+      }
+      else
+      {
+        SelectedStar?.Deselect();
+        SelectedStar = null;
+      }
+
+      return SelectedStar?.StarData;
     }
 
     protected override void OnUpdate(float timeStep)
@@ -54,5 +76,13 @@ namespace StarMap.Urho
 
     protected override void HandleException(Exception ex)
      => PublishError(new UniverseUrhoException(ex));
+
+    public void AddStars(IList<Star> stars)
+    {
+      foreach (var star in stars)
+      {
+        _plotNode.CreateChild().AddComponent(new StarComponent(star));
+      }
+    }
   }
 }

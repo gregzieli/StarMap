@@ -24,6 +24,22 @@ namespace StarMap.ViewModels.Core
       : base(navigationService, pageDialogService)
     {
       _starManager = starManager;
+      // So if I use this, the Catch in CallAsync doesn't get used. 
+      // And that implementation works smoothly, whereas this causes more and more problems.
+      // Leave it for future reference.
+      //Application.UnhandledException += UrhoUnhandledException;
+    }
+
+    private async void UrhoUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    {
+      e.Handled = true;
+      // Some stuff get caught here, some don't. For example an error during init doesn't get caught here, that's why
+      // it has its own trycatch, and a MessagingCenter event handling.
+      if (!UrhoApplication.IsExiting)
+      {
+        await UrhoApplication.Exit().ConfigureAwait(false);
+        await HandleException(e.Exception).ConfigureAwait(false);
+      }        
     }
 
     protected override async Task Restore(NavigationParameters parameters)
@@ -37,24 +53,26 @@ namespace StarMap.ViewModels.Core
     }
 
     public async Task GenerateUrho(UrhoSurface surface)
-    {
-      // Moving this piece of code to here from the View doesn't change much, it's really just for consistency;
-      // I still am unable to catch any exception that occurs upon creating the UrhoApplication.
-      // That is why it is needed to be handled separately, as another layer.
-      // An error on SetStar can be caught here.
-      var options = new ApplicationOptions(assetsFolder: "Data")
+    {      
+      await CallAsync(async () =>
       {
-        //Orientation = Urho.ApplicationOptions.OrientationType.LandscapeAndPortrait,
-        // iOS only - which is a shame, because now I have to ensure the view height < width
-        // from https://github.com/xamarin/urho/blob/master/Urho3D/Urho3D_Android/Sdl/SDLSurface.java
-        // if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) 
-        //  if (mWidth < mHeight) skip = true;
-        // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
-      };
+        // Moving this piece of code to here from the View doesn't change much, it's really just for consistency;
+        // I still am unable to catch any exception that occurs upon creating the UrhoApplication.
+        // That is why it is needed to be handled separately, as another layer.
+        // An error on OnUrhoGenerated can be caught here.
+        var options = new ApplicationOptions(assetsFolder: "Data")
+        {
+          //Orientation = Urho.ApplicationOptions.OrientationType.LandscapeAndPortrait,
+          // iOS only - which is a shame, because now I have to ensure the view height < width
+          // from https://github.com/xamarin/urho/blob/master/Urho3D/Urho3D_Android/Sdl/SDLSurface.java
+          // if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) 
+          //  if (mWidth < mHeight) skip = true;
+          // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
+        };
+        UrhoApplication = await surface.Show<TUhroApp>(options).ConfigureAwait(continueOnCapturedContext: false);
 
-      UrhoApplication = await surface.Show<TUhroApp>(options).ConfigureAwait(continueOnCapturedContext: false);
-
-      await CallAsync(OnUrhoGenerated);
+        await OnUrhoGenerated();
+      });
     }
 
     public abstract Task OnUrhoGenerated();

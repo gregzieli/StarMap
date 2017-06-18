@@ -98,7 +98,7 @@ namespace StarMap.Urho
     }
 
 
-    public async Task SetStar(StarDetail star)
+    public void SetStar(StarDetail star)
     {
       Star = star;
 
