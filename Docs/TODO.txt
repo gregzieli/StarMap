@@ -3,3 +3,6 @@
  - nowa logika do sprawdzania współrzędnych
  - add setting: choose dist in ly/pc
  - round all doubles
+ - zmienic kolejność w statusBar: 
+    StarName/Flam-Bay/"?" Con | dist
+ - update gwiazd w urho

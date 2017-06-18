@@ -11,8 +11,6 @@ namespace StarMap.Views
   {
     public Overlay RightPanel { get; private set; }
 
-    public Overlay BottomPanel { get; private set; }
-
     public MainPage()
     {      
       InitializeComponent();
@@ -21,10 +19,8 @@ namespace StarMap.Views
     protected override async void OnAppearing()
     {
       RightPanel = new Overlay(rightOverlay, DockSide.Right, rightPanelButtons.Width + rightOverlay.Padding.Left * 2);
-      BottomPanel = new Overlay(bottomOverlay, DockSide.Bottom, bottomOverlay.RowDefinitions[0].Height.Value);
 
       RightPanel.Collapse(length: 0);
-      BottomPanel.Collapse(length: 0);
 
       await ((IUrhoHandler)BindingContext).GenerateUrho(surface);
 
@@ -57,11 +53,6 @@ namespace StarMap.Views
 
       constellationFilters.IsVisible = false;
       starFilters.IsVisible = true;
-    }
-
-    private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
-    {
-      BottomPanel.Slide(Easing.CubicInOut);
     }
   }
 }
