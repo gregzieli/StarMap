@@ -12,15 +12,26 @@ namespace UhroTest
   [XamlCompilation(XamlCompilationOptions.Compile)]
   public partial class UrhoPage : ContentPage
   {
+    Stars a;
     public UrhoPage()
     {
+      Urho.Application.UnhandledException += Application_UnhandledException;
       InitializeComponent();
     }
-
+    private async void Application_UnhandledException(object sender, Urho.UnhandledExceptionEventArgs e)
+    {
+      await a?.Exit();
+    }
     protected override async void OnAppearing()
     {
-      await surface.Show<Stars>(new Urho.ApplicationOptions());
+      
+      a  = await surface.Show<Stars>(new Urho.ApplicationOptions());
+      //await Urho.Application.ToMainThreadAsync();
+      //await Urho.Application.InvokeOnMainAsync(() => { });
+      a.Foo();
     }
+
+    
 
     protected override void OnDisappearing()
     {

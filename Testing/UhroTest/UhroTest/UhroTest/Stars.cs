@@ -5,13 +5,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Urho;
+using Urho.Shapes;
 
 namespace UhroTest
 {
   public class Stars : Application
   {
     [Preserve]
-    public Stars(ApplicationOptions options) : base(options) { }
+    public Stars(ApplicationOptions options) : base(options)
+    {
+    }
+    private void Application_UnhandledException(object sender, Urho.UnhandledExceptionEventArgs e)
+    {
+    }
+    protected override void Stop()
+    {
+      base.Stop();
+      //Urho.Application.UnhandledException -= Application_UnhandledException;
+    }
+
+    public void Foo()
+    {
+      _plotNode.CreateChild().CreateComponent<Sphere>();
+    }
 
     public Star SelectedStar { get; set; }
 
