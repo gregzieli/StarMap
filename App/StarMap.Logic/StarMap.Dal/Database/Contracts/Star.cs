@@ -38,13 +38,13 @@ namespace StarMap.Dal.Database.Contracts
     public string SpectralType { get; set; }
 
     [Column("x")]
-    public double X { get; set; }
+    public float X { get; set; }
 
     [Column("y")]
-    public double Y { get; set; }
+    public float Y { get; set; }
 
     [Column("z")]
-    public double Z { get; set; }
+    public float Z { get; set; }
 
     [Column("rarad")]
     public double RightAscensionRad { get; set; }

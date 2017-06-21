@@ -11,7 +11,7 @@ namespace StarMap.LogicTest
   public class Doodles
   {
     [Test]
-    public void One()
+    public void Bools()
     {
       bool a = false;
       Assert.IsTrue(a = !a);
@@ -23,6 +23,13 @@ namespace StarMap.LogicTest
       Assert.IsTrue(b = !b);
       Assert.IsFalse(b = !b);
       Assert.IsTrue(b = !b);
+    }
+
+    [Test]
+    public void RemovingFromArray()
+    {
+      List<uint> a = new List<uint>{ 1, 2, 3, 4, 5 };
+      Assert.DoesNotThrow(new TestDelegate(() => a.Remove(6546)));
     }
   }
 }

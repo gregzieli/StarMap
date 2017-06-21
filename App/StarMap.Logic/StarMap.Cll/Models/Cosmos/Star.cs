@@ -21,11 +21,11 @@ namespace StarMap.Cll.Models.Cosmos
 
     public double DeclinationRad { get; set; } // Probably TBR
 
-    public double X { get; set; }
+    public float X { get; set; }
 
-    public double Y { get; set; }
+    public float Y { get; set; }
 
-    public double Z { get; set; }
+    public float Z { get; set; }
 
     public string Designation => Name ?? (!Flamsteed.IsNullOrEmpty() ? $"{Flamsteed} {Bayer}" : Bayer);
   }
