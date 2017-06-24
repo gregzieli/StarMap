@@ -184,6 +184,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Icons\refresh.png" />
+    <Content Include="Assets\Sprites\star.png" />
     <Content Include="Assets\Textures\star_yellow_light.png" />
     <Content Include="Assets\Textures\star_yellow_dark.png" />
     <Content Include="Assets\Textures\star_lightblue_light.png" />

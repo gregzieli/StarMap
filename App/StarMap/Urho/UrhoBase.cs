@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Gui;
@@ -10,7 +11,20 @@ namespace StarMap.Urho
   {
     [Preserve]
     public UrhoBase(ApplicationOptions options) : base(options)
-    { } 
+    { }
+
+    // Check if this way still an exception doesn't get caught by the Call method from VM.
+    // Then consider if it's not even a better solution to just swallow them.
+    static UrhoBase()
+    {
+      UnhandledException += (s, e) =>
+      {
+#if DEBUG
+        Debugger.Break();
+#endif
+        e.Handled = true;
+      };
+    }
 
     protected Scene _scene;
     protected Octree _octree;

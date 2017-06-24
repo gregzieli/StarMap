@@ -6,3 +6,9 @@
  - zmienic kolejność w statusBar: 
     StarName/Flam-Bay/"?" Con | dist
  - update gwiazd w urho
+
+ - Jak najlepiej przekazywać wybraną gwiazdę?
+  teraz, jak używam sprite'ów, mogę albo
+  1. zrobić klasę rozszerzającą staticSprite2d, która będzie miała InputStar, plus metody selec deselect
+  2. select i deselect w Universe.cs normalnie, a zwracac tylko id.
+  Trochę dużo by zabrało porównywanie performance...
