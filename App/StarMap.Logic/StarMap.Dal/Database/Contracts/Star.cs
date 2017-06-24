@@ -1,8 +1,9 @@
 ﻿using SQLite;
+using StarMap.Core.Abstractions;
 
 namespace StarMap.Dal.Database.Contracts
 {
-  public class Star
+  public class Star : IUnique
   {
     [PrimaryKey, AutoIncrement, Column("_id")]
     public int Id { get; set; }

@@ -31,5 +31,11 @@ namespace StarMap.LogicTest
       List<uint> a = new List<uint>{ 1, 2, 3, 4, 5 };
       Assert.DoesNotThrow(new TestDelegate(() => a.Remove(6546)));
     }
+
+    [Test]
+    public void Miscellaneous()
+    {
+      
+    }
   }
 }

@@ -1,9 +1,10 @@
 ﻿using StarMap.Cll.Models.Core.Bindable;
+using StarMap.Core.Abstractions;
 using System.Collections.Generic;
 
 namespace StarMap.Cll.Models.Cosmos
 {
-  public class Constellation : MultiSelectable
+  public class Constellation : MultiSelectable, IUnique
   {
     public int Id { get; set; }
 

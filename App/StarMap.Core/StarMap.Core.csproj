@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Abstractions\INotifyElementChanged.cs" />
+    <Compile Include="Abstractions\IUnique.cs" />
     <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Models\ObservantCollection.cs" />

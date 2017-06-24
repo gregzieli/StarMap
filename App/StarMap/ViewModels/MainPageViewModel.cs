@@ -132,18 +132,28 @@ namespace StarMap.ViewModels
 
     private async void GetStars()
     {
-      await Call(() =>
+      await CallAsync(() =>
       {
-        var stars = _starManager.GetStars(StarFilter);
-        // TODO: verify if newing up is OK, or maybe Clear(), or something else.
-        VisibleStars = new ObservableCollection<Star>(stars);
-
-        Debug.WriteLine($"    Count {VisibleStars.Count}");
-        Debug.WriteLine($"    Mag   {StarFilter.MagnitudeTo}");
-        Debug.WriteLine($"    Dist  {StarFilter.DistanceTo}");
-        Debug.WriteLine($"    Name  {StarFilter.DesignationQuery}");
+        GetStarsFromDb();
+        return UpdateUrho();
       });
-      
+    }
+
+    void GetStarsFromDb()
+    {
+      var stars = _starManager.GetStars(StarFilter);
+      // TODO: verify if newing up is OK, or maybe Clear(), or something else.
+      VisibleStars = new ObservableCollection<Star>(stars);
+
+      Debug.WriteLine($"    Count {VisibleStars.Count}");
+      Debug.WriteLine($"    Mag   {StarFilter.MagnitudeTo}");
+      Debug.WriteLine($"    Dist  {StarFilter.DistanceTo}");
+      Debug.WriteLine($"    Name  {StarFilter.DesignationQuery}");
+    }
+
+    async Task UpdateUrho()
+    {
+      await Application.InvokeOnMainAsync(() => UrhoApplication.UpdateWithStars(VisibleStars));
     }
 
     private void GetConstellations()
@@ -179,7 +189,7 @@ namespace StarMap.ViewModels
       {
         StarFilter = _starManager.LoadFilter();
         GetConstellations();
-        GetStars();
+        GetStarsFromDb();
       });
     }    
 
@@ -236,21 +246,22 @@ namespace StarMap.ViewModels
     public override async Task OnUrhoGenerated()
     {
       UrhoApplication.Input.TouchEnd += SelectStar;
-      await Application.InvokeOnMainAsync(() => UrhoApplication.AddStars(VisibleStars));
+      await UpdateUrho();
     }
 
     private void SelectStar(TouchEndEventArgs obj)
     {
-      SelectedStar = UrhoApplication.OnTouched(obj);
-
-      if (SelectedStar != null)
+      var id = UrhoApplication.OnTouched(obj);
+      if (id.HasValue)
       {
+        SelectedStar = VisibleStars.FirstOrDefault(x => x.Id == id.Value);
         // Setting this template seems a bit conflicted with the whole mvvm binding goodies. Just put few labels to bind to star properties.
         StatusTextTemplate = $"{(SelectedStar.ConstellationId != null ? Constellations.First(x => x.Id == SelectedStar.ConstellationId.Value).Abbreviation + " | " : "")}" +
           $"Star: {SelectedStar.Designation ?? "No designation"} | Distance: {SelectedStar.ParsecDistance} pc";
       }
       else
       {
+        SelectedStar = null;
         StatusTextTemplate = null;
       }
     }

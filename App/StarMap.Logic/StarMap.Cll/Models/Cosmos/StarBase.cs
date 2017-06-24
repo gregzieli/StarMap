@@ -1,8 +1,9 @@
-﻿using StarMap.Core.Extensions;
+﻿using StarMap.Core.Abstractions;
+using StarMap.Core.Extensions;
 
 namespace StarMap.Cll.Models.Cosmos
 {
-  public abstract class StarBase
+  public abstract class StarBase : IUnique
   {
     public int Id { get; set; }
 
