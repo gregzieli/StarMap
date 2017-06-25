@@ -60,6 +60,13 @@ namespace StarMap.Urho
 
       if (results != null)
       {
+        // now there is a child node of the star node that can be a result. Need to support that.
+        // As I look at this code, it's unnecessary to keep the Component, since all the operations are performed on is node.
+        //  So just create a solution to pick the right node. Then, this node would have two child nodes - one for ray casting (with a big  scale)
+        // and one volatile node for selection.
+        // Ehh, it's a shame constructor injection doesn't work here - could put all those methods in a separate class, 
+        //  - since established, that StarComponent is useless.
+        // Could add another bas class...
         var star = results.Value.Node?.GetComponent<StarComponent>();
         if (SelectedStar != star)
         {

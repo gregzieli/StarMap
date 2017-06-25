@@ -269,21 +269,24 @@ namespace StarMap.ViewModels
       await UpdateUrho();
     }
 
-    private void SelectStar(TouchEndEventArgs obj)
+    private async void SelectStar(TouchEndEventArgs obj)
     {
-      var id = UrhoApplication.OnTouched(obj);
-      if (!id.IsNullOrEmpty())
+      await Call(() =>
       {
-        SelectedStar = VisibleStars.FirstOrDefault(x => x.Id == int.Parse(id));
-        // Setting this template seems a bit conflicted with the whole mvvm binding goodies. Just put few labels to bind to star properties.
-        StatusTextTemplate = $"{(SelectedStar.ConstellationId != null ? Constellations.First(x => x.Id == SelectedStar.ConstellationId.Value).Abbreviation + " | " : "")}" +
-          $"Star: {SelectedStar.Designation ?? "No designation"} | Distance: {SelectedStar.ParsecDistance} pc";
-      }
-      else
-      {
-        SelectedStar = null;
-        StatusTextTemplate = null;
-      }
+        var id = UrhoApplication.OnTouched(obj);
+        if (!id.IsNullOrEmpty())
+        {
+          SelectedStar = VisibleStars.FirstOrDefault(x => x.Id == int.Parse(id));
+          // Setting this template seems a bit conflicted with the whole mvvm binding goodies. Just put few labels to bind to star properties.
+          StatusTextTemplate = $"{(SelectedStar.ConstellationId != null ? Constellations.First(x => x.Id == SelectedStar.ConstellationId.Value).Abbreviation + " | " : "")}" +
+            $"Star: {SelectedStar.Designation ?? "No designation"} | Distance: {SelectedStar.ParsecDistance} pc";
+        }
+        else
+        {
+          SelectedStar = null;
+          StatusTextTemplate = null;
+        }
+      });      
     }
   }
 }

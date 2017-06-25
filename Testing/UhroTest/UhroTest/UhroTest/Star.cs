@@ -45,11 +45,28 @@ namespace UhroTest
 
     public void Deselect()
     {
+      _starNode.RemoveAllChildren();
+    }
+
+    public async void Select()
+    {
+      var node = _starNode.CreateChild("torusNode");
+
+      var torus = node.CreateComponent<Torus>();
+      torus.Color = Color.Yellow;
+      //node.LookAt(Vector3.Up, Vector3.Up);
+
+      node.Rotate(new Quaternion(90, 0, 0));
+      await node.RunActionsAsync(new RepeatForever(new RotateBy(1, 30, 0, 0)));
+    }
+
+    public void Deselect2()
+    {
       _starNode.RemoveAllActions();//TODO: remove only "selection" action
       _starNode.RunActions(new EaseBackOut(new ScaleTo(1f, _scale.X, _scale.Y, _scale.Z)));
     }
 
-    public void Select()
+    public void Select2()
     {
       // "blinking" animation
       _starNode.RunActions(new RepeatForever(new ScaleTo(1f, 0.5f), new ScaleTo(1f, 1.5f)));

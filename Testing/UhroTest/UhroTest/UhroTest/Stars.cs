@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Shapes;
+using Urho.Urho2D;
 
 namespace UhroTest
 {
@@ -24,13 +25,9 @@ namespace UhroTest
       //Urho.Application.UnhandledException -= Application_UnhandledException;
     }
 
-    public void Foo()
-    {
-      _plotNode.CreateChild().CreateComponent<Sphere>();
-    }
-
     public Star SelectedStar { get; set; }
 
+    public Sprite2D SelectionSprite { get; set; }
     Scene _scene;
     Octree _octree;
     Node _plotNode;
@@ -109,6 +106,8 @@ namespace UhroTest
         starNode.AddComponent(star);
         _stars.Add(star);
       }
+
+      //SelectionSprite = ResourceCache.GetSprite2D("Selection.png");
     }
     
     void SetupViewport()
