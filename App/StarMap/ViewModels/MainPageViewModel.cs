@@ -9,6 +9,7 @@ using StarMap.Cll.Constants;
 using StarMap.Cll.Exceptions;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;
+using StarMap.Core.Abstractions;
 using StarMap.Core.Models;
 using StarMap.Urho;
 using StarMap.ViewModels.Core;
@@ -111,23 +112,41 @@ namespace StarMap.ViewModels
     //=> await Navigate("StarDetailPage", "id", SelectedStar.Id);
     => await Navigate(new Uri(Navigation.DetailAbsolute, UriKind.Absolute), Navigation.Keys.StarId, SelectedStar.Id);
 
-    private void OnConstellationSelected(Constellation c)
+    private async void OnConstellationSelected(Constellation c)
     {
-      // TODO: All the stars in this constellation should be highlighted somehow.
       Debug.WriteLine(c?.Name ?? "null");
+
+      await Call(() =>
+      {
+        if (c == null)
+          UrhoApplication.ResetHighlight();
+        else
+        {
+          var selection = VisibleStars.Where(x => x.ConstellationId == c.Id);
+          UrhoApplication.HighlightStars(selection);
+        }
+      });      
     }
 
     private void OnConstellationFiltered(object sender, PropertyChangedEventArgs e)
     {
       Constellation c = sender as Constellation;
       Debug.WriteLine($"{c.Name} is {(c.IsSelected ? "visible" : "hidden")}");
+      // TODO: Do stuff in URHO
     }
 
     private void FilterConstellations(object command)
     {
+      // Unsubscribe to avoid 80-something consecutive calls
+      Constellations.ElementChanged -= OnConstellationFiltered;
       bool action = (bool)command;
       foreach (var c in Constellations)
         c.IsSelected = action;
+
+      // TODO: Do stuff in URHO
+
+      // Subscribe back on
+      Constellations.ElementChanged += OnConstellationFiltered;
     }
 
     private async void GetStars()
@@ -142,8 +161,11 @@ namespace StarMap.ViewModels
     void GetStarsFromDb()
     {
       var stars = _starManager.GetStars(StarFilter);
-      // TODO: verify if newing up is OK, or maybe Clear(), or something else.
+      // Since the size of the collection may differ, it's better memorywise to instantiate a new one,
+      // rather than reuse the already allocated list with a completely different size.
       VisibleStars = new ObservableCollection<Star>(stars);
+
+
 
       Debug.WriteLine($"    Count {VisibleStars.Count}");
       Debug.WriteLine($"    Mag   {StarFilter.MagnitudeTo}");
@@ -196,9 +218,6 @@ namespace StarMap.ViewModels
     protected override async Task CleanUp()
     {
       await base.CleanUp();
-      // Since I call Navigate using the CallAsync, which sets IsBusy to true, and this method gets executed 
-      // BEFORE the awaited navigation, it would never be executed (canExecute => !isBusy)
-      // For now I just disabled the check for canExecute on the Call  method.
       await Call(() =>
       {
         SensorStop();

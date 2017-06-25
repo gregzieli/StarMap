@@ -15,6 +15,8 @@ using System.Linq;
 using Urho.Urho2D;
 using Urho.Physics;
 using System.Diagnostics;
+using StarMap.Core.Abstractions;
+using StarMap.Core.Extensions;
 
 namespace StarMap.Urho
 {
@@ -23,6 +25,8 @@ namespace StarMap.Urho
     public Universe(ApplicationOptions options) : base(options) { }
 
     public StarComponent SelectedStar { get; set; }
+
+    public IList<StarComponent> HighlightedStars { get; set; }
 
     //https://github.com/xamarin/urho-samples/blob/master/FeatureSamples/Core/24_Urho2DSprite/Urho2DSprite.cs
     public Sprite2D StarSprite { get; set; }
@@ -44,13 +48,15 @@ namespace StarMap.Urho
       light.Brightness = 1.3f;
 
       StarSprite = ResourceCache.GetSprite2D("Sprites/star.png");
+
+      HighlightedStars = new List<StarComponent>();
     }
-    
-    
+
+
     public uint? OnTouched(TouchEndEventArgs e)
     {
       Ray cameraRay = _camera.GetScreenRay((float)e.X / Graphics.Width, (float)e.Y / Graphics.Height);
-      var results = _octree.RaycastSingle(cameraRay, RayQueryLevel.Aabb, 10000, DrawableFlags.Geometry);
+      var results = _octree.RaycastSingle(cameraRay, RayQueryLevel.Aabb, 10000, DrawableFlags.Geometry); 
 
       if (results != null)
       {
@@ -109,6 +115,16 @@ namespace StarMap.Urho
 
         starNode.Position = new Vector3(star.X, star.Y, star.Z);
         starNode.LookAt(_cameraNode.Position, Vector3.Up);
+
+        #region Physics (doesn't work)
+        /*
+        var body = starNode.CreateComponent<RigidBody>();
+        body.SetCollisionLayerAndMask(2, 2);
+        var collisionShape = starNode.CreateComponent<CollisionShape>();
+        collisionShape.SetSphere(1, starNode.Position, Quaternion.Identity);
+        */
+        #endregion
+
       }
 
       foreach (var leftUnused in existingNodesById.Values)
@@ -118,6 +134,35 @@ namespace StarMap.Urho
       }
       existingNodesById.Clear();
     }
-    
+
+    public void HighlightStars(IEnumerable<IUnique> selectedStars)
+    {
+      ResetHighlight();
+
+      var aa = _plotNode.GetChildrenWithComponent<StarComponent>().OrderBy(x => x.ID);
+
+      foreach (var s in selectedStars)
+      {
+        // HAHA. ID is not Index. During node initialization I set ID, but GetChild searches index, which is note a property of the Node.
+        var a = _plotNode.GetChild((uint)s.Id);
+        var starComponent = a?.GetComponent<StarComponent>();
+        if (starComponent != null)
+        {
+          HighlightedStars.Add(starComponent);
+          starComponent.Color = Color.Yellow;
+        }
+      }
+    }
+
+    public void ResetHighlight()
+    {
+      if (HighlightedStars.IsNullOrEmpty())
+        return;
+
+      foreach (var s in HighlightedStars)
+        s.Color = Color.White;
+
+      HighlightedStars.Clear();
+    }
   }
 }

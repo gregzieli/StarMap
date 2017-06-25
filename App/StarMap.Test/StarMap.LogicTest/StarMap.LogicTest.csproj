@@ -91,6 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Astronomy.cs" />
+    <Compile Include="Classes\CollectionItem.cs" />
     <Compile Include="Collections.cs" />
     <Compile Include="Configuration\SetupFixture.cs" />
     <Compile Include="Database.cs" />

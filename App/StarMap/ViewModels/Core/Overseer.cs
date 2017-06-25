@@ -86,8 +86,8 @@ namespace StarMap.ViewModels.Core
     /// <param name="onException">An action to execute upon catching an exception.</param>
     protected async Task CallAsync(Func<Task> fn)
     {
-      if (!CanExecute())
-        return;
+      //if (!CanExecute())
+      //  return;
 
       try
       {
@@ -112,8 +112,8 @@ namespace StarMap.ViewModels.Core
     /// <param name="callback">Delegate that operates on the data awaited.</param>
     protected async Task CallAsync<A>(Func<Task<A>> fn, Action<A> callback)
     {
-      if (!CanExecute())
-        return;
+      //if (!CanExecute())
+      //  return;
 
       try
       {
