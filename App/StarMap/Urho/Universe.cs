@@ -53,7 +53,7 @@ namespace StarMap.Urho
     }
 
 
-    public uint? OnTouched(TouchEndEventArgs e)
+    public string OnTouched(TouchEndEventArgs e)
     {
       Ray cameraRay = _camera.GetScreenRay((float)e.X / Graphics.Width, (float)e.Y / Graphics.Height);
       var results = _octree.RaycastSingle(cameraRay, RayQueryLevel.Aabb, 10000, DrawableFlags.Geometry); 
@@ -74,7 +74,7 @@ namespace StarMap.Urho
         SelectedStar = null;
       }
 
-      return SelectedStar?.ID;
+      return SelectedStar?.Node.Name;
     }
     
     protected override void OnUpdate(float timeStep)
@@ -96,11 +96,11 @@ namespace StarMap.Urho
     public void UpdateWithStars(IList<Star> stars)
     {
       var existingNodesById = _plotNode.GetChildrenWithComponent<StarComponent>()
-        .ToDictionary(x => x.ID, x => x);
+        .ToDictionary(x => x.Name, x => x);
 
       foreach (var star in stars)
       {
-        uint id = Convert.ToUInt32(star.Id);
+        string id = star.Id.ToString();
 
         if (existingNodesById.ContainsKey(id))
         {
@@ -109,7 +109,7 @@ namespace StarMap.Urho
         }
 
         Node starNode = _plotNode.CreateChild(id, CreateMode.Local);
-        var starComponent = starNode.CreateComponent<StarComponent>(id: id);
+        var starComponent = starNode.CreateComponent<StarComponent>();
 
         starComponent.Sprite = StarSprite;
 
@@ -139,17 +139,16 @@ namespace StarMap.Urho
     {
       ResetHighlight();
 
-      var aa = _plotNode.GetChildrenWithComponent<StarComponent>().OrderBy(x => x.ID);
+      var aa = _plotNode.GetChildrenWithComponent<StarComponent>().OrderBy(x => x.Name);
 
       foreach (var s in selectedStars)
       {
-        // HAHA. ID is not Index. During node initialization I set ID, but GetChild searches index, which is note a property of the Node.
-        var a = _plotNode.GetChild((uint)s.Id);
-        var starComponent = a?.GetComponent<StarComponent>();
+        var starComponent = _plotNode.GetChild(s.Id.ToString())?.GetComponent<StarComponent>();
         if (starComponent != null)
         {
           HighlightedStars.Add(starComponent);
-          starComponent.Color = Color.Yellow;
+          starComponent.Color = Color.Cyan;
+          starComponent.Select2();
         }
       }
     }
@@ -160,7 +159,10 @@ namespace StarMap.Urho
         return;
 
       foreach (var s in HighlightedStars)
+      {
+        s.Deselect2();
         s.Color = Color.White;
+      }
 
       HighlightedStars.Clear();
     }

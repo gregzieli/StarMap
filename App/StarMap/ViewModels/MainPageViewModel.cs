@@ -10,6 +10,7 @@ using StarMap.Cll.Exceptions;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Abstractions;
+using StarMap.Core.Extensions;
 using StarMap.Core.Models;
 using StarMap.Urho;
 using StarMap.ViewModels.Core;
@@ -271,9 +272,9 @@ namespace StarMap.ViewModels
     private void SelectStar(TouchEndEventArgs obj)
     {
       var id = UrhoApplication.OnTouched(obj);
-      if (id.HasValue)
+      if (!id.IsNullOrEmpty())
       {
-        SelectedStar = VisibleStars.FirstOrDefault(x => x.Id == id.Value);
+        SelectedStar = VisibleStars.FirstOrDefault(x => x.Id == int.Parse(id));
         // Setting this template seems a bit conflicted with the whole mvvm binding goodies. Just put few labels to bind to star properties.
         StatusTextTemplate = $"{(SelectedStar.ConstellationId != null ? Constellations.First(x => x.Id == SelectedStar.ConstellationId.Value).Abbreviation + " | " : "")}" +
           $"Star: {SelectedStar.Designation ?? "No designation"} | Distance: {SelectedStar.ParsecDistance} pc";
