@@ -56,24 +56,27 @@ namespace StarMap.Urho
     public string OnTouched(TouchEndEventArgs e)
     {
       Ray cameraRay = _camera.GetScreenRay((float)e.X / Graphics.Width, (float)e.Y / Graphics.Height);
-      var results = _octree.RaycastSingle(cameraRay, RayQueryLevel.Aabb, 10000, DrawableFlags.Geometry); 
+      var results = _octree.RaycastSingle(cameraRay, RayQueryLevel.Triangle, 10000, DrawableFlags.Geometry); 
 
       if (results != null)
       {
-        // now there is a child node of the star node that can be a result. Need to support that.
-        // As I look at this code, it's unnecessary to keep the Component, since all the operations are performed on is node.
-        //  So just create a solution to pick the right node. Then, this node would have two child nodes - one for ray casting (with a big  scale)
-        // and one volatile node for selection.
-        // Ehh, it's a shame constructor injection doesn't work here - could put all those methods in a separate class, 
-        //  - since established, that StarComponent is useless.
-        // Could add another bas class...
-        var star = results.Value.Node?.GetComponent<StarComponent>();
-        if (SelectedStar != star)
+        if (results.Value.Drawable is Sphere sphere)
         {
-          SelectedStar?.Deselect();
-          SelectedStar = star;
-          SelectedStar?.Select();
+          var star = sphere.Node.Parent.GetComponent<StarComponent>();
+          if (star != null && SelectedStar != star)
+          {
+            SelectedStar?.Deselect();
+            SelectedStar = star;
+            SelectedStar?.Select();
+          }
         }
+        // Old one (if  having the sphere component turns out to be not working as expected)
+        //if (results.Value.Drawable is StarComponent star && SelectedStar != star)
+        //{
+        //  SelectedStar?.Deselect();
+        //  SelectedStar = star;
+        //  SelectedStar?.Select();
+        //}
       }
       else
       {
@@ -123,6 +126,12 @@ namespace StarMap.Urho
         starNode.Position = new Vector3(star.X, star.Y, star.Z);
         starNode.LookAt(_cameraNode.Position, Vector3.Up);
 
+        var a = starNode.CreateChild("collision");
+        var b = a.CreateComponent<Sphere>();
+        a.ScaleNode(1.1f);
+        // Seriously? No better way?
+        b.Color = Color.Transparent;
+
         #region Physics (doesn't work)
         /*
         var body = starNode.CreateComponent<RigidBody>();
@@ -154,8 +163,7 @@ namespace StarMap.Urho
         if (starComponent != null)
         {
           HighlightedStars.Add(starComponent);
-          starComponent.Color = Color.Cyan;
-          starComponent.Select2();
+          starComponent.Highlight();
         }
       }
     }
@@ -168,7 +176,6 @@ namespace StarMap.Urho
       foreach (var s in HighlightedStars)
       {
         s.Deselect2();
-        s.Color = Color.White;
       }
 
       HighlightedStars.Clear();
