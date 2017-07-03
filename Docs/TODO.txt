@@ -5,6 +5,7 @@
  - round all doubles
  - zmienic kolejność w statusBar: 
     StarName/Flam-Bay/"?" Con | dist
- - update gwiazd w urho
+ - filtrowanie konstelacji: nody mają coś jak visible, czy enabled.
 
- - SphereCast to niewypał, ale możnaby po prostu dodać dodatkowego Node, większego, i już. Ten mniejszy miałby sprite, większy byłby tylko do łapania promienia.
+size/scale: tu jest coś
+godotengine.org/qa/3626/how-set-sprite-textre-size
