@@ -101,7 +101,7 @@ namespace StarMap.Urho
     }
 
     protected override void HandleException(Exception ex)
-     => PublishError(new UniverseUrhoException(ex));    
+     => PublishError(new UniverseUrhoException(ex));
 
     public void UpdateWithStars(IList<Star> stars)
     {
@@ -146,6 +146,7 @@ namespace StarMap.Urho
       foreach (var leftUnused in existingNodesById.Values)
       {
         leftUnused.RemoveComponent<StarComponent>();
+        leftUnused.RemoveAllChildren();
         leftUnused.Remove();
       }
       existingNodesById.Clear();
@@ -154,9 +155,6 @@ namespace StarMap.Urho
     public void HighlightStars(IEnumerable<IUnique> selectedStars)
     {
       ResetHighlight();
-
-      var aa = _plotNode.GetChildrenWithComponent<StarComponent>().OrderBy(x => x.Name);
-
       foreach (var s in selectedStars)
       {
         var starComponent = _plotNode.GetChild(s.Id.ToString())?.GetComponent<StarComponent>();
@@ -179,6 +177,19 @@ namespace StarMap.Urho
       }
 
       HighlightedStars.Clear();
+    }
+
+    public void ShowConstellations(IEnumerable<IUnique> selectedStars, bool turnOn)
+    {
+      foreach (var s in selectedStars)
+      {
+        var a = _plotNode.GetChild(s.Id.ToString());
+        if (a != null)
+        {
+          a.Enabled = turnOn;
+          a.GetChild("collision").Enabled = turnOn;
+        }
+      }
     }
   }
 }

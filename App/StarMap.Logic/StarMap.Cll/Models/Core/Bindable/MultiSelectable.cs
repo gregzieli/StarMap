@@ -13,11 +13,11 @@ namespace StarMap.Cll.Models.Core.Bindable
   // implement just INotifyPropertyChanged
   public class MultiSelectable : BindableBase
   {
-    private bool _isSelected = true;
-    public bool IsSelected
+    private bool _isOn = true;
+    public bool IsOn
     {
-      get { return _isSelected; }
-      set { SetProperty(ref _isSelected, value); }
+      get { return _isOn; }
+      set { SetProperty(ref _isOn, value); }
     }
   }
 }

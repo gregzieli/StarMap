@@ -98,7 +98,7 @@
         </ListView.Header>
         <ListView.ItemTemplate>
           <DataTemplate>
-            <SwitchCell Text="{Binding Name}" On="{Binding IsSelected}" />
+            <SwitchCell Text="{Binding Name}" On="{Binding IsOn}" />
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>

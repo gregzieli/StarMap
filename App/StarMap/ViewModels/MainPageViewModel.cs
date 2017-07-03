@@ -15,6 +15,8 @@ using StarMap.Core.Models;
 using StarMap.Urho;
 using StarMap.ViewModels.Core;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -82,7 +84,7 @@ namespace StarMap.ViewModels
     private DelegateCommand<object> _filterConstellationsCommand;
     public DelegateCommand<object> FilterConstellationsCommand =>
       // T could not be bool, weird.
-        _filterConstellationsCommand ?? (_filterConstellationsCommand = new DelegateCommand<object>(FilterConstellations));
+        _filterConstellationsCommand ?? (_filterConstellationsCommand = new DelegateCommand<object>(FilterConstellations, x => CanExecute()));
 
     private DelegateCommand _getStarsCommand;
     public DelegateCommand GetStarsCommand =>
@@ -115,8 +117,6 @@ namespace StarMap.ViewModels
 
     private async void OnConstellationSelected(Constellation c)
     {
-      Debug.WriteLine(c?.Name ?? "null");
-
       await Call(() =>
       {
         if (c == null)
@@ -129,22 +129,29 @@ namespace StarMap.ViewModels
       });      
     }
 
-    private void OnConstellationFiltered(object sender, PropertyChangedEventArgs e)
+    async Task Foo(IEnumerable<IUnique> stars, bool turnOn)
     {
-      Constellation c = sender as Constellation;
-      Debug.WriteLine($"{c.Name} is {(c.IsSelected ? "visible" : "hidden")}");
-      // TODO: Do stuff in URHO
+      await CallAsync(async () => await Application.InvokeOnMainAsync(() =>
+      {
+        UrhoApplication.ShowConstellations(stars, turnOn);
+      }));
     }
 
-    private void FilterConstellations(object command)
+    async void OnConstellationFiltered(object sender, PropertyChangedEventArgs e)
+    {
+      Constellation c = sender as Constellation;
+      Debug.WriteLine($"{c.Name} is {(c.IsOn ? "visible" : "hidden")}");
+      await Foo(VisibleStars.Where(x => x.ConstellationId == c.Id), c.IsOn);
+    }
+
+    async void FilterConstellations(object command)
     {
       // Unsubscribe to avoid 80-something consecutive calls
       Constellations.ElementChanged -= OnConstellationFiltered;
       bool action = (bool)command;
       foreach (var c in Constellations)
-        c.IsSelected = action;
-
-      // TODO: Do stuff in URHO
+        c.IsOn = action;
+      await Foo(VisibleStars.Where(x => x.ConstellationId.HasValue), action);
 
       // Subscribe back on
       Constellations.ElementChanged += OnConstellationFiltered;
