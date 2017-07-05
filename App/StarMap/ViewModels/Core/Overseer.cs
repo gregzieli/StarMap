@@ -32,8 +32,6 @@ namespace StarMap.ViewModels.Core
     /// <param name="fn">a delegate to execute.</param>
     protected async Task Call(Action fn)
     {
-      //if (!CanExecute())
-      //  return;
       try
       {
         IsBusy = true;
@@ -50,35 +48,6 @@ namespace StarMap.ViewModels.Core
     }
 
     /// <summary>
-    /// Executes a delegate that returns a value of the given type, 
-    /// catching any exception that may happen during the execution.
-    /// </summary>
-    /// <remarks>
-    /// Although the method call is executed synchronously, it is marked async, since 
-    /// global error handling is an asynchronous operation.
-    /// </remarks>
-    /// <param name="fn">Delegate to execute.</param>
-    //protected async Task<A> Call<A>(Func<A> fn)
-    //{
-    //  try
-    //  {
-    //    IsBusy = true;
-    //    return fn();
-    //  }
-    //  catch (Exception ex)
-    //  {
-    //    await HandleException(ex);
-
-    //    return default(A);
-    //  }
-    //  finally
-    //  {
-    //    IsBusy = false;
-    //  }
-    //}
-
-
-    /// <summary>
     /// Executes a delegate that returns a value of the given type asynchronously, 
     /// catching any exception that may happen during execution.
     /// </summary>
@@ -86,9 +55,6 @@ namespace StarMap.ViewModels.Core
     /// <param name="onException">An action to execute upon catching an exception.</param>
     protected async Task CallAsync(Func<Task> fn)
     {
-      //if (!CanExecute())
-      //  return;
-
       try
       {
         IsBusy = true;
@@ -112,9 +78,6 @@ namespace StarMap.ViewModels.Core
     /// <param name="callback">Delegate that operates on the data awaited.</param>
     protected async Task CallAsync<A>(Func<Task<A>> fn, Action<A> callback)
     {
-      //if (!CanExecute())
-      //  return;
-
       try
       {
         IsBusy = true;

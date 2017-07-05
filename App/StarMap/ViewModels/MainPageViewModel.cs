@@ -26,6 +26,7 @@ using Urho;
 
 namespace StarMap.ViewModels
 {
+  // TODO: maybe not another parent, but make this class into partial classes, there's way too much code in here for me.
   public class MainPageViewModel : StarGazer<Universe, UniverseUrhoException>, IApplicationLifecycle
   {
     IDeviceRotation _motionDetector;
@@ -64,8 +65,7 @@ namespace StarMap.ViewModels
       get { return _visibleStars; }
       set { SetProperty(ref _visibleStars, value); }
     }
-
-    //  give this one a different color.
+    
     private Constellation _selectedConstellation;
     public Constellation SelectedConstellation
     {
@@ -73,9 +73,9 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _selectedConstellation, value, () => OnConstellationSelected(value)); }
     }
 
-    private DelegateCommand _resetFiltersCommandCommand;
+    private DelegateCommand _resetFiltersCommand;
     public DelegateCommand ResetFiltersCommand =>
-        _resetFiltersCommandCommand ?? (_resetFiltersCommandCommand = new DelegateCommand(ResetFilter));
+        _resetFiltersCommand ?? (_resetFiltersCommand = new DelegateCommand(ResetFilter));
 
     // Setting individual switches should be handled maybe:
     // extending the model here with an INotifyPropChanged implementation
@@ -92,6 +92,15 @@ namespace StarMap.ViewModels
 
     public DelegateCommand SelectStarCommand { get; private set; }
     public DelegateCommand ShowStarDetailsCommand { get; private set; }
+
+    private DelegateCommand _travelCommand;
+    public DelegateCommand TravelCommand =>
+        _travelCommand ?? (_travelCommand = new DelegateCommand(Travel, () => SelectedStar != null).ObservesProperty(() => SelectedStar));
+
+    private async void Travel()
+    {
+      await UrhoApplication.Travel(SelectedStar);
+    }
 
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IDeviceRotation motionDetector) 
       : base(navigationService, pageDialogService, starManager)
@@ -131,9 +140,9 @@ namespace StarMap.ViewModels
 
     async Task Foo(IEnumerable<IUnique> stars, bool turnOn)
     {
-      await CallAsync(async () => await Application.InvokeOnMainAsync(() =>
+      await CallAsync(() => Application.InvokeOnMainAsync(() =>
       {
-        UrhoApplication.ShowConstellations(stars, turnOn);
+        UrhoApplication.ToggleConstellations(stars, turnOn);
       }));
     }
 
@@ -172,6 +181,11 @@ namespace StarMap.ViewModels
       // Since the size of the collection may differ, it's better memorywise to instantiate a new one,
       // rather than reuse the already allocated list with a completely different size.
       VisibleStars = new ObservableCollection<Star>(stars);
+
+
+      // TODO: update sqlite-net-pcl and switch to asyncConnection
+      //       also, not the whole connection needs to be brought from the  Android app, just the db location.
+      // https://developer.xamarin.com/guides/xamarin-forms/application-fundamentals/databases/
 
 
 

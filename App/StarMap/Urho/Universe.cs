@@ -34,10 +34,12 @@ namespace StarMap.Urho
     Node _plotNode;
     Camera _camera;
     const float touchSensitivity = 2;
+    Vector3 _earthPosition = new Vector3(0, 0, 0);
     float _yaw, _pitch;
 
     protected override async Task FillScene()
     {
+      _cameraNode.Position = _earthPosition;
       _camera = _cameraNode.GetComponent<Camera>();
 
       _plotNode = _scene.CreateChild();
@@ -179,7 +181,7 @@ namespace StarMap.Urho
       HighlightedStars.Clear();
     }
 
-    public void ShowConstellations(IEnumerable<IUnique> selectedStars, bool turnOn)
+    public void ToggleConstellations(IEnumerable<IUnique> selectedStars, bool turnOn)
     {
       foreach (var s in selectedStars)
       {
@@ -190,6 +192,13 @@ namespace StarMap.Urho
           a.GetChild("collision").Enabled = turnOn;
         }
       }
+    }
+
+    public async Task Travel(IUnique star)
+    {
+      var target = _plotNode.GetChild(star.Id.ToString());
+      // TODO: Duration based on distance
+      await _cameraNode.RunActionsAsync(new MoveTo(2, target.Position));
     }
   }
 }

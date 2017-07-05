@@ -29,7 +29,7 @@
 
       <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="End">
         <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>
-        <Button Text="Travel" />
+        <Button Text="Travel" Command="{Binding TravelCommand}"/>
       </StackLayout>
 
     </Grid>
