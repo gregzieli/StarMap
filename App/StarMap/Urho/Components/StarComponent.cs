@@ -13,7 +13,7 @@ namespace StarMap.Urho.Components
     public void Deselect2()
     {
       Color = Color.White;
-      Node.RemoveAllActions();//TODO: remove only "selection" action
+      Node.RemoveAllActions();
       Node.RunActions(new EaseBackOut(new ScaleTo(1f, _scale.X, _scale.Y, _scale.Z)));
     }
 
@@ -22,7 +22,7 @@ namespace StarMap.Urho.Components
       Color = Color.Cyan;
       _scale = Node.Scale;
       // "blinking" animation
-      Node.RunActions(new RepeatForever(new ScaleTo(1f, 0.5f), new ScaleTo(1f, 1.5f)));
+      Node.RunActions(new RepeatForever(new ScaleTo(1, 0.9f), new ScaleTo(1, 2)));
     }
 
     public void Select()

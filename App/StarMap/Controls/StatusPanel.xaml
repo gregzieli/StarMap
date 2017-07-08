@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+      x:Class="StarMap.Controls.StatusPanel">
+
+  <Grid.ColumnDefinitions>
+    <ColumnDefinition Width="*" />
+    <ColumnDefinition Width="*" />
+    <ColumnDefinition Width="*" />
+  </Grid.ColumnDefinitions>
+
+  <Label FontSize="Small" 
+         VerticalTextAlignment="Center" 
+         TextColor="AntiqueWhite"
+         Text="{Binding CurrentPosition.Designation, StringFormat='Loc: {0}'}" />
+  <Label Grid.Column="1" FontSize="Micro" VerticalTextAlignment="Center" TextColor="AntiqueWhite"
+             Text="{Binding StatusTextTemplate}"  />
+
+  <StackLayout Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End">
+    <Button x:Name="earthButton" Text="Back" Command="{Binding GoHomeCommand}"/>
+    <Button x:Name="travelButton" Text="Travel" Command="{Binding TravelCommand}"/>
+    <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>
+  </StackLayout>
+
+
+
+</Grid>

@@ -13,17 +13,18 @@ namespace StarMap.Dal.Mappers
       return new Star()
       {
         Id = source.Id,
+        HipparcosId = source.HipparcosId,
         AbsoluteMagnitude = source.AbsoluteMagnitude,
         ApparentMagnitude = source.ApparentMagnitude,
         Name = source.ProperName,
         Bayer = source.BayerName,
         Flamsteed = source.FlamsteedName,
         ConstellationId = source.ConstellationId,
-        Declination = source.Declination,
-        DeclinationRad = source.DeclinationRad, // Probably TBR
+        //Declination = source.Declination,
+        //DeclinationRad = source.DeclinationRad, // Probably TBR
         ParsecDistance = source.ParsecDistance,
-        RightAscension = source.RightAscension,
-        RightAscensionRad = source.RightAscensionRad, // Probably TBR
+        //RightAscension = source.RightAscension,
+        //RightAscensionRad = source.RightAscensionRad, // Probably TBR
         X = source.X,
         Y = source.Y,
         Z = source.Z

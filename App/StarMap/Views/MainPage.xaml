@@ -14,26 +14,11 @@
                       AbsoluteLayout.LayoutFlags="All" />
     
     <!-- #region overlays-->
-    <Grid x:Name="bottomOverlay" 
-          AbsoluteLayout.LayoutBounds="1, 1, 1, .1" 
-          AbsoluteLayout.LayoutFlags="All" 
-          BackgroundColor="{StaticResource OverlayBackground}" 
-          Padding="10, 0, 20, 0">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="*" />
-      </Grid.ColumnDefinitions>
+    <custom:StatusPanel Padding="10, 0, 20, 0"
+                        AbsoluteLayout.LayoutBounds="1, 1, 1, .1" 
+                        AbsoluteLayout.LayoutFlags="All" 
+                        BackgroundColor="{StaticResource OverlayBackground}" />
 
-      <Label FontSize="Micro" VerticalTextAlignment="Center" TextColor="AntiqueWhite"
-             Text="{Binding StatusTextTemplate}"  />
-
-      <StackLayout Orientation="Horizontal" Grid.Column="1" HorizontalOptions="End">
-        <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>
-        <Button Text="Travel" Command="{Binding TravelCommand}"/>
-      </StackLayout>
-
-    </Grid>
-    
     <Grid x:Name="rightOverlay"
           AbsoluteLayout.LayoutBounds="1, 1, .4, 1" 
           AbsoluteLayout.LayoutFlags="All" 

@@ -8,6 +8,7 @@ using StarMap.Cll.Abstractions.Services;
 using StarMap.Cll.Constants;
 using StarMap.Cll.Exceptions;
 using StarMap.Cll.Filters;
+using StarMap.Cll.Models.Core;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Abstractions;
 using StarMap.Core.Extensions;
@@ -30,6 +31,22 @@ namespace StarMap.ViewModels
   public class MainPageViewModel : StarGazer<Universe, UniverseUrhoException>, IApplicationLifecycle
   {
     IDeviceRotation _motionDetector;
+
+    static IReferencable Earth;
+
+    private IReferencable _currentPosition;
+    public IReferencable CurrentPosition
+    {
+      get { return _currentPosition; }
+      set { SetProperty(ref _currentPosition, value); }
+    }
+
+    private bool _destinationReached;
+    public bool DestinationReached
+    {
+      get { return _destinationReached; }
+      set { SetProperty(ref _destinationReached, value); }
+    }
 
     private ObservantCollection<Constellation> _constellations;
     public ObservantCollection<Constellation> Constellations
@@ -97,20 +114,35 @@ namespace StarMap.ViewModels
     public DelegateCommand TravelCommand =>
         _travelCommand ?? (_travelCommand = new DelegateCommand(Travel, () => SelectedStar != null).ObservesProperty(() => SelectedStar));
 
+    private DelegateCommand _goHomeCommand;
+    public DelegateCommand GoHomeCommand =>
+        _goHomeCommand ?? (_goHomeCommand = new DelegateCommand(GoHome).ObservesCanExecute(() => DestinationReached));
+
+    private async void GoHome()
+    {
+      await CallAsync(UrhoApplication.GoHome);
+      CurrentPosition = Earth;
+    }
+
     private async void Travel()
     {
-      await UrhoApplication.Travel(SelectedStar);
+      DestinationReached = false;
+      var target = SelectedStar;
+      await CallAsync(() => UrhoApplication.Travel(target));
+      CurrentPosition = target;
+      DestinationReached = true;
     }
 
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IDeviceRotation motionDetector) 
       : base(navigationService, pageDialogService, starManager)
     {
       _motionDetector = motionDetector;
-      
+      Earth = new Planet("Earth");
+      CurrentPosition = Earth;
 
       //SelectStarCommand = new DelegateCommand(SelectStar);
       ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
-           // Cannot use ObservesCanExecute extension here, but it's OK to use ObservesProperty
+           // Cannot use ObservesCanExecute extension here because it observes a bool property only, but it's OK to use ObservesProperty
            // (That way I dont have to ShowStarDetailsCommand.RaiseCanExecuteChanged() in the SelectedStar setter)
            // And it's fluent, and u can observe as many props as u want
            .ObservesProperty(() => SelectedStar);
@@ -178,6 +210,8 @@ namespace StarMap.ViewModels
     void GetStarsFromDb()
     {
       var stars = _starManager.GetStars(StarFilter);
+      
+
       // Since the size of the collection may differ, it's better memorywise to instantiate a new one,
       // rather than reuse the already allocated list with a completely different size.
       VisibleStars = new ObservableCollection<Star>(stars);
@@ -297,10 +331,22 @@ namespace StarMap.ViewModels
         var id = UrhoApplication.OnTouched(obj);
         if (!id.IsNullOrEmpty())
         {
-          SelectedStar = VisibleStars.FirstOrDefault(x => x.Id == int.Parse(id));
+          var star = VisibleStars.FirstOrDefault(x => x.Id == int.Parse(id)); ;
+          // NB: I could set refs to constellations for all the stars upon retrieving from db,
+          //     it's the obvious thing to do. But, in most operations I need only the Id. 
+          //     The Constellation ref is needed only to display proper designation.
+          //     And no one is going to select every star there is. That's why i decided to get the constellation ref
+          //     here, which can be misleading, I know.
+
+          // TODO: retrieve constellations from db as dictionary by id
+          if (star.Constellation is null && star.ConstellationId != null)
+            star.Constellation = Constellations.First(x => x.Id == star.ConstellationId);
+
           // Setting this template seems a bit conflicted with the whole mvvm binding goodies. Just put few labels to bind to star properties.
-          StatusTextTemplate = $"{(SelectedStar.ConstellationId != null ? Constellations.First(x => x.Id == SelectedStar.ConstellationId.Value).Abbreviation + " | " : "")}" +
-            $"Star: {SelectedStar.Designation ?? "No designation"} | Distance: {SelectedStar.ParsecDistance} pc";
+          StatusTextTemplate = $"{(star.Constellation?.Abbreviation ?? "")}" +
+            $"    Star: {star.Designation ?? "No designation"} | Distance: {star.ParsecDistance} pc";
+
+          SelectedStar = star;
         }
         else
         {

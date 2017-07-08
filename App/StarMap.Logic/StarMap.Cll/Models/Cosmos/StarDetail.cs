@@ -4,8 +4,6 @@ namespace StarMap.Cll.Models.Cosmos
 {
   public class StarDetail : StarBase
   {
-    public int? HipparcosId { get; set; }
-
     public int? HenryDraperId { get; set; }
 
     public string GlieseId { get; set; }

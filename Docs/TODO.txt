@@ -3,18 +3,22 @@
  - nowa logika do sprawdzania współrzędnych na ziemi
  - add setting: choose dist in ly/pc
  - round all doubles
- - zmienic kolejność w statusBar: 
-    StarName/Flam-Bay/"?" Con | dist
+ - Status bar:
+    CURRENT_LOCATION        (selected)StarName/Flam-Bay/"?" Con | RELATIVE_DIST
  - zmienić db conn na async
+ - SOL - daćdwa Taurusy, co by się w dwóch płaszczyznach tak fajnie kręciły
+
 
 TRAVEL
  - sprity muszą zwracać się ZAWSZE w kamerę
  - SOL powinno być zaznaczone inaczej
- - na pasku statusu powinno być napisane, gdzie jesteś
  - dystans musi się kalkulować podczas podróży
  - przy przejściu na detale i z powtrotem, musi wracać na poprzednią gwiazdę
- - przycisk powrót do domu
 
+
+
+
+w folderze Controls są i bardzo generyczne kontrolki, i takie zwyczajne template'y, żeby po prostu podzielić jeden xaml w kilka - one za binding context biorą ten, w którym siedzą.
 size/scale: tu jest coś
 godotengine.org/qa/3626/how-set-sprite-textre-size
 

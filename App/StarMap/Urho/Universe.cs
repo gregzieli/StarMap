@@ -17,6 +17,7 @@ using Urho.Physics;
 using System.Diagnostics;
 using StarMap.Core.Abstractions;
 using StarMap.Core.Extensions;
+using Urho.Gui;
 
 namespace StarMap.Urho
 {
@@ -34,8 +35,11 @@ namespace StarMap.Urho
     Node _plotNode;
     Camera _camera;
     const float touchSensitivity = 2;
+    const float VELOCITY = 3;//[pc/s]
     Vector3 _earthPosition = new Vector3(0, 0, 0);
     float _yaw, _pitch;
+
+    bool _firstTime = true;
 
     protected override async Task FillScene()
     {
@@ -142,7 +146,20 @@ namespace StarMap.Urho
         collisionShape.SetSphere(1, starNode.Position, Quaternion.Identity);
         */
         #endregion
+      }
 
+      if (_firstTime)
+      {
+        var sunNode = _plotNode.GetChild("0");
+        var textNode = sunNode.CreateChild("text");
+        // local position for a child is vector3.zero
+        textNode.Position = new Vector3(0, 0.4f, 0);
+        textNode.SetScale(4);
+        var bb = textNode.CreateComponent<Text3D>();
+        bb.SetFont(CoreAssets.Fonts.AnonymousPro, 10);
+        bb.TextEffect = TextEffect.Stroke;
+        bb.Text = "Sun";
+        _firstTime = false;
       }
 
       foreach (var leftUnused in existingNodesById.Values)
@@ -194,11 +211,25 @@ namespace StarMap.Urho
       }
     }
 
-    public async Task Travel(IUnique star)
+    public Task Travel(IUnique star)
     {
       var target = _plotNode.GetChild(star.Id.ToString());
-      // TODO: Duration based on distance
-      await _cameraNode.RunActionsAsync(new MoveTo(2, target.Position));
+      
+      var duration = Vector3.Distance(_cameraNode.Position, target.Position) / VELOCITY;
+
+      // Then u can travel non-stop changing the destination
+      _cameraNode.RemoveAllActions();
+
+      _plotNode.GetChild("0").GetChild("text").LookAt(_cameraNode.Position, Vector3.Up);
+      
+      return _cameraNode.RunActionsAsync(new MoveTo(duration, target.Position));
+    }
+
+    public Task GoHome()
+    {
+      // Then u can travel non-stop changing the destination
+      _cameraNode.RemoveAllActions();
+      return _cameraNode.RunActionsAsync(new MoveTo(1, _earthPosition));
     }
   }
 }

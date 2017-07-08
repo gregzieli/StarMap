@@ -96,6 +96,25 @@ namespace StarMap.ViewModels.Core
       }
     }
 
+    protected async Task CallAsync(Func<Task> fn, Action callback)
+    {
+      try
+      {
+        IsBusy = true;
+        await fn();
+        // just to keep the synchronous code in the try block.
+        callback();
+      }
+      catch (Exception ex)
+      {
+        await HandleException(ex);
+      }
+      finally
+      {
+        IsBusy = false;
+      }
+    }
+
     /// <summary>
     /// Executes a delegate that returns a value of the given type asynchronously, 
     /// catching any exception that may happen during execution.
