@@ -38,9 +38,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ConstellationFilter.xaml.cs">
+      <DependentUpon>ConstellationFilter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FilterPanel.xaml.cs">
+      <DependentUpon>FilterPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Overlay.cs" />
     <Compile Include="Controls\SliderCell.xaml.cs">
       <DependentUpon>SliderCell.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\StarFilter.xaml.cs">
+      <DependentUpon>StarFilter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\StatusPanel.xaml.cs">
       <DependentUpon>StatusPanel.xaml</DependentUpon>
@@ -231,6 +240,24 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Controls\StatusPanel.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\FilterPanel.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\StarFilter.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Controls\ConstellationFilter.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

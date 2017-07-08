@@ -13,8 +13,6 @@ namespace StarMap.Cll.Models.Cosmos
     /// </summary>
     public string Base { get; set; }
 
-    public Constellation Constellation { get; set; }
-
     /// <summary>
     /// Gets or sets the star's brightness as visible from Earth.
     /// </summary>
@@ -39,5 +37,8 @@ namespace StarMap.Cll.Models.Cosmos
     public double? TemperatureKelvin { get; set; }
 
     public double? TemperatureCelcius => TemperatureKelvin.HasValue ? TemperatureKelvin - 273.15 : null;
+
+
+    //TODO: override Designation - use real greek letters for Bayer, Constellation in Genetive
   }
 }

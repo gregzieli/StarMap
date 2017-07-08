@@ -1,7 +1,8 @@
-﻿using System;
-using StarMap.Cll.Models.Core;
+﻿using StarMap.Cll.Models.Core;
 using StarMap.Core.Abstractions;
 using StarMap.Core.Extensions;
+using System.Linq;
+using System.Text;
 
 namespace StarMap.Cll.Models.Cosmos
 {
@@ -19,19 +20,34 @@ namespace StarMap.Cll.Models.Cosmos
 
     public double ParsecDistance { get; set; }
 
+    /// <summary>
+    /// Constellation the star belongs to.
+    /// </summary>
+    public Constellation Constellation { get; set; }
+
     public double LightYearDistance => ParsecDistance * 3.262;
 
-    public string Designation => Name ?? (!Flamsteed.IsNullOrEmpty() ? $"{Flamsteed} {Bayer}" : Bayer);
+    public virtual string Designation => GetDesignation();
+    
+    string GetDesignation()
+    {
+      var con = Constellation?.Abbreviation;
 
-    // Keep it in case I dont want it here, but in manager or some utils class in CLL.
-    //public static string GetStarDesignation(string proper, string bayer, string flamsteed)
-    //  => proper ?? (!flamsteed.IsNullOrEmpty() ? $"{flamsteed} {bayer}" : bayer);
-    //public static double GetLightYears(double parsecs)
-    //  => parsecs* 3.262;
+      if (Name != null)
+        return con is null ? Name : $"{Name} ({con})";
 
-    //string GetDesignation()
-    //{
-    //  return Name ?? $"hip: {HipparcosId}, {Flamsteed}{Bayer}"
-    //}
+      var sb = new StringBuilder();
+
+      if (HipparcosId.HasValue)
+        sb.Append($"hip {HipparcosId}, ");
+
+      if (new[] { Flamsteed, Bayer, con }.Any(x => !x.IsNullOrEmpty()))
+        // The database originally had a column bf that contains just that. 
+        // If there's time, use that, to limit the fields populated on db query.
+        // Not that important, since it will only be one vs two.
+        sb.Append($"{Flamsteed}{Bayer} {Constellation.Abbreviation}");
+
+      return sb.ToString();
+    }
   }
 }

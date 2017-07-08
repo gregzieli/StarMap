@@ -342,10 +342,6 @@ namespace StarMap.ViewModels
           if (star.Constellation is null && star.ConstellationId != null)
             star.Constellation = Constellations.First(x => x.Id == star.ConstellationId);
 
-          // Setting this template seems a bit conflicted with the whole mvvm binding goodies. Just put few labels to bind to star properties.
-          StatusTextTemplate = $"{(star.Constellation?.Abbreviation ?? "")}" +
-            $"    Star: {star.Designation ?? "No designation"} | Distance: {star.ParsecDistance} pc";
-
           SelectedStar = star;
         }
         else

@@ -14,8 +14,7 @@
                       AbsoluteLayout.LayoutFlags="All" />
     
     <!-- #region overlays-->
-    <custom:StatusPanel Padding="10, 0, 20, 0"
-                        AbsoluteLayout.LayoutBounds="1, 1, 1, .1" 
+    <custom:StatusPanel AbsoluteLayout.LayoutBounds="1, 1, 1, .1" 
                         AbsoluteLayout.LayoutFlags="All" 
                         BackgroundColor="{StaticResource OverlayBackground}" />
 
@@ -34,60 +33,8 @@
         <Button x:Name="starsPanelButton" Text="" Clicked="OnStarFilterPanelButtonClicked" />
       </StackLayout>
 
-      <TableView x:Name="starFilters" Grid.Column="1" IsVisible="False"> <!-- There's no difference which intent. -->
-        <TableRoot>
-          <TableSection Title="Star filters" BindingContext="{Binding StarFilter}">
-            <EntryCell Label="Name/designation"
-                       Placeholder="Search..."
-                       Text="{Binding DesignationQuery}"/>
-            <custom:SliderCell Minimum="{x:Static const:Filters.MIN_DIST}" 
-                               Maximum="{x:Static const:Filters.MAX_DIST}" 
-                               Label="Distance" 
-                               SelectedValue="{Binding DistanceTo}"/>
-            <custom:SliderCell Minimum="{x:Static const:Filters.MIN_MAG}" 
-                               Maximum="{x:Static const:Filters.MAX_MAG}" 
-                               Label="Magnitude" 
-                               SelectedValue="{Binding MagnitudeTo}"/>
-          </TableSection>
-          <TableSection>
-            <ViewCell>
-              <Button Text="Filter" Command="{Binding GetStarsCommand}" FontSize="Micro"/>
-            </ViewCell>
-            <ViewCell>
-              <Button Text="Reset" Command="{Binding ResetFiltersCommand}" FontSize="Micro" />
-            </ViewCell>
-          </TableSection>
-        </TableRoot>
-      </TableView>
-      
-      <ListView x:Name="constellationFilters"
-                CachingStrategy="RecycleElement"
-                ItemsSource="{Binding Constellations}" 
-                SelectedItem="{Binding SelectedConstellation, Mode=TwoWay}"
-                RowHeight="30" Grid.Column="1"
-                IsVisible="False">
-        <!--<ListView.Behaviors>
-            <prism-bhv:EventToCommandBehavior EventName="ItemSelected" 
-                                              Command="{Binding ConstellationSelectedCommand}"
-                                              EventArgsParameterPath="SelectedItem" />
-          </ListView.Behaviors>-->
-        <ListView.Header>
-          <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
-            <Button Text="Hide all" 
-                    Command="{Binding FilterConstellationsCommand}"
-                    CommandParameter="{StaticResource False}" />
-            <Button Text="Show all" 
-                    Command="{Binding FilterConstellationsCommand}" 
-                    CommandParameter="{StaticResource True}" />
-          </StackLayout>
-        </ListView.Header>
-        <ListView.ItemTemplate>
-          <DataTemplate>
-            <SwitchCell Text="{Binding Name}" On="{Binding IsOn}" />
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
-
+      <custom:StarFilter x:Name="starFilters" Grid.Column="1" IsVisible="False" />
+      <custom:ConstellationFilter x:Name="constellationFilters" Grid.Column="1"  IsVisible="False" />
     </Grid>
     <!-- #endregion -->
     

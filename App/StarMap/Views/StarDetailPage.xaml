@@ -31,12 +31,12 @@
       </StackLayout>
 
       <Label Text="{Binding Constellation.Name, StringFormat='Constellation: {0}'}" />
-      <Label Text="{Binding ParsecDistance, StringFormat='Distance from Earth: {0} pc'}" />
-      <Label Text="{Binding ApparentMagnitude, StringFormat='Apparent magnitude: {0}'}" />
-      <Label Text="{Binding AbsoluteMagnitude, StringFormat='Absolute magnitude: {0}'}" />
+      <Label Text="{Binding ParsecDistance, StringFormat='Distance from Earth: {0:N0} pc'}" />
+      <Label Text="{Binding ApparentMagnitude, StringFormat='Apparent magnitude: {0:N1}'}" />
+      <Label Text="{Binding AbsoluteMagnitude, StringFormat='Absolute magnitude: {0:N1}'}" />
       <Label Text="{Binding SpectralType, StringFormat='Spectral type: {0}'}" />
-      <Label Text="{Binding Luminosity, StringFormat='Luminosity: {0}'}" />
-      <Label Text="{Binding TemperatureKelvin, StringFormat='Temperature: {0} K'}" />
+      <Label Text="{Binding Luminosity, StringFormat='Luminosity: {0:N2}'}" />
+      <Label Text="{Binding TemperatureKelvin, StringFormat='Temperature: {0:N0} K'}" />
     </StackLayout>
 
 

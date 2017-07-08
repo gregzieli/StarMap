@@ -2,11 +2,8 @@
  - startPage będzie miał instrukcje, co jest gdzie
  - nowa logika do sprawdzania współrzędnych na ziemi
  - add setting: choose dist in ly/pc
- - round all doubles
- - Status bar:
-    CURRENT_LOCATION        (selected)StarName/Flam-Bay/"?" Con | RELATIVE_DIST
  - zmienić db conn na async
- - SOL - daćdwa Taurusy, co by się w dwóch płaszczyznach tak fajnie kręciły
+ - SOL - dać dwa Taurusy, co by się w dwóch płaszczyznach tak fajnie kręciły
 
 
 TRAVEL
@@ -14,6 +11,7 @@ TRAVEL
  - SOL powinno być zaznaczone inaczej
  - dystans musi się kalkulować podczas podróży
  - przy przejściu na detale i z powtrotem, musi wracać na poprzednią gwiazdę
+ - widoczność przycisku BACK musi jednak zależeć od położenia, nie tylko od kliknięcia w przycisk TRAVEL - bo przy zapisie stanu i wznowieniu, musi być dalej widoczny.
 
 
 
@@ -24,3 +22,7 @@ godotengine.org/qa/3626/how-set-sprite-textre-size
 
 performance: spróbuj użyć gdzies Task.Run
  - https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html
+
+
+NOTES:
+ - rozdzialik o custom views, styles

@@ -3,20 +3,34 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
       x:Class="StarMap.Controls.StatusPanel">
 
+  <Grid.Resources>
+    <ResourceDictionary>
+      <Style x:Key="statusStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="Micro" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="TextColor" Value="AntiqueWhite" />
+      </Style>
+    </ResourceDictionary>    
+  </Grid.Resources>
+
   <Grid.ColumnDefinitions>
+    <ColumnDefinition Width="Auto" />
     <ColumnDefinition Width="*" />
-    <ColumnDefinition Width="*" />
-    <ColumnDefinition Width="*" />
+    <ColumnDefinition Width="Auto" />
   </Grid.ColumnDefinitions>
 
-  <Label FontSize="Small" 
-         VerticalTextAlignment="Center" 
-         TextColor="AntiqueWhite"
+  <Label Style="{StaticResource statusStyle}"
+         Margin="10, 0, 0, 0"
          Text="{Binding CurrentPosition.Designation, StringFormat='Loc: {0}'}" />
-  <Label Grid.Column="1" FontSize="Micro" VerticalTextAlignment="Center" TextColor="AntiqueWhite"
-             Text="{Binding StatusTextTemplate}"  />
 
-  <StackLayout Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End">
+  <StackLayout Orientation="Horizontal" Grid.Column="1" Margin="10, 0, 0, 0">
+    <Label Style="{StaticResource statusStyle}"
+           Text="{Binding SelectedStar.Designation, StringFormat='Target: {0}'}" />
+    <Label Style="{StaticResource statusStyle}"
+           Text="{Binding SelectedStar.ParsecDistance, StringFormat='{0:N0} pc'}" />
+  </StackLayout>
+
+  <StackLayout Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End" Margin="0, 0, 20, 0">
     <Button x:Name="earthButton" Text="Back" Command="{Binding GoHomeCommand}"/>
     <Button x:Name="travelButton" Text="Travel" Command="{Binding TravelCommand}"/>
     <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>

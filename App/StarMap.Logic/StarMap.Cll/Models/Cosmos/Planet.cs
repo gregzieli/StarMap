@@ -8,6 +8,7 @@ namespace StarMap.Cll.Models.Cosmos
 
     public Planet()
     { }
+
     public Planet(string name)
     {
       Designation = name;

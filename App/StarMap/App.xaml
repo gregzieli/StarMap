@@ -16,6 +16,7 @@
 
       <x:Boolean x:Key="True">True</x:Boolean>
       <x:Boolean x:Key="False">False</x:Boolean>
+      
 
       <!--<Style TargetType="NavigationPage">
         <Setter Property="BarBackgroundColor" Value="{StaticResource Primary}" />

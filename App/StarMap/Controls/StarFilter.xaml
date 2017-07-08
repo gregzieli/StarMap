@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TableView xmlns="http://xamarin.com/schemas/2014/forms" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+           x:Class="StarMap.Controls.StarFilter"
+           xmlns:const="clr-namespace:StarMap.Cll.Constants;assembly=StarMap.Cll"
+           xmlns:custom="clr-namespace:StarMap.Controls">
+
+  <TableRoot>
+    <TableSection Title="Star filters" BindingContext="{Binding StarFilter}">
+      <EntryCell Label="Name/designation"
+                 Placeholder="Search..."
+                 Text="{Binding DesignationQuery}" />
+      
+      <custom:SliderCell Minimum="{x:Static const:Filters.MIN_DIST}"
+                         Maximum="{x:Static const:Filters.MAX_DIST}" 
+                         Label="Distance" 
+                         SelectedValue="{Binding DistanceTo, StringFormat='{0:N0}'}"/>
+      <custom:SliderCell Minimum="{x:Static const:Filters.MIN_MAG}" 
+                         Maximum="{x:Static const:Filters.MAX_MAG}" 
+                         Label="Magnitude" 
+                         SelectedValue="{Binding MagnitudeTo, StringFormat='{0:N0}'}"/>
+    </TableSection>
+    <TableSection>
+      <ViewCell>
+        <Button Text="Filter" Command="{Binding GetStarsCommand}" FontSize="Micro"/>
+      </ViewCell>
+      <ViewCell>
+        <Button Text="Reset" Command="{Binding ResetFiltersCommand}" FontSize="Micro" />
+      </ViewCell>
+    </TableSection>
+  </TableRoot>
+
+</TableView>

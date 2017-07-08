@@ -5,14 +5,6 @@
     public int? ConstellationId { get; set; }
 
     /// <summary>
-    /// Constellation the star belongs to.
-    /// </summary>
-    /// <remarks>
-    /// Be aware: it might not be set, even if the ConstellationId is not null! 
-    /// </remarks>
-    public Constellation Constellation { get; set; }
-
-    /// <summary>
     /// Gets or sets the star's brightness as visible from Earth.
     /// </summary>
     public double ApparentMagnitude { get; set; }
