@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Urho;
+using Urho.Actions;
 using Urho.Shapes;
 using Urho.Urho2D;
 
@@ -88,7 +89,18 @@ namespace UhroTest
 
       _cameraNode = _scene.CreateChild();
       _camera = _cameraNode.CreateComponent<Camera>();
-      _cameraNode.Position = new Vector3(10, 35, 50);
+      _cameraNode.Position = new Vector3(0, 0, 0);
+
+      var sol = _plotNode.CreateChild("sol");
+      sol.Position = new Vector3(0, 0, 5);
+      sol.CreateComponent<Sphere>();
+      var a = sol.CreateChild();
+      var b = sol.CreateChild();
+      a.CreateComponent<Torus>().Color = Color.Red;
+      b.CreateComponent<Torus>().Color = Color.Green;
+
+      a.RunActions(new RepeatForever(new RotateBy(1, 0, 0, 120)));
+      b.RunActions(new RepeatForever(new RotateBy(1, 120, 0, 0)));
 
       Node lightNode = _cameraNode.CreateChild();
       var light = lightNode.CreateComponent<Light>();

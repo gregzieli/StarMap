@@ -25,7 +25,7 @@ namespace UhroTest
     protected override async void OnAppearing()
     {
       
-      a  = await surface.Show<Stars>(new Urho.ApplicationOptions("Data"));
+      a  = await surface.Show<Stars>(new Urho.ApplicationOptions());
     }
 
     
