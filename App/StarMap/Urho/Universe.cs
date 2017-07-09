@@ -18,6 +18,7 @@ using System.Diagnostics;
 using StarMap.Core.Abstractions;
 using StarMap.Core.Extensions;
 using Urho.Gui;
+using Microsoft.Practices.ObjectBuilder2;
 
 namespace StarMap.Urho
 {
@@ -39,8 +40,6 @@ namespace StarMap.Urho
     Vector3 _earthPosition = new Vector3(0, 0, 0);
     float _yaw, _pitch;
 
-    bool _firstTime = true;
-
     protected override async Task FillScene()
     {
       _cameraNode.Position = _earthPosition;
@@ -49,9 +48,9 @@ namespace StarMap.Urho
       _plotNode = _scene.CreateChild();
 
       var light = _lightNode.GetComponent<Light>();
-      light.LightType = LightType.Point;
-      light.Range = 10000;
-      light.Brightness = 1.3f;
+      //light.LightType = LightType.Directional;
+      light.Range = 1000;
+      //light.Brightness = 2;
 
       StarSprite = ResourceCache.GetSprite2D("Sprites/star.png");
 
@@ -66,23 +65,19 @@ namespace StarMap.Urho
 
       if (results != null)
       {
-        if (results.Value.Drawable is Sphere sphere)
+        // OK, so it doesn't work perfectly.
+        // 1. if one node is closer than the other, but they are behind one another, i can never tap the one in the back.
+        // 2. when travelling, some *collision* nodes are missing, dunno why.
+        StarComponent star = results.Value.Drawable is Sphere sphere
+          ? sphere.Node.Parent.GetComponent<StarComponent>()
+          : results.Value.Drawable as StarComponent;
+
+        if (star != null && SelectedStar != star)
         {
-          var star = sphere.Node.Parent.GetComponent<StarComponent>();
-          if (star != null && SelectedStar != star)
-          {
-            SelectedStar?.Deselect();
-            SelectedStar = star;
-            SelectedStar?.Select();
-          }
+          SelectedStar?.Deselect();
+          SelectedStar = star;
+          SelectedStar.Select();
         }
-        // Old one (if  having the sphere component turns out to be not working as expected)
-        //if (results.Value.Drawable is StarComponent star && SelectedStar != star)
-        //{
-        //  SelectedStar?.Deselect();
-        //  SelectedStar = star;
-        //  SelectedStar?.Select();
-        //}
       }
       else
       {
@@ -148,19 +143,7 @@ namespace StarMap.Urho
         #endregion
       }
 
-      if (_firstTime)
-      {
-        var sunNode = _plotNode.GetChild("0");
-        var textNode = sunNode.CreateChild("text");
-        // local position for a child is vector3.zero
-        textNode.Position = new Vector3(0, 0.4f, 0);
-        textNode.SetScale(4);
-        var bb = textNode.CreateComponent<Text3D>();
-        bb.SetFont(CoreAssets.Fonts.AnonymousPro, 10);
-        bb.TextEffect = TextEffect.Stroke;
-        bb.Text = "Sun";
-        _firstTime = false;
-      }
+      MarkSun();
 
       foreach (var leftUnused in existingNodesById.Values)
       {
@@ -216,20 +199,62 @@ namespace StarMap.Urho
       var target = _plotNode.GetChild(star.Id.ToString());
       
       var duration = Vector3.Distance(_cameraNode.Position, target.Position) / VELOCITY;
-
+      
       // Then u can travel non-stop changing the destination
       _cameraNode.RemoveAllActions();
 
-      _plotNode.GetChild("0").GetChild("text").LookAt(_cameraNode.Position, Vector3.Up);
-      
-      return _cameraNode.RunActionsAsync(new MoveTo(duration, target.Position));
+      Task travelTask = _cameraNode.RunActionsAsync(new MoveTo(duration, target.Position));
+
+      _plotNode.GetChildrenWithComponent<StarComponent>().ForEach(x => x.LookAt(target.Position, Vector3.Up));      
+
+      // If async task is the last thing to do, why bother awaiting it in here as well?
+      return Task.WhenAll(travelTask, MarkSun(true));
     }
 
     public Task GoHome()
     {
       // Then u can travel non-stop changing the destination
       _cameraNode.RemoveAllActions();
-      return _cameraNode.RunActionsAsync(new MoveTo(1, _earthPosition));
+
+      Task task = _cameraNode.RunActionsAsync(new MoveTo(1, _earthPosition));
+
+      _plotNode.GetChildrenWithComponent<StarComponent>().ForEach(x => x.LookAt(_earthPosition, Vector3.Up));
+
+      return Task.WhenAll(task, MarkSun(false));
+    }
+
+    void MarkSun()
+    {
+      var sunNode = _plotNode.GetChild("0");
+      if (sunNode.GetChild("sol") != null)
+        return;
+      var a = sunNode.CreateChild("sol");
+      a.SetScale(0.4f);
+      var one = a.CreateChild();
+      var two = a.CreateChild();
+
+      one.CreateComponent<Torus>().Color = Color.Red;
+      two.CreateComponent<Torus>().Color = Color.Red;
+
+      one.RunActions(new RepeatForever(new RotateBy(1, 0, 0, 120)));
+      two.RunActions(new RepeatForever(new RotateBy(1, 120, 0, 0)));
+
+      a.SetDeepEnabled(false);
+    }
+    Task MarkSun(bool enable) => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));
+
+    [Obsolete]
+    void MarkSun1()
+    {
+      var sunNode = _plotNode.GetChild("0");
+      var textNode = sunNode.CreateChild("text");
+      // local position for a child is vector3.zero
+      textNode.Position = new Vector3(0, 0.4f, 0);
+      textNode.SetScale(4);
+      var bb = textNode.CreateComponent<Text3D>();
+      bb.SetFont(CoreAssets.Fonts.AnonymousPro, 10);
+      bb.TextEffect = TextEffect.Stroke;
+      bb.Text = "Sun";
     }
   }
 }
