@@ -17,11 +17,6 @@ namespace StarMap.Views
     {
       base.OnAppearing();
 
-      //earthButton.IsVisible = false;
-      //// Why bother with extra properties to bind to
-      //earthButton.Clicked += (s, e) => earthButton.IsVisible = false;
-      //travelButton.Clicked += (s, e) => earthButton.IsVisible = true;
-
       RightPanel = new Overlay(rightOverlay, DockSide.Right, rightPanelButtons.Width + rightOverlay.Padding.Left * 2);
 
       RightPanel.Collapse(length: 0);

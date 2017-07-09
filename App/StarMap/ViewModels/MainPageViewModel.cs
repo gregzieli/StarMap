@@ -41,13 +41,6 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _currentPosition, value); }
     }
 
-    private bool _destinationReached;
-    public bool DestinationReached
-    {
-      get { return _destinationReached; }
-      set { SetProperty(ref _destinationReached, value); }
-    }
-
     private ObservantCollection<Constellation> _constellations;
     public ObservantCollection<Constellation> Constellations
     {
@@ -116,7 +109,7 @@ namespace StarMap.ViewModels
 
     private DelegateCommand _goHomeCommand;
     public DelegateCommand GoHomeCommand =>
-        _goHomeCommand ?? (_goHomeCommand = new DelegateCommand(GoHome).ObservesCanExecute(() => DestinationReached));
+        _goHomeCommand ?? (_goHomeCommand = new DelegateCommand(GoHome));
 
     private async void GoHome()
     {
@@ -126,11 +119,9 @@ namespace StarMap.ViewModels
 
     private async void Travel()
     {
-      DestinationReached = false;
       var target = SelectedStar;
       await CallAsync(() => UrhoApplication.Travel(target));
       CurrentPosition = target;
-      DestinationReached = true;
     }
 
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IDeviceRotation motionDetector) 
