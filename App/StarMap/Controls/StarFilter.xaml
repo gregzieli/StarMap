@@ -14,11 +14,11 @@
       <custom:SliderCell Minimum="{x:Static const:Filters.MIN_DIST}"
                          Maximum="{x:Static const:Filters.MAX_DIST}" 
                          Label="Distance" 
-                         SelectedValue="{Binding DistanceTo, StringFormat='{0:N0}'}"/>
+                         SelectedValue="{Binding DistanceTo}"/>
       <custom:SliderCell Minimum="{x:Static const:Filters.MIN_MAG}" 
                          Maximum="{x:Static const:Filters.MAX_MAG}" 
                          Label="Magnitude" 
-                         SelectedValue="{Binding MagnitudeTo, StringFormat='{0:N0}'}"/>
+                         SelectedValue="{Binding MagnitudeTo}"/>
     </TableSection>
     <TableSection>
       <ViewCell>

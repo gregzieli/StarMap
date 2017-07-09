@@ -16,7 +16,7 @@
       </Grid.RowDefinitions>
 
       <Label Text="{Binding Label}" VerticalOptions="Center" Grid.RowSpan="2" />
-      <Label Text="{Binding Value, Source={Reference slider}}" HorizontalOptions="Center" Grid.Column="1"/>
+      <Label Text="{Binding Value, Source={Reference slider}, StringFormat='{0:F0}'}" HorizontalOptions="Center" Grid.Column="1"/>
       <Slider x:Name="slider" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding SelectedValue}" Grid.Column="1" Grid.Row="1"/>
     </Grid>
   </ViewCell.View>

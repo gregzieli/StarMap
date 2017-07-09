@@ -35,8 +35,8 @@
       <Label Text="{Binding ApparentMagnitude, StringFormat='Apparent magnitude: {0:N1}'}" />
       <Label Text="{Binding AbsoluteMagnitude, StringFormat='Absolute magnitude: {0:N1}'}" />
       <Label Text="{Binding SpectralType, StringFormat='Spectral type: {0}'}" />
-      <Label Text="{Binding Luminosity, StringFormat='Luminosity: {0:N2}'}" />
-      <Label Text="{Binding TemperatureKelvin, StringFormat='Temperature: {0:N0} K'}" />
+      <Label Text="{Binding Luminosity, StringFormat='Luminosity: {0:F1}'}" />
+      <Label Text="{Binding TemperatureKelvin, StringFormat='Temperature: {0:F0} K'}" />
     </StackLayout>
 
 
