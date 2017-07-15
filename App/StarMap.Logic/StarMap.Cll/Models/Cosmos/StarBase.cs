@@ -6,7 +6,7 @@ using System.Text;
 
 namespace StarMap.Cll.Models.Cosmos
 {
-  public abstract class StarBase : IUnique, IReferencable
+  public abstract class StarBase : IReferencable
   {
     public int Id { get; set; }
 
@@ -45,7 +45,7 @@ namespace StarMap.Cll.Models.Cosmos
         // The database originally had a column bf that contains just that. 
         // If there's time, use that, to limit the fields populated on db query.
         // Not that important, since it will only be one vs two.
-        sb.Append($"{Flamsteed}{Bayer} {Constellation.Abbreviation}");
+        sb.Append($"{Flamsteed}{Bayer} {con}");
 
       return sb.ToString();
     }

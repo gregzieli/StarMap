@@ -115,6 +115,7 @@ namespace StarMap.ViewModels
     {
       await CallAsync(UrhoApplication.GoHome);
       CurrentPosition = Earth;
+      Settings.Astrolocation = CurrentPosition.Id;
     }
 
     private async void Travel()
@@ -122,6 +123,7 @@ namespace StarMap.ViewModels
       var target = SelectedStar;
       await CallAsync(() => UrhoApplication.Travel(target));
       CurrentPosition = target;
+      Settings.Astrolocation = CurrentPosition.Id;
     }
 
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IDeviceRotation motionDetector) 
@@ -129,7 +131,6 @@ namespace StarMap.ViewModels
     {
       _motionDetector = motionDetector;
       Earth = new Planet("Earth");
-      CurrentPosition = Earth;
 
       //SelectStarCommand = new DelegateCommand(SelectStar);
       ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
@@ -222,7 +223,13 @@ namespace StarMap.ViewModels
 
     async Task UpdateUrho()
     {
-      await Application.InvokeOnMainAsync(() => UrhoApplication.UpdateWithStars(VisibleStars));
+      var star = VisibleStars.FirstOrDefault(x => x.Id == Settings.Astrolocation);
+      if (star != null && star.Constellation is null && star.ConstellationId != null)
+        star.Constellation = Constellations.First(x => x.Id == star.ConstellationId);
+
+
+      CurrentPosition = star ?? Earth;
+      await Application.InvokeOnMainAsync(() => UrhoApplication.UpdateWithStars(VisibleStars, CurrentPosition));
     }
 
     private void GetConstellations()

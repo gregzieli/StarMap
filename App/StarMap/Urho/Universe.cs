@@ -42,7 +42,6 @@ namespace StarMap.Urho
 
     protected override async Task FillScene()
     {
-      _cameraNode.Position = _earthPosition;
       _camera = _cameraNode.GetComponent<Camera>();
 
       _plotNode = _scene.CreateChild();
@@ -104,8 +103,11 @@ namespace StarMap.Urho
     protected override void HandleException(Exception ex)
      => PublishError(new UniverseUrhoException(ex));
 
-    public void UpdateWithStars(IList<Star> stars)
+    public void UpdateWithStars(IList<Star> stars, IUnique currentPosition)
     {
+      var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
+      _cameraNode.Position = currentStar is null ? _earthPosition : new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
+
       var existingNodesById = _plotNode.GetChildrenWithComponent<StarComponent>()
         .ToDictionary(x => x.Name, x => x);
 
@@ -143,7 +145,7 @@ namespace StarMap.Urho
         #endregion
       }
 
-      MarkSun();
+      MarkSun().SetDeepEnabled(currentStar != null);
 
       foreach (var leftUnused in existingNodesById.Values)
       {
@@ -223,15 +225,17 @@ namespace StarMap.Urho
       return Task.WhenAll(task, MarkSun(false));
     }
 
-    void MarkSun()
+    Node MarkSun()
     {
+      Node sol;
       var sunNode = _plotNode.GetChild("0");
-      if (sunNode.GetChild("sol") != null)
-        return;
-      var a = sunNode.CreateChild("sol");
-      a.SetScale(0.4f);
-      var one = a.CreateChild();
-      var two = a.CreateChild();
+      if ((sol = sunNode.GetChild("sol")) != null)
+        return sol;
+
+      sol = sunNode.CreateChild("sol");
+      sol.SetScale(0.4f);
+      var one = sol.CreateChild();
+      var two = sol.CreateChild();
 
       one.CreateComponent<Torus>().Color = Color.Red;
       two.CreateComponent<Torus>().Color = Color.Red;
@@ -239,7 +243,7 @@ namespace StarMap.Urho
       one.RunActions(new RepeatForever(new RotateBy(1, 0, 0, 120)));
       two.RunActions(new RepeatForever(new RotateBy(1, 120, 0, 0)));
 
-      a.SetDeepEnabled(false);
+      return sol;
     }
     Task MarkSun(bool enable) => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));
 

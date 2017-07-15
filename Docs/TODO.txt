@@ -4,11 +4,11 @@
  - add setting: choose dist in ly/pc
  - zmienić db conn na async
  - luminacity: napisać "times Sun Lum" czy coś
+ - [LOW PRIORITY]: do travel, go home, itd nie przesyłać samego id, tylko już gotową pozycję.
 
 
 TRAVEL
  - dystans musi się kalkulować podczas podróży
- - przy przejściu na detale i z powtrotem, musi wracać na poprzednią gwiazdę
  - disable selection & collision nodes upon arrival
 
 size/scale: tu jest coś

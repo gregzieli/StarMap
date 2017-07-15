@@ -11,8 +11,6 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
         <Setter Property="TextColor" Value="AntiqueWhite" />
       </Style>
-
-      <conv:LocationToBooleanConverter x:Key="earthButtonConverter" />
     </ResourceDictionary>    
   </Grid.Resources>
 
@@ -38,7 +36,4 @@
     <Button x:Name="travelButton" Text="Travel" Command="{Binding TravelCommand}"/>
     <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>
   </StackLayout>
-
-
-
 </Grid>

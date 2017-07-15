@@ -9,7 +9,7 @@ namespace StarMap.Converters
   public class LocationToBooleanConverter : IValueConverter
   {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-      => ((IReferencable)value).Designation != "Earth";
+      => value != null && ((IReferencable)value).Designation != "Earth";
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
