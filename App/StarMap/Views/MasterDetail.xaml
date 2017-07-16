@@ -6,7 +6,8 @@
                   x:Class="StarMap.Views.MasterDetail">
 
   <MasterDetailPage.Master>
-    <ContentPage Title="Default" Opacity=".9">
+    <ContentPage Title="Master" Opacity=".9" BackgroundColor="CornflowerBlue">
+      
       <StackLayout Padding="20" Spacing="5">
         <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="MainPage"/>
         <Button Text="Settings" Command="{Binding NavigateCommand}" CommandParameter="SettingsPage" />
