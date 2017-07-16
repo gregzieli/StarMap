@@ -1,16 +1,11 @@
 ﻿TODO: 
  - startPage będzie miał instrukcje, co jest gdzie
  - nowa logika do sprawdzania współrzędnych na ziemi
- - add setting: choose dist in ly/pc
+ - [LOW PRIORITY] add setting: choose dist in ly/pc
  - zmienić db conn na async
  - luminacity: napisać "times Sun Lum" czy coś
- - [LOW PRIORITY]: do travel, go home, itd nie przesyłać samego id, tylko już gotową pozycję.
- - spróbuj jeszcze raz z physics - rigit body - collision shape
+ - [LOW PRIORITY] do travel, go home, itd nie przesyłać samego id, tylko już gotową pozycję.
 
-
-TRAVEL
- - dystans musi się kalkulować podczas podróży
- - disable selection & collision nodes upon arrival
 
 size/scale: tu jest coś
 godotengine.org/qa/3626/how-set-sprite-textre-size

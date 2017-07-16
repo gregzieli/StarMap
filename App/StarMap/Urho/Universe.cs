@@ -61,8 +61,9 @@ namespace StarMap.Urho
     }
 
 
-    public string OnTouched(TouchEndEventArgs e)
+    public string OnTouched(TouchEndEventArgs e, out float relativeDistance)
     {
+      relativeDistance = default(float);
       Ray cameraRay = _camera.GetScreenRay((float)e.X / Graphics.Width, (float)e.Y / Graphics.Height);
 
       _physics.SphereCast(ref _rayCast, cameraRay, 0.3f, 1000);
@@ -77,6 +78,7 @@ namespace StarMap.Urho
           SelectedStar?.Deselect();
           SelectedStar = star;
           SelectedStar.Select();
+          relativeDistance = Vector3.Distance(_cameraNode.Position, star.Node.Position);
         }
       }
       else
@@ -85,7 +87,6 @@ namespace StarMap.Urho
         SelectedStar = null;
       }
 
-      
       return SelectedStar?.Node.Name;
     }
     

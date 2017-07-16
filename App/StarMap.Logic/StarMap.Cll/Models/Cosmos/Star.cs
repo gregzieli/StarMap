@@ -24,5 +24,7 @@
     public float Y { get; set; }
 
     public float Z { get; set; }
+
+    public float RelativeDistance { get; set; }
   }
 }

@@ -54,14 +54,7 @@ namespace StarMap.ViewModels
       get { return _selectedStar; }
       set { SetProperty(ref _selectedStar, value); }
     }
-
-    private string _statusTextTemplate;
-    public string StatusTextTemplate
-    {
-      get { return _statusTextTemplate; }
-      set { SetProperty(ref _statusTextTemplate, value); }
-    }
-
+    
     private StarFilter _starFilter;
     public StarFilter StarFilter
     {
@@ -326,26 +319,25 @@ namespace StarMap.ViewModels
     {
       await Call(() =>
       {
-        var id = UrhoApplication.OnTouched(obj);
+        var id = UrhoApplication.OnTouched(obj, out float relativeDistance);
         if (!id.IsNullOrEmpty())
         {
-          var star = VisibleStars.FirstOrDefault(x => x.Id == int.Parse(id)); ;
+          var star = VisibleStars.FirstOrDefault(x => x.Id == int.Parse(id));
           // NB: I could set refs to constellations for all the stars upon retrieving from db,
           //     it's the obvious thing to do. But, in most operations I need only the Id. 
           //     The Constellation ref is needed only to display proper designation.
           //     And no one is going to select every star there is. That's why i decided to get the constellation ref
-          //     here, which can be misleading, I know.
-
-          // TODO: retrieve constellations from db as dictionary by id
+          //     here, which can be misleading.
+          
           if (star.Constellation is null && star.ConstellationId != null)
             star.Constellation = Constellations.First(x => x.Id == star.ConstellationId);
 
+          star.RelativeDistance = relativeDistance;
           SelectedStar = star;
         }
         else
         {
           SelectedStar = null;
-          StatusTextTemplate = null;
         }
       });      
     }

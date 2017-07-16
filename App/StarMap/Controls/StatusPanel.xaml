@@ -28,7 +28,7 @@
     <Label Style="{StaticResource statusStyle}"
            Text="{Binding SelectedStar.Designation, StringFormat='Target: {0}'}" />
     <Label Style="{StaticResource statusStyle}"
-           Text="{Binding SelectedStar.ParsecDistance, StringFormat='{0:N0} pc'}" />
+           Text="{Binding SelectedStar.RelativeDistance, StringFormat='{0:N0} pc'}" />
   </StackLayout>
 
   <StackLayout Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End" Margin="0, 0, 20, 0">
