@@ -1,24 +1,20 @@
-﻿using StarMap.Cll.Exceptions;
+﻿using Microsoft.Practices.ObjectBuilder2;
+using StarMap.Cll.Exceptions;
 using StarMap.Cll.Models.Cosmos;
-using StarMap.Core.Utils;
+using StarMap.Core.Abstractions;
+using StarMap.Core.Extensions;
+using StarMap.Urho.Components;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Actions;
-using Urho.Shapes;
-using static Xamarin.Forms.Color;
-using XFColor = Xamarin.Forms.Color;
-using System.Collections.ObjectModel;
-using StarMap.Urho.Components;
-using System.Linq;
-using Urho.Urho2D;
-using Urho.Physics;
-using System.Diagnostics;
-using StarMap.Core.Abstractions;
-using StarMap.Core.Extensions;
 using Urho.Gui;
-using Microsoft.Practices.ObjectBuilder2;
+using Urho.Physics;
+using Urho.Shapes;
+using Urho.Urho2D;
 
 namespace StarMap.Urho
 {
@@ -39,17 +35,25 @@ namespace StarMap.Urho
     const float VELOCITY = 3;//[pc/s]
     Vector3 _earthPosition = new Vector3(0, 0, 0);
     float _yaw, _pitch;
+    PhysicsWorld _physics;
+    PhysicsRaycastResult _rayCast;
 
     protected override async Task FillScene()
     {
+      _physics = _scene.CreateComponent<PhysicsWorld>();
+      _rayCast = new PhysicsRaycastResult();
+
       _camera = _cameraNode.GetComponent<Camera>();
+      // From Xamarin workbooks: Setting higher Field of View (default is 45[deg]) works as *zooming out*
+      // but e.g. 90 wierdly skews the view, and the Sun is still not visible.
+      _camera.Fov = 60;
+      // Not sure if it changes anything. This is the smallest value possible.
+      _camera.NearClip = 0.010000599f;
 
       _plotNode = _scene.CreateChild();
 
       var light = _lightNode.GetComponent<Light>();
-      //light.LightType = LightType.Directional;
       light.Range = 1000;
-      //light.Brightness = 2;
 
       StarSprite = ResourceCache.GetSprite2D("Sprites/star.png");
 
@@ -60,18 +64,15 @@ namespace StarMap.Urho
     public string OnTouched(TouchEndEventArgs e)
     {
       Ray cameraRay = _camera.GetScreenRay((float)e.X / Graphics.Width, (float)e.Y / Graphics.Height);
-      var results = _octree.RaycastSingle(cameraRay, RayQueryLevel.Triangle, 10000, DrawableFlags.Geometry); 
 
-      if (results != null)
+      _physics.SphereCast(ref _rayCast, cameraRay, 0.3f, 1000);
+      if (_rayCast.Body != null)
       {
-        // OK, so it doesn't work perfectly.
-        // 1. if one node is closer than the other, but they are behind one another, i can never tap the one in the back.
-        // 2. when travelling, some *collision* nodes are missing, dunno why.
-        StarComponent star = results.Value.Drawable is Sphere sphere
-          ? sphere.Node.Parent.GetComponent<StarComponent>()
-          : results.Value.Drawable as StarComponent;
-
-        if (star != null && SelectedStar != star)
+        // It's a bit annoying to get the component only to operate on it's node,
+        // But at least I could put some logic into that class, and not here.
+        // Because really, it could be 'selectedNode', and 'Select-Deselect' methods done here.
+        StarComponent star = _rayCast.Body.Node.Parent.GetComponent<StarComponent>();
+        if (SelectedStar != star)
         {
           SelectedStar?.Deselect();
           SelectedStar = star;
@@ -84,6 +85,7 @@ namespace StarMap.Urho
         SelectedStar = null;
       }
 
+      
       return SelectedStar?.Node.Name;
     }
     
@@ -129,19 +131,13 @@ namespace StarMap.Urho
         starNode.Position = new Vector3(star.X, star.Y, star.Z);
         starNode.LookAt(_cameraNode.Position, Vector3.Up);
 
-        var a = starNode.CreateChild("collision");
-        var b = a.CreateComponent<Sphere>();
-        a.ScaleNode(1.1f);
-        // Seriously? No better way?
-        b.Color = Color.Transparent;
+        #region Physics
 
-        #region Physics (doesn't work)
-        /*
-        var body = starNode.CreateComponent<RigidBody>();
-        body.SetCollisionLayerAndMask(2, 2);
-        var collisionShape = starNode.CreateComponent<CollisionShape>();
-        collisionShape.SetSphere(1, starNode.Position, Quaternion.Identity);
-        */
+        var collisionNode = starNode.CreateChild("collision");
+        collisionNode.CreateComponent<RigidBody>();
+        var collisionShape = collisionNode.CreateComponent<CollisionShape>();
+        collisionShape.SetSphere(0.1f, Vector3.Zero, Quaternion.Identity);
+        
         #endregion
       }
 
@@ -208,9 +204,8 @@ namespace StarMap.Urho
       Task travelTask = _cameraNode.RunActionsAsync(new MoveTo(duration, target.Position));
 
       _plotNode.GetChildrenWithComponent<StarComponent>().ForEach(x => x.LookAt(target.Position, Vector3.Up));      
-
-      // If async task is the last thing to do, why bother awaiting it in here as well?
-      return Task.WhenAll(travelTask, MarkSun(true));
+      
+      return Task.WhenAll(travelTask, MarkSun(star.Id != 0));
     }
 
     public Task GoHome()

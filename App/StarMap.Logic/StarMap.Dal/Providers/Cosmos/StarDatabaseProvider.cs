@@ -28,7 +28,7 @@ namespace StarMap.Dal.Providers
         return re.ToList();
       });
     }
-
+    
     public StarDetail GetStarDetails(int id)
     {
       return Read(context =>

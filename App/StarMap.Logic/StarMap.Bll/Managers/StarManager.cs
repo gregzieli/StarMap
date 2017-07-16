@@ -6,8 +6,6 @@ using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 
 namespace StarMap.Bll.Managers
 {
