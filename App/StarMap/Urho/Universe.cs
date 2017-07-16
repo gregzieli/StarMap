@@ -3,15 +3,14 @@ using StarMap.Cll.Exceptions;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Abstractions;
 using StarMap.Core.Extensions;
+using StarMap.Core.Utils;
 using StarMap.Urho.Components;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Actions;
-using Urho.Gui;
 using Urho.Physics;
 using Urho.Shapes;
 using Urho.Urho2D;
@@ -33,7 +32,7 @@ namespace StarMap.Urho
     Camera _camera;
     const float touchSensitivity = 2;
     const float VELOCITY = 3;//[pc/s]
-    Vector3 _earthPosition = new Vector3(0, 0, 0);
+    Vector3 _earthPosition = new Vector3(0.5f, 0, 0);
     float _yaw, _pitch;
     PhysicsWorld _physics;
     PhysicsRaycastResult _rayCast;
@@ -46,7 +45,7 @@ namespace StarMap.Urho
       _camera = _cameraNode.GetComponent<Camera>();
       // From Xamarin workbooks: Setting higher Field of View (default is 45[deg]) works as *zooming out*
       // but e.g. 90 wierdly skews the view, and the Sun is still not visible.
-      _camera.Fov = 60;
+      _camera.Fov = 80;
       // Not sure if it changes anything. This is the smallest value possible.
       _camera.NearClip = 0.010000599f;
 
@@ -97,6 +96,7 @@ namespace StarMap.Urho
         TouchState state = Input.GetTouch(0);
         _yaw += touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.X;
         _pitch += touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.Y;
+
         _cameraNode.Rotation = new Quaternion(_pitch, _yaw, 0);
       }
 
@@ -128,6 +128,13 @@ namespace StarMap.Urho
         var starComponent = starNode.CreateComponent<StarComponent>();
 
         starComponent.Sprite = StarSprite;
+
+        // Scale by absolute magnitude
+        // Dunno why, but manipulating this causes crashes when navigating from the page.
+        //var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -14, 8, 1.5, 0.4);
+        //starNode.ScaleNode((float)scale);
+        if (star.ParsecDistance < 6)
+          starNode.Scale = new Vector3(0.2f, 0.2f, 0.2f);
 
         starNode.Position = new Vector3(star.X, star.Y, star.Z);
         starNode.LookAt(_cameraNode.Position, Vector3.Up);
@@ -242,19 +249,6 @@ namespace StarMap.Urho
       return sol;
     }
     Task MarkSun(bool enable) => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));
-
-    [Obsolete]
-    void MarkSun1()
-    {
-      var sunNode = _plotNode.GetChild("0");
-      var textNode = sunNode.CreateChild("text");
-      // local position for a child is vector3.zero
-      textNode.Position = new Vector3(0, 0.4f, 0);
-      textNode.SetScale(4);
-      var bb = textNode.CreateComponent<Text3D>();
-      bb.SetFont(CoreAssets.Fonts.AnonymousPro, 10);
-      bb.TextEffect = TextEffect.Stroke;
-      bb.Text = "Sun";
-    }
+    
   }
 }

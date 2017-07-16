@@ -55,7 +55,6 @@ namespace StarMap.Core.Utils
       {
         var standard = (v - min) / range;
         yield return standard * customRange + minRange;
-
       }
     }
   }

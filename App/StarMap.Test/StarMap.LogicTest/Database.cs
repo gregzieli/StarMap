@@ -3,6 +3,7 @@ using NUnit.Framework;
 using StarMap.Cll.Abstractions;
 using StarMap.Common.Test;
 using System.Linq;
+using StarMap.Core.Utils;
 
 namespace StarMap.LogicTest
 {

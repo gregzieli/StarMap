@@ -5,10 +5,7 @@
  - zmienić db conn na async
  - luminacity: napisać "times Sun Lum" czy coś
  - [LOW PRIORITY] do travel, go home, itd nie przesyłać samego id, tylko już gotową pozycję.
-
-
-size/scale: tu jest coś
-godotengine.org/qa/3626/how-set-sprite-textre-size
+ 
 
 performance: spróbuj użyć gdzies Task.Run
  - https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html
