@@ -27,25 +27,25 @@ namespace StarMap.Bll.Helpers
 
     public static string Geolocation
     {
-      get { return AppSettings.GetValueOrDefault<string>(GeolocationKey); }
+      get { return AppSettings.GetValueOrDefault(GeolocationKey, default(string)); }
       set { AppSettings.AddOrUpdateValue(GeolocationKey, value); }
     }
 
     public static string Filter
     {
-      get { return AppSettings.GetValueOrDefault<string>(FilterKey); }
+      get { return AppSettings.GetValueOrDefault(FilterKey, default(string)); }
       set { AppSettings.AddOrUpdateValue(FilterKey, value); }
     }
 
     public static int Astrolocation
     {
-      get { return AppSettings.GetValueOrDefault<int>(AstrolocationKey, -1); } // -1 would be earth
+      get { return AppSettings.GetValueOrDefault(AstrolocationKey, -1); } // -1 would be earth
       set { AppSettings.AddOrUpdateValue(AstrolocationKey, value); }
     }
 
     public static bool SensorsOn
     {
-      get { return AppSettings.GetValueOrDefault<bool>(SensorsKey, false); } // now to false, but on release should be true.
+      get { return AppSettings.GetValueOrDefault(SensorsKey, false); } // now to false, but on release should be true.
       set { AppSettings.AddOrUpdateValue(SensorsKey, value); }
     }
   }
