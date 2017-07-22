@@ -4,6 +4,7 @@ using StarMap.Cll.Abstractions;
 using StarMap.Common.Test;
 using System.Linq;
 using StarMap.Core.Utils;
+using System.Threading.Tasks;
 
 namespace StarMap.LogicTest
 {
@@ -34,6 +35,32 @@ namespace StarMap.LogicTest
       {
         while (e.MoveNext()) prov.GetStarDetails(e.Current.Id);
       }));      
+    }
+
+    [Test]
+    public async Task ShowUniverseAsync()
+    {
+      var prov = Container.Resolve<IStarDataAsyncProvider>();
+      var a = await prov.GetConstellationsAsync();
+
+      Assert.IsTrue(a.Count() > 0);
+    }
+
+    [Test]
+    public async Task StarDetailMappingAsync()
+    {
+      var prov = Container.Resolve<IStarDataAsyncProvider>();
+      var all = await prov.GetStarsAsync(new Cll.Filters.StarFilter()
+      {
+        DistanceTo = 100000,
+        MagnitudeTo = 100000
+      });
+
+      var e = all.GetEnumerator();
+      Assert.DoesNotThrowAsync(new AsyncTestDelegate(async () => // It takes a few minutes for all
+      {
+        while (e.MoveNext()) await prov.GetStarDetailsAsync(e.Current.Id);
+      }));
     }
   }
 }

@@ -7,13 +7,14 @@
  - sprawdź czy rotation event można poprawić
  
 
-performance: spróbuj użyć gdzies Task.Run
+performance: spróbuj użyć gdzies Task.Run: np. przy ma[owaniu gwiazd
  - https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html
 
 
 NOTES:
  - rozdzialik o custom views, styles
  - w folderze Controls są i bardzo generyczne kontrolki, i takie zwyczajne template'y, żeby po prostu podzielić jeden xaml w kilka - one za binding context biorą ten, w którym siedzą.
+ - Całe te moje Usingi, locki przy bazie danych były naprawdę niepotrzebne - async w ogóle nie jest IDisposable, poza tym strzela po getConnection przy każdym query.
 
 BIBLIOGRAFIA: 
 https://developer.xamarin.com/workbooks/ - Exploring Urho Coordinates

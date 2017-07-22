@@ -6,24 +6,58 @@ using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace StarMap.Bll.Managers
 {
   public class StarManager : BaseManager, IStarManager
   {
-    IStarDataProvider _provider;
+    IStarDataProvider _provider2;
+    IStarDataAsyncProvider _provider;
     // There really is no reason to not store the logic in Astronomer just here, in another method.
     IAstronomer _astronomer;
 
-    public StarManager(IStarDataProvider provider, IAstronomer astronomer)
+    public StarManager(IStarDataAsyncProvider provider, IAstronomer astronomer)
     {
       _provider = provider;
       _astronomer = astronomer;
     }
 
+
+    public async Task<IList<Constellation>> GetConstellationsAsync()
+    {
+      var constellations = await _provider.GetConstellationsAsync();
+
+      if (constellations.IsNullOrEmpty())
+        throw new Exception("Constellations missing from the database");
+
+      return constellations;
+    }
+
+    public async Task<IEnumerable<Star>> GetStarsAsync(StarFilter filter)
+    {
+      Settings.Filter = Serialize(filter);
+
+      var stars = await _provider.GetStarsAsync(filter);
+
+      if (stars.IsNullOrEmpty())
+        throw new Exception("Stars missing from the database");
+
+      return stars;
+    }
+
+    public async Task<StarDetail> GetStarDetailsAsync(int id)
+    {
+      var star = await _provider.GetStarDetailsAsync(id);
+
+      PrepareStar(star);
+
+      return star;
+    }
+
     public IList<Constellation> GetConstellations()
     {
-      var constellations = _provider.GetConstellations();
+      var constellations = _provider2.GetConstellations();
 
       if (constellations.IsNullOrEmpty())
         throw new Exception("Constellations missing from the database");
@@ -35,7 +69,7 @@ namespace StarMap.Bll.Managers
     {
       Settings.Filter = Serialize(filter);
 
-      var stars = _provider.GetStars(filter);
+      var stars = _provider2.GetStars(filter);
 
       if (stars.IsNullOrEmpty())
         throw new Exception("Stars missing from the database");
@@ -45,7 +79,7 @@ namespace StarMap.Bll.Managers
 
     public StarDetail GetStarDetails(int id)
     {
-      var star = _provider.GetStarDetails(id);
+      var star = _provider2.GetStarDetails(id);
       
       PrepareStar(star);
 

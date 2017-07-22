@@ -23,6 +23,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Urho;
+using Urho.Forms;
 
 namespace StarMap.ViewModels
 {
@@ -135,10 +136,12 @@ namespace StarMap.ViewModels
     #region methods
 
     private async void ShowStarDetails()
-    //Another option:
-    //Navigate($"StarDetailPage?id={SelectedStar.Id}");
-    //=> await Navigate("StarDetailPage", "id", SelectedStar.Id);
-    => await Navigate(new Uri(Navigation.DetailAbsolute, UriKind.Absolute), Navigation.Keys.StarId, SelectedStar.Id);
+    {
+      //Another option:
+      //Navigate($"StarDetailPage?id={SelectedStar.Id}");
+      //=> await Navigate("StarDetailPage", "id", SelectedStar.Id);
+      await Navigate(new Uri(Navigation.DetailAbsolute, UriKind.Absolute), Navigation.Keys.StarId, SelectedStar.Id);
+    }
 
     private async void OnConstellationSelected(Constellation c)
     {
@@ -184,33 +187,19 @@ namespace StarMap.ViewModels
 
     private async void GetStars()
     {
-      await CallAsync(() =>
+      await CallAsync(async () =>
       {
-        GetStarsFromDb();
-        return UpdateUrho();
+        await GetStarsFromDatabase();
+        await UpdateUrho();
       });
     }
 
-    void GetStarsFromDb()
+    async Task GetStarsFromDatabase()
     {
-      var stars = _starManager.GetStars(StarFilter);
-      
-
+      var stars = await _starManager.GetStarsAsync(StarFilter).ConfigureAwait(false);
       // Since the size of the collection may differ, it's better memorywise to instantiate a new one,
       // rather than reuse the already allocated list with a completely different size.
       VisibleStars = new ObservableCollection<Star>(stars);
-
-
-      // TODO: update sqlite-net-pcl and switch to asyncConnection
-      //       also, not the whole connection needs to be brought from the  Android app, just the db location.
-      // https://developer.xamarin.com/guides/xamarin-forms/application-fundamentals/databases/
-
-
-
-      Debug.WriteLine($"    Count {VisibleStars.Count}");
-      Debug.WriteLine($"    Mag   {StarFilter.MagnitudeTo}");
-      Debug.WriteLine($"    Dist  {StarFilter.DistanceTo}");
-      Debug.WriteLine($"    Name  {StarFilter.DesignationQuery}");
     }
 
     async Task UpdateUrho()
@@ -219,14 +208,13 @@ namespace StarMap.ViewModels
       if (star != null && star.Constellation is null && star.ConstellationId != null)
         star.Constellation = Constellations.First(x => x.Id == star.ConstellationId);
 
-
       CurrentPosition = star ?? Earth;
       await Application.InvokeOnMainAsync(() => UrhoApplication.UpdateWithStars(VisibleStars, CurrentPosition));
     }
 
-    private void GetConstellations()
+    async Task GetConstellations()
     {
-      var constellations = _starManager.GetConstellations();
+      var constellations = await _starManager.GetConstellationsAsync();
       Constellations = new ObservantCollection<Constellation>(constellations);
       Constellations.ElementChanged += OnConstellationFiltered;
     }
@@ -253,11 +241,11 @@ namespace StarMap.ViewModels
       if (Constellations != null)
         return;
 
-      await Call(() =>
+      await CallAsync(() =>
       {
         StarFilter = _starManager.LoadFilter();
-        GetConstellations();
-        GetStarsFromDb();
+
+        return Task.WhenAll(GetConstellations(), GetStarsFromDatabase());
       });
     }    
 

@@ -69,8 +69,8 @@ namespace StarMap.ViewModels.Core
           //  if (mWidth < mHeight) skip = true;
           // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
         };
-        UrhoApplication = await surface.Show<TUhroApp>(options).ConfigureAwait(continueOnCapturedContext: false);
 
+        UrhoApplication = await surface.Show<TUhroApp>(options);
         await OnUrhoGenerated();
       });
     }

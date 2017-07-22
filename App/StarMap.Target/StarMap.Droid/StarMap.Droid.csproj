@@ -167,6 +167,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\AndroidAsyncConnection.cs" />
     <Compile Include="Database\AndroidConnection.cs" />
     <Compile Include="Database\Connector.cs" />
     <Compile Include="MainActivity.cs" />

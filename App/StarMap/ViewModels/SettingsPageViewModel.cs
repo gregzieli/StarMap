@@ -1,6 +1,7 @@
 ﻿using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
+using StarMap.Bll.Helpers;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Models.Geolocation;
 using StarMap.ViewModels.Core;
@@ -18,15 +19,15 @@ namespace StarMap.ViewModels
     private ExtendedPosition _geoPosition;
     public ExtendedPosition GeoPosition
     {
-      get { return _geoPosition; }
-      set { SetProperty(ref _geoPosition, value); }
+      get => _geoPosition;
+      set => SetProperty(ref _geoPosition, value);
     }
 
     public bool SensorsOn
     {
-      get { return Bll.Helpers.Settings.SensorsOn; }
+      get => Settings.SensorsOn;
       // No time to create a manager for that. 
-      set { Bll.Helpers.Settings.SensorsOn = value; }
+      set => Settings.SensorsOn = value;
     }
 
     public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, 

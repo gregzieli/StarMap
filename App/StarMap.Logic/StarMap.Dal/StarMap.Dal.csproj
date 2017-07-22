@@ -40,6 +40,8 @@
     <Compile Include="Mappers\Constellations.cs" />
     <Compile Include="Mappers\Stars.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\DatabaseAsyncProvider.cs" />
+    <Compile Include="Providers\Cosmos\StarDatabaseAsyncProvider.cs" />
     <Compile Include="Providers\DatabaseProvider.cs" />
     <Compile Include="Providers\Cosmos\StarDatabaseProvider.cs" />
     <Compile Include="Providers\BaseProvider.cs" />

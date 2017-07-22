@@ -13,6 +13,7 @@ namespace StarMap.LogicTest.Classes
     {
       container
         .RegisterType<IStarDataProvider, StarDatabaseProvider>(new InjectionConstructor(new MockConnection()))
+        .RegisterType<IStarDataAsyncProvider, StarDatabaseAsyncProvider>(new InjectionConstructor(new MockAsyncConnection()))
         .RegisterType<IStarManager, StarManager>()
         .RegisterType<IAstronomer, Astronomer>()
         .RegisterType<ILocationManager, LocationManager>();

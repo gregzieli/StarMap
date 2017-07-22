@@ -114,32 +114,5 @@ namespace StarMap.ViewModels.Core
         IsBusy = false;
       }
     }
-
-    /// <summary>
-    /// Executes a delegate that returns a value of the given type asynchronously, 
-    /// catching any exception that may happen during execution.
-    /// </summary>
-    /// <param name="fn">Delegate to execute.</param>
-    /// <param name="onException">An action to execute upon catching an exception.</param>
-    //protected async Task<A> CallAsync<A>(Func<Task<A>> fn, Func<Exception, Task> onException = null)
-    //{
-    //  try
-    //  {
-    //    IsBusy = true;
-    //    return await fn();
-    //  }
-    //  catch (Exception ex)
-    //  {
-    //    await HandleException(ex);
-    //    //if (onException != null)
-    //    //  await onException(ex);
-
-    //    return default(A);
-    //  }
-    //  finally
-    //  {
-    //    IsBusy = false;
-    //  }
-    //}
   }
 }

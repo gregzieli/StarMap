@@ -31,23 +31,23 @@ namespace StarMap.ViewModels.Core
     protected async void Navigate(Uri uri)
       => await Navigate(uri, null);   
 
-    protected async Task Navigate(string path, string key, object param)
+    protected Task Navigate(string path, string key, object param)
     {
       var navParams = new NavigationParameters() { { key, param } };
-      await Navigate(path, navParams);
+      return Navigate(path, navParams);
     }
 
-    protected async Task Navigate(Uri uri, string key, object param)
+    protected Task Navigate(Uri uri, string key, object param)
     {
       var navParams = new NavigationParameters() { { key, param } };
-      await Navigate(uri, navParams);
+      return Navigate(uri, navParams);
     }
 
-    protected async Task Navigate(string path, NavigationParameters navParams)
-      => await CallAsync(() => _navigationService.NavigateAsync(path, navParams));
+    protected Task Navigate(string path, NavigationParameters navParams)
+      => CallAsync(() => _navigationService.NavigateAsync(path, navParams));
 
-    protected async Task Navigate(Uri uri, NavigationParameters navParams)
-      => await CallAsync(() => _navigationService.NavigateAsync(uri, navParams));
+    protected Task Navigate(Uri uri, NavigationParameters navParams)
+      => CallAsync(() => _navigationService.NavigateAsync(uri, navParams));
 
     public virtual async void OnNavigatedFrom(NavigationParameters parameters)
       => await CleanUp();

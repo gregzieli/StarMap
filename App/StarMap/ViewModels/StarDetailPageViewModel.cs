@@ -19,17 +19,14 @@ namespace StarMap.ViewModels
     private StarDetail _star;
     public StarDetail Star
     {
-      get { return _star; }
+      get => _star;
       set { SetProperty(ref _star, value); }
     }
     
     protected override async Task Restore(NavigationParameters parameters)
     {
-      await base.Restore(parameters);
-      await Call(() =>
-      {
-        Star = _starManager.GetStarDetails((int)parameters[Navigation.Keys.StarId]);
-      });
+      //await base.Restore(parameters); // TODO: check if this was causing the errors
+      await CallAsync(() => _starManager.GetStarDetailsAsync((int)parameters[Navigation.Keys.StarId]), star => Star = star);
     }
 
     public override async Task OnUrhoGenerated()

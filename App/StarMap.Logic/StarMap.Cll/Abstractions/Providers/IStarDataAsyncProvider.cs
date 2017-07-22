@@ -5,16 +5,8 @@ using System.Threading.Tasks;
 
 namespace StarMap.Cll.Abstractions
 {
-  public interface IStarManager
+  public interface IStarDataAsyncProvider
   {
-    IList<Constellation> GetConstellations();
-
-    IEnumerable<Star> GetStars(StarFilter filter);
-
-    StarDetail GetStarDetails(int id);
-
-    StarFilter LoadFilter();
-
     Task<IList<Constellation>> GetConstellationsAsync();
 
     Task<IEnumerable<Star>> GetStarsAsync(StarFilter filter);

@@ -36,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Abstractions\Managers\ILocationManager.cs" />
+    <Compile Include="Abstractions\Providers\IStarDataAsyncProvider.cs" />
+    <Compile Include="Abstractions\Services\IDatabaseAsyncConnection.cs" />
     <Compile Include="Abstractions\Services\IDatabaseConnection.cs" />
     <Compile Include="Abstractions\Managers\IStarManager.cs" />
     <Compile Include="Abstractions\Providers\IStarDataProvider.cs" />

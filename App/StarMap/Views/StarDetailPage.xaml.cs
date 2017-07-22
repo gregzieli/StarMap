@@ -17,7 +17,7 @@ namespace StarMap.Views
 
     protected override async void OnAppearing()
     {
-      await ((IUrhoHandler)BindingContext).GenerateUrho(surface).ConfigureAwait(false);      
+      await ((IUrhoHandler)BindingContext).GenerateUrho(surface);
     }
 
     protected override void OnDisappearing()
