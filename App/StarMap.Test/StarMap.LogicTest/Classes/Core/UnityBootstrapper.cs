@@ -12,8 +12,8 @@ namespace StarMap.LogicTest.Classes
     public static void RegisterTypes(IUnityContainer container)
     {
       container
-        .RegisterType<IStarDataProvider, StarDatabaseProvider>(new InjectionConstructor(new MockConnection()))
-        .RegisterType<IStarDataAsyncProvider, StarDatabaseAsyncProvider>(new InjectionConstructor(new MockAsyncConnection()))
+        .RegisterType<IStarDataProvider, StarDatabaseProvider>(new InjectionConstructor(new MockRepository()))
+        .RegisterType<IStarDataAsyncProvider, StarDatabaseAsyncProvider>(new InjectionConstructor(new MockRepository()))
         .RegisterType<IStarManager, StarManager>()
         .RegisterType<IAstronomer, Astronomer>()
         .RegisterType<ILocationManager, LocationManager>();

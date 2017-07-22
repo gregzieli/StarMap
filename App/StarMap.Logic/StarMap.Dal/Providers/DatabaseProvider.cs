@@ -5,12 +5,12 @@ namespace StarMap.Dal.Providers
 {
   public abstract class DatabaseProvider : BaseProvider<SQLiteConnection>
   {
-    IDatabaseConnection _connection;
-    public DatabaseProvider(IDatabaseConnection connection)
+    string _repository;
+    public DatabaseProvider(IRepository repository)
     {
-      _connection = connection;
+      _repository = repository.GetFilePath();
     }
 
-    protected override SQLiteConnection Context => _connection.GetConnection();
+    protected override SQLiteConnection Context => new SQLiteConnection(_repository, SQLiteOpenFlags.ReadOnly);
   }
 }

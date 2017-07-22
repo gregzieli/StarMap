@@ -14,8 +14,8 @@ namespace StarMap.LogicTest
     [Test]
     public void ShowUniverse()
     {
-      var manager = Container.Resolve<IStarManager>();
-      var a = manager.GetConstellations();
+      var prov = Container.Resolve<IStarDataProvider>();
+      var a = prov.GetConstellations();
 
       Assert.IsTrue(a.Count() > 0);
     }

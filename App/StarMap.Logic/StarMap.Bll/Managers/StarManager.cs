@@ -12,9 +12,9 @@ namespace StarMap.Bll.Managers
 {
   public class StarManager : BaseManager, IStarManager
   {
-    IStarDataProvider _provider2;
     IStarDataAsyncProvider _provider;
     // There really is no reason to not store the logic in Astronomer just here, in another method.
+    // But i like unity.
     IAstronomer _astronomer;
 
     public StarManager(IStarDataAsyncProvider provider, IAstronomer astronomer)
@@ -22,7 +22,6 @@ namespace StarMap.Bll.Managers
       _provider = provider;
       _astronomer = astronomer;
     }
-
 
     public async Task<IList<Constellation>> GetConstellationsAsync()
     {
@@ -50,37 +49,6 @@ namespace StarMap.Bll.Managers
     {
       var star = await _provider.GetStarDetailsAsync(id);
 
-      PrepareStar(star);
-
-      return star;
-    }
-
-    public IList<Constellation> GetConstellations()
-    {
-      var constellations = _provider2.GetConstellations();
-
-      if (constellations.IsNullOrEmpty())
-        throw new Exception("Constellations missing from the database");
-
-      return constellations;
-    }
-    
-    public IEnumerable<Star> GetStars(StarFilter filter)
-    {
-      Settings.Filter = Serialize(filter);
-
-      var stars = _provider2.GetStars(filter);
-
-      if (stars.IsNullOrEmpty())
-        throw new Exception("Stars missing from the database");
-
-      return stars;
-    }
-
-    public StarDetail GetStarDetails(int id)
-    {
-      var star = _provider2.GetStarDetails(id);
-      
       PrepareStar(star);
 
       return star;

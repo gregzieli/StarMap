@@ -16,7 +16,7 @@ namespace StarMap.Dal.Providers
   public class StarDatabaseAsyncProvider : DatabaseAsyncProvider, IStarDataAsyncProvider
   {
     // Inject the context (supports mock)
-    public StarDatabaseAsyncProvider(IDatabaseAsyncConnection context) : base(context) { }
+    public StarDatabaseAsyncProvider(IRepository context) : base(context) { }
 
     public async Task<IList<Constellation>> GetConstellationsAsync()
     {
@@ -62,10 +62,9 @@ namespace StarMap.Dal.Providers
       if (filter.Limit.HasValue)
         query = query.Take(filter.Limit.Value);
 
-      var re = (await query.ToListAsync().ConfigureAwait(false))
-        .Select(x => Stars.Map(x));
-
-      return re.ToList();
+      var list = await query.ToListAsync().ConfigureAwait(false);
+      
+      return await Task.Run(() => list.Select(x => Stars.Map(x))).ConfigureAwait(false);
     }
   }
 }

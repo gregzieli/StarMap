@@ -5,7 +5,6 @@ namespace StarMap.Bll.Managers
 {
   public abstract class BaseManager
   {
-
     protected T Deserialize<T>(string json, bool canThrow = true)
     {
       try

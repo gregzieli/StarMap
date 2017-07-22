@@ -5,12 +5,12 @@ namespace StarMap.Dal.Providers
 {
   public abstract class DatabaseAsyncProvider
   {
-    IDatabaseAsyncConnection _connection;
-    public DatabaseAsyncProvider(IDatabaseAsyncConnection connection)
+    string _repository;
+    public DatabaseAsyncProvider(IRepository repository)
     {
-      _connection = connection;
+      _repository = repository.GetFilePath();
     }
 
-    protected SQLiteAsyncConnection Context => _connection.GetConnection();
+    protected SQLiteAsyncConnection Context => new SQLiteAsyncConnection(_repository, SQLiteOpenFlags.ReadOnly);
   }
 }

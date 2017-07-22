@@ -22,7 +22,7 @@ namespace StarMap
         //// https://github.com/PrismLibrary/Prism/blob/master/docs/Xamarin-Forms/5-Dependency-Service.md
         //// : Prism simplifies this feature by allowing you to simply request any dependencies 
         ////   that have been registered with Xamarin's DependencyService via your class constructor.
-        ///*new InjectionConstructor(DependencyService.Get<IDatabaseConnection>())*/);
+        ///*new InjectionConstructor(DependencyService.Get<IRepository>())*/);
     }
   }
 }

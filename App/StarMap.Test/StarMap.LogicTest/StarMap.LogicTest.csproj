@@ -92,7 +92,7 @@
   <ItemGroup>
     <Compile Include="Astronomy.cs" />
     <Compile Include="Classes\CollectionItem.cs" />
-    <Compile Include="Classes\MockAsyncConnection.cs" />
+    <Compile Include="Classes\MockRepository.cs" />
     <Compile Include="Collections.cs" />
     <Compile Include="Configuration\SetupFixture.cs" />
     <Compile Include="Database.cs" />
@@ -100,7 +100,6 @@
     <Compile Include="Location.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Classes\Dog.cs" />
-    <Compile Include="Classes\MockConnection.cs" />
     <Compile Include="Classes\Core\ObservableImplementation.cs" />
     <Compile Include="Classes\Core\UnityBootstrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

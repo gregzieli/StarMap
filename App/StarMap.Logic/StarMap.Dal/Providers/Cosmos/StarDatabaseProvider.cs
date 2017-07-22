@@ -15,7 +15,7 @@ namespace StarMap.Dal.Providers
   public class StarDatabaseProvider : DatabaseProvider, IStarDataProvider
   {
     // Inject the context (supports mock)
-    public StarDatabaseProvider(IDatabaseConnection context) : base(context) { }
+    public StarDatabaseProvider(IRepository repository) : base(repository) { }
 
     public IList<Constellation> GetConstellations()
     {
