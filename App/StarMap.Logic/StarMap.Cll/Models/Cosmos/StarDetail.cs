@@ -42,28 +42,27 @@ namespace StarMap.Cll.Models.Cosmos
     string GetDesignation()
     {
       var sb = new StringBuilder();
+      bool tracker = false,
+        hasName = Name != null;
       
-      if (Flamsteed != null)
+      if (tracker |= Flamsteed != null)
         sb.AppendFormat("{0} ", Flamsteed);
 
-      if (Bayer != null)
+      if (tracker |= Bayer != null)
         sb.AppendFormat("{0} ", MapBayer(Bayer));
 
-      if (Constellation != null)
-        // TODO: use genetive (in here, dont bother with the db)
-        sb.Append(Constellation.Name);
+      if (Constellation != null && (hasName || tracker))
+        sb.Append(Resources.AppResources.ResourceManager
+          .GetString($"{Constellation.Abbreviation}_G"));
 
-      if (Name != null)
+      if (hasName)
       {
         if (sb.Length > 0)
           sb.Insert(0, $"{Name}, ");
         else
           sb.Append(Name);
       }
-
-      var re = sb.ToString().Trim();
-      return re == string.Empty 
-        ? "?" : re;
+      return sb.ToString().Trim();
     }
 
     static Regex _bayerRx = new Regex(@"(\w+)(-?\d?)");

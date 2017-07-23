@@ -2,9 +2,15 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-             xmlns:urho="clr-namespace:Urho.Forms;assembly=Urho.Forms"
+             xmlns:urho="clr-namespace:Urho.Forms;assembly=Urho.Forms" 
+             xmlns:conv="clr-namespace:StarMap.Converters"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.StarDetailPage">
+  <ContentPage.Resources>
+    <ResourceDictionary>
+      <conv:NullableToBooleanConverter x:Key="NullConverter" />
+    </ResourceDictionary>
+  </ContentPage.Resources>
 
   <Grid Padding="10" ColumnSpacing="10" RowSpacing="10" BindingContext="{Binding Star}">
     <Grid.ColumnDefinitions>
@@ -20,18 +26,18 @@
 
     <StackLayout Grid.Column="1" Margin="10">
       <StackLayout Orientation="Horizontal">
-        <Label Text="{Binding HipparcosId, StringFormat='Hipparcos: {0}'}" />
-        <Label Text="{Binding HenryDraperId, StringFormat='Henry-Draper: {0}'}" />
-        <Label Text="{Binding GlieseId, StringFormat='Gliese: {0}'}" />
-        </StackLayout>
-      
-      <Label Text="{Binding Designation, StringFormat='Designation: {0}'}" />      
+        <Label Text="{Binding HipparcosId, StringFormat='Hipparcos: {0}'}" IsVisible="{Binding HipparcosId, Converter={StaticResource NullConverter}" />
+        <Label Text="{Binding HenryDraperId, StringFormat='Henry-Draper: {0}'}" IsVisible="{Binding HenryDraperId, Converter={StaticResource NullConverter}" />
+        <Label Text="{Binding GlieseId, StringFormat='Gliese: {0}'}" IsVisible="{Binding GlieseId, Converter={StaticResource NullConverter}" />
+      </StackLayout>
+      <Label Text="{Binding Constellation.Name, StringFormat='Constellation: {0}'}" IsVisible="{Binding Constellation, Converter={StaticResource NullConverter}" />
+      <Label Text="{Binding Designation, StringFormat='Designation: {0}'}" IsVisible="{Binding Designation, Converter={StaticResource NullConverter}}" />
       <Label Text="{Binding ParsecDistance, StringFormat='Distance from Earth: {0:N0} pc'}" />
       <Label Text="{Binding ApparentMagnitude, StringFormat='Apparent magnitude: {0:N1}'}" />
       <Label Text="{Binding AbsoluteMagnitude, StringFormat='Absolute magnitude: {0:N1}'}" />
-      <Label Text="{Binding SpectralType, StringFormat='Spectral type: {0}'}" />
+      <Label Text="{Binding SpectralType, StringFormat='Spectral type: {0}'}" IsVisible="{Binding SpectralType, Converter={StaticResource NullConverter}" />
       <Label Text="{Binding Luminosity, StringFormat='Luminosity: {0:F1}'}" />
-      <Label Text="{Binding TemperatureKelvin, StringFormat='Temperature: {0:F0} K'}" />
+      <Label Text="{Binding TemperatureKelvin, StringFormat='Temperature: {0:F0} K'}" IsVisible="{Binding TemperatureKelvin, Converter={StaticResource NullConverter}"/>
     </StackLayout>
 
 

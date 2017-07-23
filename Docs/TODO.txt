@@ -5,13 +5,10 @@
  - [LOW PRIORITY] do travel, go home, itd nie przesyłać samego id, tylko już gotową pozycję.
  - sprawdź czy rotation event można poprawić
  - about page
- - na starDetail; pokazywać overriden Designation: Name, flam bayer(prawdziwa grecka litera) constellation Gen
-    a) tylko name: usunąć przecinek
-    b) tylko Constellation: dodać na początku: Constellation: 
  - zmienić double na floaty
  
 
-performance: spróbuj użyć gdzies Task.Run: np. przy maowaniu gwiazd
+performance: spróbuj użyć gdzies Task.Run: np. przy mapowaniu gwiazd
  - https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html
 
 
