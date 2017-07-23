@@ -27,8 +27,9 @@ namespace StarMap.Cll.Models.Cosmos
 
     public double LightYearDistance => ParsecDistance * 3.262;
 
-    public virtual string Designation => GetDesignation();
-    
+    string _designation;
+    public virtual string Designation => _designation ?? (_designation = GetDesignation());
+
     string GetDesignation()
     {
       var con = Constellation?.Abbreviation;
@@ -38,16 +39,21 @@ namespace StarMap.Cll.Models.Cosmos
 
       var sb = new StringBuilder();
 
-      if (HipparcosId.HasValue)
-        sb.Append($"hip {HipparcosId}, ");
-
       if (new[] { Flamsteed, Bayer, con }.Any(x => !x.IsNullOrEmpty()))
         // The database originally had a column bf that contains just that. 
         // If there's time, use that, to limit the fields populated on db query.
         // Not that important, since it will only be one vs two.
-        sb.Append($"{Flamsteed}{Bayer} {con}");
+        sb.AppendFormat("{0}{1} {2}", Flamsteed, Bayer, con);
 
-      return sb.ToString();
+      if (HipparcosId.HasValue)
+      {
+        if (sb.Length > 0)
+          sb.Insert(0, $"hip {HipparcosId}, ");
+        else
+          sb.Append($"hip {HipparcosId}");
+      }
+
+      return sb.ToString().Trim();
     }
   }
 }

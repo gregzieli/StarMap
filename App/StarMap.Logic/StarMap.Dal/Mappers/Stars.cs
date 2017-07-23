@@ -42,7 +42,6 @@ namespace StarMap.Dal.Mappers
         HipparcosId = source.HipparcosId,
         HenryDraperId = source.HenryDraperId,
         GlieseId = source.GlieseId,
-        Base = source.Base,
         AbsoluteMagnitude = source.AbsoluteMagnitude,
         ApparentMagnitude = source.ApparentMagnitude,
         Bayer = source.BayerName,

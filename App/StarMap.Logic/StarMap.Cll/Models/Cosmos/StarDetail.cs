@@ -1,4 +1,7 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using System.Text;
+using System.Text.RegularExpressions;
+using Xamarin.Forms;
 
 namespace StarMap.Cll.Models.Cosmos
 {
@@ -7,11 +10,6 @@ namespace StarMap.Cll.Models.Cosmos
     public int? HenryDraperId { get; set; }
 
     public string GlieseId { get; set; }
-
-    /// <summary>
-    /// Gets or sets the name of the multi-star system.
-    /// </summary>
-    public string Base { get; set; }
 
     /// <summary>
     /// Gets or sets the star's brightness as visible from Earth.
@@ -38,7 +36,98 @@ namespace StarMap.Cll.Models.Cosmos
 
     public double? TemperatureCelcius => TemperatureKelvin.HasValue ? TemperatureKelvin - 273.15 : null;
 
+    string _designation;
+    public override string Designation => _designation ?? (_designation = GetDesignation());
 
-    //TODO: override Designation - use real greek letters for Bayer, Constellation in Genetive
+    string GetDesignation()
+    {
+      var sb = new StringBuilder();
+      
+      if (Flamsteed != null)
+        sb.AppendFormat("{0} ", Flamsteed);
+
+      if (Bayer != null)
+        sb.AppendFormat("{0} ", MapBayer(Bayer));
+
+      if (Constellation != null)
+        // TODO: use genetive (in here, dont bother with the db)
+        sb.Append(Constellation.Name);
+
+      if (Name != null)
+      {
+        if (sb.Length > 0)
+          sb.Insert(0, $"{Name}, ");
+        else
+          sb.Append(Name);
+      }
+
+      var re = sb.ToString().Trim();
+      return re == string.Empty 
+        ? "?" : re;
+    }
+
+    static Regex _bayerRx = new Regex(@"(\w+)(-?\d?)");
+    string MapBayer(string bayer)
+    {
+      Match match = _bayerRx.Match(bayer);
+      if (!match.Success)
+        return null;
+
+      Func<string, string> convert = greek => $"{greek}{match.Groups[2].Value}";
+
+      switch (match.Groups[1].Value)
+      {
+        case "Alp":
+          return convert("α");
+        case "Bet":
+          return convert("β");
+        case "Gam":
+          return convert("γ");
+        case "Del":
+          return convert("δ");
+        case "Eps":
+          return convert("ε");
+        case "Zet":
+          return convert("ζ");
+        case "Eta":
+          return convert("η");
+        case "The":
+          return convert("θ");
+        case "Iot":
+          return convert("ι");
+        case "Kap":
+          return convert("κ");
+        case "Lam":
+          return convert("λ");
+        case "Mu":
+          return convert("μ");
+        case "Nu":
+          return convert("ν");
+        case "Xi":
+          return convert("ξ");
+        case "Omi":
+          return convert("ο");
+        case "Pi":
+          return convert("π");
+        case "Rho":
+          return convert("ρ");
+        case "Sig":
+          return convert("σ");
+        case "Tau":
+          return convert("τ");
+        case "Ups":
+          return convert("υ");
+        case "Phi":
+          return convert("φ");
+        case "Chi":
+          return convert("χ");
+        case "Psi":
+          return convert("ψ");
+        case "Ome":
+          return convert("ω");
+        default:
+          throw new NotSupportedException("No such letter");
+      }
+    }
   }
 }

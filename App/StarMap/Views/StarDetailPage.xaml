@@ -24,13 +24,8 @@
         <Label Text="{Binding HenryDraperId, StringFormat='Henry-Draper: {0}'}" />
         <Label Text="{Binding GlieseId, StringFormat='Gliese: {0}'}" />
         </StackLayout>
-      <StackLayout Orientation="Horizontal">
-        <Label Text="{Binding Name, StringFormat='Proper name: {0}'}" />
-        <Label Text="{Binding Bayer, StringFormat='Bayer name: {0}'}" />
-        <Label Text="{Binding Flamsteed, StringFormat='Flamsteed name: {0}'}" />
-      </StackLayout>
-
-      <Label Text="{Binding Constellation.Name, StringFormat='Constellation: {0}'}" />
+      
+      <Label Text="{Binding Designation, StringFormat='Designation: {0}'}" />      
       <Label Text="{Binding ParsecDistance, StringFormat='Distance from Earth: {0:N0} pc'}" />
       <Label Text="{Binding ApparentMagnitude, StringFormat='Apparent magnitude: {0:N1}'}" />
       <Label Text="{Binding AbsoluteMagnitude, StringFormat='Absolute magnitude: {0:N1}'}" />

@@ -6,6 +6,9 @@
  - sprawdź czy rotation event można poprawić
  - about page
  - na starDetail; pokazywać overriden Designation: Name, flam bayer(prawdziwa grecka litera) constellation Gen
+    a) tylko name: usunąć przecinek
+    b) tylko Constellation: dodać na początku: Constellation: 
+ - zmienić double na floaty
  
 
 performance: spróbuj użyć gdzies Task.Run: np. przy maowaniu gwiazd

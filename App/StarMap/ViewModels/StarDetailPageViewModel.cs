@@ -26,7 +26,10 @@ namespace StarMap.ViewModels
     protected override async Task Restore(NavigationParameters parameters)
     {
       //await base.Restore(parameters); // TODO: check if this was causing the errors
-      await CallAsync(() => _starManager.GetStarDetailsAsync((int)parameters[Navigation.Keys.StarId]), star => Star = star);
+      await CallAsync(() => 
+        _starManager.GetStarDetailsAsync((int)parameters[Navigation.Keys.StarId]), 
+        star => 
+          Star = star);
     }
 
     public override async Task OnUrhoGenerated()

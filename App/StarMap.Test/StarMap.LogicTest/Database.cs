@@ -31,10 +31,10 @@ namespace StarMap.LogicTest
       });// It takes a few minutes for all
 
       var e = all.GetEnumerator();
-      Assert.DoesNotThrow(new TestDelegate(() => 
+      Assert.DoesNotThrow(new TestDelegate(() =>
       {
         while (e.MoveNext()) prov.GetStarDetails(e.Current.Id);
-      }));      
+      }));
     }
 
     [Test]
@@ -59,7 +59,11 @@ namespace StarMap.LogicTest
       var e = all.GetEnumerator();
       Assert.DoesNotThrowAsync(new AsyncTestDelegate(async () => // It takes a few minutes for all
       {
-        while (e.MoveNext()) await prov.GetStarDetailsAsync(e.Current.Id);
+        while (e.MoveNext())
+        {
+          var a = await prov.GetStarDetailsAsync(e.Current.Id);
+          var b = a.Designation;
+        };
       }));
     }
   }
