@@ -9,9 +9,20 @@
     <ContentPage Title="Master" Opacity=".9" BackgroundColor="CornflowerBlue">
       
       <StackLayout Padding="20" Spacing="5">
-        <Button Text="Stars" Command="{Binding NavigateCommand}" CommandParameter="MainPage"/>
-        <Button Text="Settings" Command="{Binding NavigateCommand}" CommandParameter="SettingsPage" />
-        <Button Text="About" Command="{Binding NavigateCommand}" CommandParameter="NavigationPage/AboutPage" />
+        <Button Image="stars.png"
+                Text="Stars" 
+                Command="{Binding NavigateCommand}" 
+                CommandParameter="MainPage"/>
+        
+        <Button Image="settings.png" 
+                Text="Settings"
+                Command="{Binding NavigateCommand}" 
+                CommandParameter="SettingsPage" />
+        
+        <Button Image="about.png"
+                Text="About"
+                Command="{Binding NavigateCommand}" 
+                CommandParameter="NavigationPage/AboutPage" />
       </StackLayout>
     </ContentPage>
   </MasterDetailPage.Master>
