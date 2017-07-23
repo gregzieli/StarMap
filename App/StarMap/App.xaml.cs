@@ -13,13 +13,13 @@ namespace StarMap
   {
     public App(IPlatformInitializer initializer = null) : base(initializer) { }
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
       TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
       try
       {
         InitializeComponent();
-        NavigationService.NavigateAsync("MasterDetail/StartPage");
+        await NavigationService.NavigateAsync("MasterDetail/StartPage");
       }
       catch (Exception e)
       {
@@ -50,21 +50,14 @@ namespace StarMap
       // Register other (logical) types in a separate method
       UnityBootstrapper.RegisterTypes(Container);
 
-      Container.RegisterTypeForNavigation<NavigationPage>();
-      Container.RegisterTypeForNavigation<StartPage, StartPageViewModel>();
-      Container.RegisterTypeForNavigation<MasterDetail, MasterDetailViewModel>();
-      Container.RegisterTypeForNavigation<StarDetailPage, StarDetailPageViewModel>();
-      Container.RegisterTypeForNavigation<SettingsPage>();
-      Container.RegisterTypeForNavigation<AboutPage>();
-      Container.RegisterTypeForNavigation<MainPage>();
-    }
-    
-    protected override void OnSleep()
-    {
-      base.OnSleep();
-
-      //var sensor = new SensorManager();
-      //sensor.Stop();
+      Container.RegisterTypeForNavigation<NavigationPage>()
+        .RegisterTypeForNavigation<StartPage, StartPageViewModel>()
+        .RegisterTypeForNavigation<MasterDetail, MasterDetailViewModel>()
+        .RegisterTypeForNavigation<StarDetailPage, StarDetailPageViewModel>()
+        .RegisterTypeForNavigation<SettingsPage>()
+        .RegisterTypeForNavigation<AboutPage>()
+        .RegisterTypeForNavigation<MainPage>()
+        .RegisterTypeForNavigation<WebViewPage>();
     }
   }
 }

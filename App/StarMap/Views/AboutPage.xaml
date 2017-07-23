@@ -4,5 +4,31 @@
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.AboutPage">
-  <Label Text="ABOUT" VerticalOptions="Center" HorizontalOptions="Center" />
+
+  <StackLayout Padding="20, 5">
+
+    <Label Text="Star Map" HorizontalOptions="Center" FontSize="Large" />
+    <Label Text="v1.0.0" HorizontalOptions="Center" FontSize="Small" />
+
+    <Label Text="Author: Grzegorz Zieliński" HorizontalOptions="End" />
+    <Label Text="Sources: " />
+
+    <ListView x:Name="list" ItemsSource="{Binding Sources}" VerticalOptions="FillAndExpand">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <StackLayout Orientation="Horizontal">
+              <Label Text="{Binding Name}" VerticalOptions="Center" />
+              <Button Text="{Binding Url}" 
+                      FontSize="Micro"  
+                      HorizontalOptions="EndAndExpand"
+                      Command="{Binding BindingContext.WebCommand, Source={x:Reference list}}"
+                      CommandParameter="{Binding Url}"/>
+            </StackLayout>
+          </ViewCell>          
+        </DataTemplate>
+      </ListView.ItemTemplate>
+
+    </ListView>
+  </StackLayout>
 </ContentPage>

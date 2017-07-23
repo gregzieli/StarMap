@@ -4,8 +4,9 @@
  - luminacity: napisać "times Sun Lum" czy coś
  - [LOW PRIORITY] do travel, go home, itd nie przesyłać samego id, tylko już gotową pozycję.
  - sprawdź czy rotation event można poprawić
- - about page
  - zmienić double na floaty
+ - dodaj jakiś takiś glow effect do starDetail
+ - powstawiać ikonki do/zamiast tekstów na buttonach / image zamiast buttonów
  
 
 performance: spróbuj użyć gdzies Task.Run: np. przy mapowaniu gwiazd
