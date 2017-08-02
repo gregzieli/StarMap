@@ -31,7 +31,7 @@ namespace StarMap.Urho
       // TODO: Not final
       StarTextures = new List<Material>
       {
-        Material.FromImage("Textures/star_white1.jpg")
+        Material.FromImage("Textures/white-dwarf2.jpg")//star_white1.jpg
       };
     }
 

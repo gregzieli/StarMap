@@ -169,6 +169,7 @@
     <Content Include="Assets\Textures\star_red_dark2.jpg" />
     <Content Include="Assets\Textures\space1.png" />
     <Content Include="Assets\Textures\space2.png" />
+    <Content Include="Assets\Textures\white-dwarf2.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Views\AboutPage.xaml">
