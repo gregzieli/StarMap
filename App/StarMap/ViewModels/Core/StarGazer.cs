@@ -27,7 +27,7 @@ namespace StarMap.ViewModels.Core
       // So if I use this, the Catch in CallAsync doesn't get used. 
       // And that implementation works smoothly, whereas this causes more and more problems.
       // Leave it for future reference.
-      //Application.UnhandledException += UrhoUnhandledException;
+      Application.UnhandledException += UrhoUnhandledException;
     }
 
     private async void UrhoUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -35,11 +35,11 @@ namespace StarMap.ViewModels.Core
       e.Handled = true;
       // Some stuff get caught here, some don't. For example an error during init doesn't get caught here, that's why
       // it has its own trycatch, and a MessagingCenter event handling.
-      if (!UrhoApplication.IsExiting)
-      {
-        await UrhoApplication.Exit().ConfigureAwait(false);
-        await HandleException(e.Exception).ConfigureAwait(false);
-      }        
+      //if (!UrhoApplication.IsExiting)
+      //{
+      //  await UrhoApplication.Exit().ConfigureAwait(false);
+      //  await HandleException(e.Exception).ConfigureAwait(false);
+      //}        
     }
 
     protected override async Task Restore(NavigationParameters parameters)

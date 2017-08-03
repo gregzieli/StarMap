@@ -45,7 +45,7 @@ namespace StarMap.Urho
       _camera = _cameraNode.GetComponent<Camera>();
       // From Xamarin workbooks: Setting higher Field of View (default is 45[deg]) works as *zooming out*
       // but e.g. 90 wierdly skews the view, and the Sun is still not visible.
-      _camera.Fov = 80;
+      _camera.Fov = 30;
       // Not sure if it changes anything. This is the smallest value possible.
       _camera.NearClip = 0.010000599f;
 
@@ -128,25 +128,19 @@ namespace StarMap.Urho
         var starComponent = starNode.CreateComponent<StarComponent>();
 
         starComponent.Sprite = StarSprite;
+        float scale = 1;
 
         // Scale by absolute magnitude
-        // Dunno why, but manipulating this causes crashes when navigating from the page.
-        //var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -14, 8, 1.5, 0.4);
-        //starNode.ScaleNode((float)scale);
-        if (star.ParsecDistance < 6)
-          starNode.Scale = new Vector3(0.2f, 0.2f, 0.2f);
+        if (star.AbsoluteMagnitude < 2)
+          scale = (float)Normalizer.Normalize(star.AbsoluteMagnitude, -14, 1, 3, 1.2);
+
+        //starNode.Scale = new Vector3(scale, scale, scale);
+        // haha this throws error sometimes when moving away from the page
+        starNode.SetScale(scale);
 
         starNode.Position = new Vector3(star.X, star.Y, star.Z);
         starNode.LookAt(_cameraNode.Position, Vector3.Up);
-
-        #region Physics
-
-        var collisionNode = starNode.CreateChild("collision");
-        collisionNode.CreateComponent<RigidBody>();
-        var collisionShape = collisionNode.CreateComponent<CollisionShape>();
-        collisionShape.SetSphere(0.1f, Vector3.Zero, Quaternion.Identity);
-        
-        #endregion
+        starNode.AddCollisionSupport(0.1f);
       }
 
       MarkSun().SetDeepEnabled(currentStar != null);
@@ -211,6 +205,7 @@ namespace StarMap.Urho
 
       Task travelTask = _cameraNode.RunActionsAsync(new MoveTo(duration, target.Position));
 
+      // TODO: calculate size by apparentMag
       _plotNode.GetChildrenWithComponent<StarComponent>().ForEach(x => x.LookAt(target.Position, Vector3.Up));      
       
       return Task.WhenAll(travelTask, MarkSun(star.Id != 0));

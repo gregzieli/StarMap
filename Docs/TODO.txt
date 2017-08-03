@@ -1,20 +1,21 @@
 ﻿TODO:
- - nowa logika do sprawdzania współrzędnych na ziemi
+ - usunąć całą logikę z Earth - home jest Sol
+ - sprawdź czy rotation event można poprawić
+ - powstawiać ikonki do/zamiast tekstów na buttonach / image zamiast buttonów
+ - ustawiać rozmiar gwiazd po apparent magnitude - i przeliczać przy każdej podróży
+
+ - [TBR] nowa logika do sprawdzania współrzędnych na ziemi
  - [LOW PRIORITY] add setting: choose dist in ly/pc
  - [LOW PRIORITY] do travel, go home, itd nie przesyłać samego id, tylko już gotową pozycję.
- - sprawdź czy rotation event można poprawić
- - dodaj jakiś takiś glow effect do starDetail
- - powstawiać ikonki do/zamiast tekstów na buttonach / image zamiast buttonów
+ - [LOW PRIORITY] dodaj jakiś takiś glow effect do starDetail
  
-
-performance: spróbuj użyć gdzies Task.Run: np. przy mapowaniu gwiazd
- - https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html
-
 
 NOTES:
  - rozdzialik o custom views, styles
  - w folderze Controls są i bardzo generyczne kontrolki, i takie zwyczajne template'y, żeby po prostu podzielić jeden xaml w kilka - one za binding context biorą ten, w którym siedzą.
  - Całe te moje Usingi, locki przy bazie danych były naprawdę niepotrzebne - async w ogóle nie jest IDisposable, poza tym strzela po getConnection przy każdym query.
+ - urho: scaleNode mnoży scale * parametr. SetScale zwyczajnie ustawia.
+ - performance: Task.Run: np. przy mapowaniu gwiazd - https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html
 
 BIBLIOGRAFIA: 
 https://developer.xamarin.com/workbooks/ - Exploring Urho Coordinates

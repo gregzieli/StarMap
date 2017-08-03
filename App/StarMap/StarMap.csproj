@@ -59,6 +59,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Urho\BillboardUniverse.cs" />
     <Compile Include="Urho\Components\StarComponent.cs" />
+    <Compile Include="Urho\Extensions.cs" />
     <Compile Include="Urho\Universe.cs" />
     <Compile Include="Urho\SingleStar.cs" />
     <Compile Include="Urho\UrhoBase.cs" />
