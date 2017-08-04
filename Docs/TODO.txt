@@ -2,6 +2,11 @@
  - usunąć całą logikę z Earth - home jest Sol
  - sprawdź czy rotation event można poprawić
  - powstawiać ikonki do/zamiast tekstów na buttonach / image zamiast buttonów
+   - filter konstelacji
+   - filter gwiazd
+   - przycisk PODRÓŻ
+   - przycisk SZCZEGÓŁY
+   - przycisk POWRÓT
  - ustawiać rozmiar gwiazd po apparent magnitude - i przeliczać przy każdej podróży -- mm nie wiem czy ma to sens
 
  - [TBR] nowa logika do sprawdzania współrzędnych na ziemi

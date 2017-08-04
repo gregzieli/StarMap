@@ -31,9 +31,9 @@
            Text="{Binding SelectedStar.RelativeDistance, StringFormat='{0:N0} pc'}" />
   </StackLayout>
 
-  <StackLayout Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End" Margin="0, 0, 20, 0">
-    <Button x:Name="earthButton" Text="Earth" Command="{Binding GoHomeCommand}" IsVisible="{Binding CurrentPosition, Converter={conv:LocationToBooleanConverter}}"/>
+  <StackLayout Orientation="Horizontal" Grid.Column="2" HorizontalOptions="End" Margin="0, 0, 10, 0">
+    <Button x:Name="earthButton" Image="turn_back.png" WidthRequest="35" Command="{Binding GoHomeCommand}" IsVisible="{Binding CurrentPosition, Converter={conv:LocationToBooleanConverter}}"/>
     <Button x:Name="travelButton" Text="Travel" Command="{Binding TravelCommand}"/>
-    <Button Text="Details" Command="{Binding ShowStarDetailsCommand}"/>
+    <Button Image="star_detail.png" WidthRequest="35" Command="{Binding ShowStarDetailsCommand}"/>
   </StackLayout>
 </Grid>

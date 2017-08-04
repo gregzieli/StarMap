@@ -148,9 +148,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Icons\about.png" />
+    <Content Include="Assets\Icons\constellation_filter.png" />
     <Content Include="Assets\Icons\refresh.png" />
     <Content Include="Assets\Icons\settings.png" />
     <Content Include="Assets\Icons\stars.png" />
+    <Content Include="Assets\Icons\star_detail.png" />
+    <Content Include="Assets\Icons\star_filter.png" />
+    <Content Include="Assets\Icons\turn_back.png" />
     <Content Include="Assets\Sprites\star.png" />
     <Content Include="Assets\Textures\star_yellow_light.png" />
     <Content Include="Assets\Textures\star_yellow_dark.png" />
