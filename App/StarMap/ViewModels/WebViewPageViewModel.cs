@@ -21,6 +21,7 @@ namespace StarMap.ViewModels
 
     protected override async Task Restore(NavigationParameters parameters)
     {
+      await Task.Yield();
       Url = parameters["url"] as string;
     }
   }

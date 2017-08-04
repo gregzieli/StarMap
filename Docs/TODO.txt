@@ -2,7 +2,7 @@
  - usunąć całą logikę z Earth - home jest Sol
  - sprawdź czy rotation event można poprawić
  - powstawiać ikonki do/zamiast tekstów na buttonach / image zamiast buttonów
- - ustawiać rozmiar gwiazd po apparent magnitude - i przeliczać przy każdej podróży
+ - ustawiać rozmiar gwiazd po apparent magnitude - i przeliczać przy każdej podróży -- mm nie wiem czy ma to sens
 
  - [TBR] nowa logika do sprawdzania współrzędnych na ziemi
  - [LOW PRIORITY] add setting: choose dist in ly/pc

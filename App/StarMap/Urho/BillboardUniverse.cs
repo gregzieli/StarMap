@@ -22,7 +22,7 @@ namespace StarMap.Urho
 
     BillboardSet _billboardSet;
 
-    protected override async Task FillScene()
+    protected override void FillScene()
     {
       _camera = _cameraNode.GetComponent<Camera>();
 

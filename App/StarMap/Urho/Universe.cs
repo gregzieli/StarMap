@@ -37,7 +37,7 @@ namespace StarMap.Urho
     PhysicsWorld _physics;
     PhysicsRaycastResult _rayCast;
 
-    protected override async Task FillScene()
+    protected override void FillScene()
     {
       _physics = _scene.CreateComponent<PhysicsWorld>();
       _rayCast = new PhysicsRaycastResult();
@@ -45,9 +45,9 @@ namespace StarMap.Urho
       _camera = _cameraNode.GetComponent<Camera>();
       // From Xamarin workbooks: Setting higher Field of View (default is 45[deg]) works as *zooming out*
       // but e.g. 90 wierdly skews the view, and the Sun is still not visible.
-      _camera.Fov = 30;
+      _camera.Fov = 35;
       // Not sure if it changes anything. This is the smallest value possible.
-      _camera.NearClip = 0.010000599f;
+      //_camera.NearClip = 0.010000599f;
 
       _plotNode = _scene.CreateChild();
 
@@ -132,7 +132,7 @@ namespace StarMap.Urho
 
         // Scale by absolute magnitude
         if (star.AbsoluteMagnitude < 2)
-          scale = (float)Normalizer.Normalize(star.AbsoluteMagnitude, -14, 1, 3, 1.2);
+          scale = (float)Normalizer.Normalize(star.AbsoluteMagnitude, -14, 1, 2, 1.2);
 
         //starNode.Scale = new Vector3(scale, scale, scale);
         // haha this throws error sometimes when moving away from the page

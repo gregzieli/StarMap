@@ -28,7 +28,6 @@ namespace StarMap.Urho
 
     void GetTextures()
     {
-      // TODO: Not final
       StarTextures = new List<Material>
       {
         Material.FromImage("Textures/white-dwarf2.jpg")//star_white1.jpg
@@ -102,7 +101,7 @@ namespace StarMap.Urho
     {
       Star = star;
 
-      var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 10, 1.25, 0.5);
+      var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 10, 1.5, 0.5);
       _starNode?.SetScale(Convert.ToSingle(scale));
 
       var a = _starNode?.GetComponent<Sphere>();
@@ -123,7 +122,7 @@ namespace StarMap.Urho
       base.OnUpdate(timeStep);
     }
 
-    protected override async Task FillScene()
+    protected override void FillScene()
     {
       GetTextures();
 
@@ -138,7 +137,7 @@ namespace StarMap.Urho
       _starNode.Position = new Vector3(0, 0, 2);
       Sphere star = _starNode.CreateComponent<Sphere>();
 
-      await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0))).ConfigureAwait(false);
+      _starNode.RunActions(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
     }
 
     protected override void HandleException(Exception ex)

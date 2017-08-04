@@ -27,10 +27,10 @@ namespace StarMap.ViewModels.Core
       // So if I use this, the Catch in CallAsync doesn't get used. 
       // And that implementation works smoothly, whereas this causes more and more problems.
       // Leave it for future reference.
-      Application.UnhandledException += UrhoUnhandledException;
+      //Application.UnhandledException += UrhoUnhandledException;
     }
 
-    private async void UrhoUnhandledException(object sender, UnhandledExceptionEventArgs e)
+    private void UrhoUnhandledException(object sender, UnhandledExceptionEventArgs e)
     {
       e.Handled = true;
       // Some stuff get caught here, some don't. For example an error during init doesn't get caught here, that's why
@@ -44,12 +44,14 @@ namespace StarMap.ViewModels.Core
 
     protected override async Task Restore(NavigationParameters parameters)
     {
-      await Call(() => XF.MessagingCenter.Subscribe<TUrhoException>(this, string.Empty, async (ex) => await HandleException(ex)));
+      await Task.Yield();
+      XF.MessagingCenter.Subscribe<TUrhoException>(this, string.Empty, async (ex) => await HandleException(ex));
     }
 
     protected override async Task CleanUp()
     {
-      await Call(() => XF.MessagingCenter.Unsubscribe<TUrhoException>(this, string.Empty));
+      await Task.Yield();
+      XF.MessagingCenter.Unsubscribe<TUrhoException>(this, string.Empty);
     }
 
     public async Task GenerateUrho(UrhoSurface surface)

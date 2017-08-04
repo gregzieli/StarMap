@@ -235,7 +235,6 @@ namespace StarMap.ViewModels
 
     protected override async Task Restore(NavigationParameters parameters)
     {
-      await base.Restore(parameters);
       SensorStart();
 
       if (Constellations != null)
@@ -245,14 +244,13 @@ namespace StarMap.ViewModels
       {
         StarFilter = _starManager.LoadFilter();
 
-        return Task.WhenAll(GetConstellations(), GetStarsFromDatabase());
+        return Task.WhenAll(GetConstellations(), GetStarsFromDatabase(), base.Restore(parameters));
       });
     }    
 
     protected override async Task CleanUp()
     {
-      await base.CleanUp();
-      await Call(() =>
+      await CallAsync(() =>
       {
         SensorStop();
         Constellations.ElementChanged -= OnConstellationFiltered;
@@ -260,6 +258,7 @@ namespace StarMap.ViewModels
         Constellations = null;
         VisibleStars.Clear();
         VisibleStars = null;
+        return base.CleanUp();
       });
     }
 

@@ -31,7 +31,7 @@ namespace StarMap.Urho
     protected Node _lightNode, _cameraNode;
 
     protected abstract void HandleException(Exception ex);
-    protected abstract Task FillScene();
+    protected abstract void FillScene();
 
     protected override async void Start()
     {
@@ -39,7 +39,7 @@ namespace StarMap.Urho
       {
         base.Start();
         CreateScene();
-        await FillScene().ConfigureAwait(false);
+        FillScene();
       }
       catch (Exception e)
       {
