@@ -17,10 +17,6 @@
       <ColumnDefinition Width="*" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
-    <!--<Grid.RowDefinitions>
-      <RowDefinition Height="*" />
-      <RowDefinition Height="2*" />
-    </Grid.RowDefinitions>-->
 
     <urho:UrhoSurface x:Name="surface" Margin="10, 40" />
 
@@ -36,12 +32,10 @@
                   Detail="{Binding Constellation.Name}"/>
         <TextCell Text="Designation"
                   Detail="{Binding Designation}"/>
-        <TextCell Text="Apparent magnitude"
-                  Detail="{Binding ApparentMagnitude, StringFormat='{0:N1}'}" />
-        <TextCell Text="Absolute magnitude" 
-                  Detail="{Binding AbsoluteMagnitude, StringFormat='{0:N1}'}" />
         <TextCell Text="Distance from Earth" 
                   Detail="{Binding LightYearDistance, StringFormat='{0:N1} ly'}" />
+        <TextCell Text="Absolute magnitude" 
+                  Detail="{Binding AbsoluteMagnitude, StringFormat='{0:N1}'}" />        
         <TextCell Text="Spectral type" 
                   Detail="{Binding SpectralType}" />
         <TextCell Text="Luminosity (times Sun's luminosity)" 

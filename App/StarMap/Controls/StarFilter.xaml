@@ -8,7 +8,7 @@
   <TableRoot>
     <TableSection Title="Star filters" BindingContext="{Binding StarFilter}">
       <EntryCell Label="Name/designation"
-                 Placeholder="Search..."
+                 Placeholder="   ..."
                  Text="{Binding DesignationQuery}" />
       
       <custom:SliderCell Minimum="{x:Static const:Filters.MIN_DIST}"
