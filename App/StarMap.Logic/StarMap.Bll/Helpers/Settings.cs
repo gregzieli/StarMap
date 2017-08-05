@@ -1,4 +1,3 @@
-// Helpers/Settings.cs
 using Plugin.Settings;
 using Plugin.Settings.Abstractions;
 
@@ -39,7 +38,7 @@ namespace StarMap.Bll.Helpers
 
     public static int Astrolocation
     {
-      get { return AppSettings.GetValueOrDefault(AstrolocationKey, -1); } // -1 would be earth
+      get { return AppSettings.GetValueOrDefault(AstrolocationKey, 0); } // 0 is Sol
       set { AppSettings.AddOrUpdateValue(AstrolocationKey, value); }
     }
 

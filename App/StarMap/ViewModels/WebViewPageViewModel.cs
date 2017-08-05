@@ -1,7 +1,7 @@
 ﻿using Prism.Navigation;
 using Prism.Services;
+using StarMap.Cll.Constants;
 using StarMap.ViewModels.Core;
-using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
@@ -19,10 +19,9 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _url, value); }
     }
 
-    protected override async Task Restore(NavigationParameters parameters)
+    protected override void Restore(NavigationParameters parameters)
     {
-      await Task.Yield();
-      Url = parameters["url"] as string;
+      Url = parameters[Navigation.Keys.Url] as string;
     }
   }
 }

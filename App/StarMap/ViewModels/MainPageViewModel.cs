@@ -32,14 +32,14 @@ namespace StarMap.ViewModels
   {
     IDeviceRotation _motionDetector;
 
-    static IReferencable Earth;
-
-    private IReferencable _currentPosition;
-    public IReferencable CurrentPosition
+    private IUnique _currentPosition;
+    public IUnique CurrentPosition
     {
       get { return _currentPosition; }
       set { SetProperty(ref _currentPosition, value); }
     }
+
+    public IUnique Sol { get; set; }
 
     private ObservantCollection<Constellation> _constellations;
     public ObservantCollection<Constellation> Constellations
@@ -98,22 +98,14 @@ namespace StarMap.ViewModels
 
     private DelegateCommand _travelCommand;
     public DelegateCommand TravelCommand =>
-        _travelCommand ?? (_travelCommand = new DelegateCommand(Travel, () => SelectedStar != null).ObservesProperty(() => SelectedStar));
+        _travelCommand ?? (_travelCommand = new DelegateCommand(() => Travel(SelectedStar), () => SelectedStar != null).ObservesProperty(() => SelectedStar));
 
     private DelegateCommand _goHomeCommand;
     public DelegateCommand GoHomeCommand =>
-        _goHomeCommand ?? (_goHomeCommand = new DelegateCommand(GoHome));
-
-    private async void GoHome()
+        _goHomeCommand ?? (_goHomeCommand = new DelegateCommand(() => Travel(Sol)));
+    
+    private async void Travel(IUnique target)
     {
-      await CallAsync(UrhoApplication.GoHome);
-      CurrentPosition = Earth;
-      Settings.Astrolocation = CurrentPosition.Id;
-    }
-
-    private async void Travel()
-    {
-      var target = SelectedStar;
       await CallAsync(() => UrhoApplication.Travel(target));
       CurrentPosition = target;
       Settings.Astrolocation = CurrentPosition.Id;
@@ -123,7 +115,6 @@ namespace StarMap.ViewModels
       : base(navigationService, pageDialogService, starManager)
     {
       _motionDetector = motionDetector;
-      Earth = new Planet("Earth");
 
       //SelectStarCommand = new DelegateCommand(SelectStar);
       ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
@@ -200,15 +191,17 @@ namespace StarMap.ViewModels
       // Since the size of the collection may differ, it's better memorywise to instantiate a new one,
       // rather than reuse the already allocated list with a completely different size.
       VisibleStars = new ObservableCollection<Star>(stars);
+
+      Sol = stars.First(x => x.Id == 0);
     }
 
     async Task UpdateUrho()
     {
-      var star = VisibleStars.FirstOrDefault(x => x.Id == Settings.Astrolocation);
-      if (star != null && star.Constellation is null && star.ConstellationId != null)
-        star.Constellation = Constellations.First(x => x.Id == star.ConstellationId);
+      var currentLocation = VisibleStars.FirstOrDefault(x => x.Id == Settings.Astrolocation);
+      if (currentLocation != null && currentLocation.Constellation is null && currentLocation.ConstellationId != null)
+        currentLocation.Constellation = Constellations.First(x => x.Id == currentLocation.ConstellationId);
 
-      CurrentPosition = star ?? Earth;
+      CurrentPosition = currentLocation ?? Sol;
       await Application.InvokeOnMainAsync(() => UrhoApplication.UpdateWithStars(VisibleStars, CurrentPosition));
     }
 
@@ -233,8 +226,10 @@ namespace StarMap.ViewModels
 
     
 
-    protected override async Task Restore(NavigationParameters parameters)
+    protected override async void Restore(NavigationParameters parameters)
     {
+      base.Restore(parameters);
+
       SensorStart();
 
       if (Constellations != null)
@@ -244,22 +239,17 @@ namespace StarMap.ViewModels
       {
         StarFilter = _starManager.LoadFilter();
 
-        return Task.WhenAll(GetConstellations(), GetStarsFromDatabase(), base.Restore(parameters));
+        return Task.WhenAll(GetConstellations(), GetStarsFromDatabase());
       });
     }    
 
-    protected override async Task CleanUp()
+    protected override void CleanUp()
     {
-      await CallAsync(() =>
-      {
-        SensorStop();
-        Constellations.ElementChanged -= OnConstellationFiltered;
-        Constellations.Clear();
-        Constellations = null;
-        VisibleStars.Clear();
-        VisibleStars = null;
-        return base.CleanUp();
-      });
+      SensorStop();
+      Constellations.ElementChanged -= OnConstellationFiltered;
+      //Constellations.Clear();
+      //VisibleStars.Clear();
+      base.CleanUp();
     }
 
     private void OnRotationChanged(object sender, RotationChangedEventArgs e)

@@ -1,5 +1,4 @@
 ﻿using StarMap.Cll.Abstractions.Services;
-using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
 using System;
 using Xamarin.Forms;
@@ -23,6 +22,7 @@ namespace StarMap.Bll.Helpers
       // https://en.wikipedia.org/wiki/Hertzsprung%E2%80%93Russell_diagram
       // https://pl.wikipedia.org/wiki/Plik:Diagram_H-R2_PL.gif <- this one has the most classes
       // http://uofgts.com/Astro/starclass/HRdiag-Big.jpg
+      // https://en.wikipedia.org/wiki/Stellar_classification <- this one has the most classes
       switch (c)
       {      
         case 'W':

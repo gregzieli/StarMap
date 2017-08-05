@@ -42,15 +42,13 @@ namespace StarMap.ViewModels.Core
       //}        
     }
 
-    protected override async Task Restore(NavigationParameters parameters)
+    protected override void Restore(NavigationParameters parameters)
     {
-      await Task.Yield();
       XF.MessagingCenter.Subscribe<TUrhoException>(this, string.Empty, async (ex) => await HandleException(ex));
     }
 
-    protected override async Task CleanUp()
+    protected override void CleanUp()
     {
-      await Task.Yield();
       XF.MessagingCenter.Unsubscribe<TUrhoException>(this, string.Empty);
     }
 

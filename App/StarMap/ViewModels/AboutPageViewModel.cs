@@ -1,19 +1,16 @@
 ﻿using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
+using StarMap.Cll.Constants;
 using StarMap.ViewModels.Core;
 using System.Collections.Generic;
-using System;
-using StarMap.Cll.Constants;
 
 namespace StarMap.ViewModels
 {
   public class AboutPageViewModel : Navigator
   {
     public AboutPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService) 
-      : base(navigationService, pageDialogService)
-    {
-    }
+      : base(navigationService, pageDialogService) { }
 
     private DelegateCommand<string> _webCommand;
     public DelegateCommand<string> WebCommand =>

@@ -21,26 +21,13 @@ namespace StarMap.Urho
     public SingleStar(ApplicationOptions options) : base(options) { }
 
     Node _starNode;
-
-    public IList<Material> StarTextures { get; set; }
     
     public StarDetail Star { get; set; }
-
-    void GetTextures()
+    
+    [Obsolete("In the future, maybe, after change: not by color, but some other criteria")]
+    IDictionary<XFColor, IList<Material>> GetTextures()
     {
-      StarTextures = new List<Material>
-      {
-        Material.FromImage("Textures/white-dwarf2.jpg")//star_white1.jpg
-      };
-    }
-
-    [Obsolete]
-    public IDictionary<XFColor, IList<Material>> StarTextures2 { get; set; }
-    [Obsolete]
-    void GetTextures2()
-    {
-      // TODO: Not final
-      StarTextures2 = new Dictionary<XFColor, IList<Material>>()
+      return new Dictionary<XFColor, IList<Material>>()
       {
         {
           DarkRed, new List<Material>()
@@ -96,16 +83,12 @@ namespace StarMap.Urho
       };
     }
 
-
     public void SetStar(StarDetail star)
     {
       Star = star;
 
       var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 10, 1.5, 0.5);
       _starNode?.SetScale(Convert.ToSingle(scale));
-
-      var a = _starNode?.GetComponent<Sphere>();
-      a?.SetMaterial(StarTextures?[Randomizer.RandomInt(0, StarTextures.Count - 1)]);
 
       var light = _lightNode?.GetComponent<Light>();
       if (light != null)
@@ -122,10 +105,8 @@ namespace StarMap.Urho
       base.OnUpdate(timeStep);
     }
 
-    protected override void FillScene()
+    protected override async void FillScene()
     {
-      GetTextures();
-
       _starNode = _scene.CreateChild();
 
       Node skyboxNode = _scene.CreateChild();
@@ -136,8 +117,9 @@ namespace StarMap.Urho
 
       _starNode.Position = new Vector3(0, 0, 2);
       Sphere star = _starNode.CreateComponent<Sphere>();
+      star.SetMaterial(Material.FromImage("Textures/white-dwarf2.jpg"));
 
-      _starNode.RunActions(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
+      await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
     }
 
     protected override void HandleException(Exception ex)

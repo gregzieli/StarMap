@@ -20,11 +20,11 @@ namespace StarMap.Bll.Managers
 
       // In meters
       locator.DesiredAccuracy = 50;
+      
+      var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000)
+        .ConfigureAwait(false);
 
-      var position = await locator.GetPositionAsync(timeoutMilliseconds: 10000);
-        //.ConfigureAwait(continueOnCapturedContext: false);
-
-      StoreGpsPosition(position);
+      Settings.Geolocation = Serialize(position);
 
       return new ExtendedPosition(position);
     }
@@ -39,10 +39,6 @@ namespace StarMap.Bll.Managers
 
       return new ExtendedPosition(position);
     }
-
-    public void StoreGpsPosition(Position position)
-    {
-      Settings.Geolocation = Serialize(position);
-    }
+    
   }
 }

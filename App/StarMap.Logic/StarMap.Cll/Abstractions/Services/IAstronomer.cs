@@ -1,5 +1,4 @@
-﻿using StarMap.Cll.Models.Cosmos;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace StarMap.Cll.Abstractions.Services
 {

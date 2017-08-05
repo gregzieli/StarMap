@@ -62,13 +62,7 @@ namespace StarMap.Dal.Providers
            || search.Contains(x.ProperName)
            || search.Contains(x.BayerName)
            || search.Contains(x.FlamsteedName));
-
-        if (!filter.ConstellationsIds.IsNullOrEmpty())
-          query = query.Where(x => filter.ConstellationsIds.Contains(x.ConstellationId.GetValueOrDefault()));
-
-        if (filter.Limit.HasValue)
-          query = query.Take(filter.Limit.Value);
-
+        
         var re = query.AsEnumerable()
           .Select(x => Stars.Map(x));
 

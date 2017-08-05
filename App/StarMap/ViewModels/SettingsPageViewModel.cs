@@ -13,34 +13,33 @@ namespace StarMap.ViewModels
   public class SettingsPageViewModel : Navigator
   {
     ILocationManager _locationManager;
-    
-    public DelegateCommand UpdateLocationCommand { get; private set; }
 
-    private ExtendedPosition _geoPosition;
-    public ExtendedPosition GeoPosition
+    public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, ILocationManager locationManager)
+      : base(navigationService, pageDialogService)
     {
-      get => _geoPosition;
-      set => SetProperty(ref _geoPosition, value);
+      _locationManager = locationManager;
     }
 
     public bool SensorsOn
     {
       get => Settings.SensorsOn;
       // No time to create a manager for that. 
-      set => Settings.SensorsOn = value;
+      set { Settings.SensorsOn = value; }
     }
 
-    public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, 
-      ILocationManager locationManager) 
-      : base(navigationService, pageDialogService)
+    ExtendedPosition _geoPosition;
+    public ExtendedPosition GeoPosition
     {
-      _locationManager = locationManager;
-      UpdateLocationCommand = new DelegateCommand(UpdateLocation, CanExecute)
-        .ObservesProperty(() => IsBusy);
+      get => _geoPosition;
+      set { SetProperty(ref _geoPosition, value); }
     }
 
-    // Async void command handler
-    private async void UpdateLocation()
+    DelegateCommand _updateLocationCommand;
+    public DelegateCommand UpdateLocationCommand =>
+        _updateLocationCommand ?? (_updateLocationCommand = new DelegateCommand(UpdateLocation, CanExecute).ObservesProperty(() => IsBusy));
+    
+
+    async void UpdateLocation()
     {
       await CallAsync(_locationManager.GetNewGpsPositionAsync,
         position =>
@@ -50,22 +49,18 @@ namespace StarMap.ViewModels
         });
     }
 
-    protected override async Task Restore(NavigationParameters parameters)
+    protected override async void Restore(NavigationParameters parameters)
     {
       await CallAsync(async () =>
       {
-        GeoPosition = await _locationManager.CheckLocationAsync().ConfigureAwait(false);
+        GeoPosition = await _locationManager.CheckLocationAsync();
         // other settings
       });
     }
 
     protected override async Task HandleException(Exception ex)
     {
-      string message = "Cannot get localization for this device. The position will not update.";
-#if DEBUG
-      message += Environment.NewLine + "Exception:" + Environment.NewLine + ex.Message;
-#endif
-      await DisplayAlertAsync("Localization error", message, "OK");
+      await DisplayAlertAsync("Localization error", "Cannot get localization for this device. The position will not update.");
     }
   }
 }

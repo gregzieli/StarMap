@@ -9,7 +9,5 @@ namespace StarMap.Cll.Abstractions
     Task<ExtendedPosition> GetNewGpsPositionAsync();
 
     Task<ExtendedPosition> CheckLocationAsync();
-
-    void StoreGpsPosition(Position position);
   }
 }

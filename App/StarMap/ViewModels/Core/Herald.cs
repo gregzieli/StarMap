@@ -1,47 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Prism.Services;
+using System;
 using System.Threading.Tasks;
-using Prism.Navigation;
-using Prism.Services;
-using Prism.Events;
 
 namespace StarMap.ViewModels.Core
 {
-  // Official prism documentation
-  // https://github.com/PrismLibrary/Prism/blob/master/docs/WPF/09-Communication.md
-  // says that 'The PubSubEvent<TPayload> is intended to be the base class for an application's or module's specific events'
-  // So using this class would be against that. And to have generics using this custom event class would be an overkill, since 
-  // the methods would need two type params (where TEventType : PubSubEvent<TPayload>).
-  // OK, so really:
-  // If it turns out I only use one TPayload per event, it's fine to use this class, otherwise custom events are required.
-  public abstract class Herald : Navigator
+  public abstract class Herald : Overseer
   {
-    IEventAggregator _eventAggregator;
-    public Herald(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator) : base(navigationService, pageDialogService)
+    IPageDialogService _pageDialogService;
+
+    public Herald(IPageDialogService pageDialogService)
     {
-      _eventAggregator = eventAggregator;
+      _pageDialogService = pageDialogService;
     }
 
-    /// <summary>
-    /// Gets an instance of an event type.
-    /// </summary>
-    /// <typeparam name="TPayload">Type of the payload of the event.</typeparam>
-    /// <returns>an event that can be subscribed to or published.</returns>
-    protected PubSubEvent<TPayload> GetEvent<TPayload>() => _eventAggregator.GetEvent<PubSubEvent<TPayload>>();
-
-    /// <summary>
-    /// Publishes event with the specified payload, using Prism's PubSubEvent.
-    /// </summary>
-    /// <typeparam name="TPayload">Type of the payload of the event.</typeparam>
-    /// <param name="payload">Message to pass to the subscribers.</param>
-    protected async Task PublishEvent<TPayload>(TPayload payload)
+    // TODO: CONSTANTS!!!!
+    protected async Task DisplayAlertAsync(string title, string message, string closeButton = "OK")
     {
-      await Call(() =>
-      {
-        GetEvent<TPayload>().Publish(payload);
-      });
+      await _pageDialogService.DisplayAlertAsync(title, message, closeButton);
+    }
+
+    protected async Task<bool> DisplayDialogAsync(string title, string message, string acceptButton = "OK", string cancelButton = "Cancel")
+    {
+      return await _pageDialogService.DisplayAlertAsync(title, message, acceptButton, cancelButton);
+    }
+
+    // The basic one, can be overriden if a more detailed action is needed.
+    protected override async Task HandleException(Exception ex)
+    {
+      await DisplayAlertAsync("Error", ex.Message);
     }
   }
 }

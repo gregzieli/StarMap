@@ -1,17 +1,10 @@
 ﻿TODO:
- - usunąć całą logikę z Earth - home jest Sol
  - sprawdź czy rotation event można poprawić
- - powstawiać ikonki do/zamiast tekstów na buttonach / image zamiast buttonów
-   - filter konstelacji
-   - filter gwiazd
-   - przycisk PODRÓŻ
-   - przycisk SZCZEGÓŁY
-   - przycisk POWRÓT
- - ustawiać rozmiar gwiazd po apparent magnitude - i przeliczać przy każdej podróży -- mm nie wiem czy ma to sens
+ - onNavigated - albo w Navigator restore i cleanup return Task, i w onNavigated robić CallAsync, a w implementacjach restore i cleanup nie, albo zrobić całkiem void, i w implementacjach async void.
 
- - [TBR] nowa logika do sprawdzania współrzędnych na ziemi
- - [LOW PRIORITY] add setting: choose dist in ly/pc
- - [LOW PRIORITY] do travel, go home, itd nie przesyłać samego id, tylko już gotową pozycję.
+ - [LOW PRIORITY] setting: choose dist in ly/pc
+ - [LOW PRIORITY] setting: travel velocity
+ - [LOW PRIORITY] do travel nie przesyłać samego id, tylko już gotową pozycję (i id, taki interface).
  - [LOW PRIORITY] dodaj jakiś takiś glow effect do starDetail
  
 
@@ -21,6 +14,9 @@ NOTES:
  - Całe te moje Usingi, locki przy bazie danych były naprawdę niepotrzebne - async w ogóle nie jest IDisposable, poza tym strzela po getConnection przy każdym query.
  - urho: scaleNode mnoży scale * parametr. SetScale zwyczajnie ustawia.
  - performance: Task.Run: np. przy mapowaniu gwiazd - https://blog.stephencleary.com/2013/11/taskrun-etiquette-examples-dont-use.html
+
+ - chciałem zostawić ConstellationIds w filtrze (tylko do testów), ale Sqlute.net nie radzi sobie 
+  ze skompilowaniem najprostrzego query.Where(x => x.ConstellationId.HasValue ? filter.ConstellationsIds.Contains(x.ConstellationId.Value) : true);
 
 BIBLIOGRAFIA: 
 https://developer.xamarin.com/workbooks/ - Exploring Urho Coordinates

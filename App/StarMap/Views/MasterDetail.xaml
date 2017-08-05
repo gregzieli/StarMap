@@ -17,7 +17,7 @@
         <Button Image="settings.png" 
                 Text="Settings"
                 Command="{Binding NavigateCommand}" 
-                CommandParameter="SettingsPage" />
+                CommandParameter="NavigationPage/SettingsPage" />
         
         <Button Image="about.png"
                 Text="About"

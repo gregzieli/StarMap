@@ -15,16 +15,11 @@ namespace StarMap.Dal.Mappers
         Id = source.Id,
         HipparcosId = source.HipparcosId,
         AbsoluteMagnitude = source.AbsoluteMagnitude,
-        ApparentMagnitude = source.ApparentMagnitude,
         Name = source.ProperName,
         Bayer = source.BayerName,
         Flamsteed = source.FlamsteedName,
         ConstellationId = source.ConstellationId,
-        //Declination = source.Declination,
-        //DeclinationRad = source.DeclinationRad, // Probably TBR
         ParsecDistance = source.ParsecDistance,
-        //RightAscension = source.RightAscension,
-        //RightAscensionRad = source.RightAscensionRad, // Probably TBR
         X = source.X,
         Y = source.Y,
         Z = source.Z
@@ -46,13 +41,11 @@ namespace StarMap.Dal.Mappers
         ApparentMagnitude = source.ApparentMagnitude,
         Bayer = source.BayerName,
         SpectralType = source.SpectralType,
-        Declination = source.Declination,
         Flamsteed = source.FlamsteedName,
         ParsecDistance = source.ParsecDistance,
         Luminosity = source.Luminosity,
         ColorIndex = source.ColorIndex,
         Name = source.ProperName,
-        RightAscension = source.RightAscension,
         Constellation = Constellations.Map(source.Constellation)
       };
     }

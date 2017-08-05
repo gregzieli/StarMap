@@ -52,10 +52,10 @@ namespace StarMap.LogicTest
       var prov = Container.Resolve<IStarDataAsyncProvider>();
       var all = await prov.GetStarsAsync(new Cll.Filters.StarFilter()
       {
-        DistanceTo = 100000,
-        MagnitudeTo = 100000
+        DistanceTo = 15,
+        MagnitudeTo = 15
       });
-
+      
       var e = all.GetEnumerator();
       Assert.DoesNotThrowAsync(new AsyncTestDelegate(async () => // It takes a few minutes for all
       {
@@ -65,6 +65,20 @@ namespace StarMap.LogicTest
           var b = a.Designation;
         };
       }));
+    }
+
+    [Test]
+    public async Task CheckSun()
+    {
+      var prov = Container.Resolve<IStarDataAsyncProvider>();
+      var foo = await prov.GetStarsAsync(new Cll.Filters.StarFilter
+      {
+        DesignationQuery = "awd",
+        DistanceTo = 901
+
+      });
+      Assert.IsTrue(foo.Any(x => x.Id == 0));
+
     }
   }
 }

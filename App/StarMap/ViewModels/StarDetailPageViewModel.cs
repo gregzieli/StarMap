@@ -13,8 +13,7 @@ namespace StarMap.ViewModels
   public class StarDetailPageViewModel : StarGazer<SingleStar, StarDetailUrhoException>
   {
     public StarDetailPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager)
-       : base(navigationService, pageDialogService, starManager)
-    { }
+       : base(navigationService, pageDialogService, starManager) { }
 
     private StarDetail _star;
     public StarDetail Star
@@ -23,9 +22,9 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _star, value); }
     }
     
-    protected override async Task Restore(NavigationParameters parameters)
+    protected override async void Restore(NavigationParameters parameters)
     {
-      //await base.Restore(parameters); // TODO: check if this was causing the errors
+      base.Restore(parameters); // TODO: check if this was causing the errors
       await CallAsync(() => 
         _starManager.GetStarDetailsAsync((int)parameters[Navigation.Keys.StarId]), 
         star => 

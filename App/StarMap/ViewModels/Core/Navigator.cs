@@ -6,7 +6,7 @@ using Prism.Services;
 
 namespace StarMap.ViewModels.Core
 {
-  public abstract class Navigator : Interlocutor, INavigationAware
+  public abstract class Navigator : Herald, INavigationAware
   {
     INavigationService _navigationService;
 
@@ -49,34 +49,32 @@ namespace StarMap.ViewModels.Core
     protected Task Navigate(Uri uri, NavigationParameters navParams)
       => CallAsync(() => _navigationService.NavigateAsync(uri, navParams));
 
-    public virtual async void OnNavigatedFrom(NavigationParameters parameters)
-      => await CleanUp();
+    public virtual void OnNavigatedFrom(NavigationParameters parameters)
+      => CleanUp();
 
-    public virtual async void OnNavigatedTo(NavigationParameters parameters)
-    {
-      // Check if it works better on NavigatINGTo
-      // 1. hardware back button calls only this one
-      await Restore(parameters);
-    }
+    public virtual void OnNavigatedTo(NavigationParameters parameters)
+      => Restore(parameters);
 
-    public virtual void OnNavigatingTo(NavigationParameters parameters)
-    {
-      
-    }
-
-    // Could make those two abstract to lose the async and the green underline, but then, 
-    // since Navigator is direct parent of more than one class, I would have to
-    // implement it a couple of times. This is just less code.
-
+    public virtual void OnNavigatingTo(NavigationParameters parameters) { }
+    
     /// <summary>
     /// Logic to restore VM's properties, and other actions done upon opening the page
     /// </summary>
-    protected virtual async Task Restore(NavigationParameters parameters) { }
+    protected virtual void Restore(NavigationParameters parameters) { }    
 
     /// <summary>
-    /// 
     /// Logic to be executed upon exiting a view model.
     /// </summary>
-    protected virtual async Task CleanUp() { }
+    protected virtual void CleanUp() { }
+
+
+
+    // TODO Check which is better
+    public virtual async void OnNavigatedFrom2(NavigationParameters parameters)
+      => await CallAsync(CleanUp2);
+    public virtual async void OnNavigatedTo2(NavigationParameters parameters)
+      => await CallAsync(() => Restore2(parameters));
+    protected virtual async Task Restore2(NavigationParameters parameters) { }
+    protected virtual async Task CleanUp2() { }
   }
 }

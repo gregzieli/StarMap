@@ -23,6 +23,10 @@ namespace StarMap.Urho
 
     public StarComponent SelectedStar { get; set; }
 
+    public IUnique CurrentLocation { get; set; }
+
+    public bool IsHome => CurrentLocation?.Id == 0;
+
     public IList<StarComponent> HighlightedStars { get; set; }
 
     //https://github.com/xamarin/urho-samples/blob/master/FeatureSamples/Core/24_Urho2DSprite/Urho2DSprite.cs
@@ -32,7 +36,6 @@ namespace StarMap.Urho
     Camera _camera;
     const float touchSensitivity = 2;
     const float VELOCITY = 3;//[pc/s]
-    Vector3 _earthPosition = new Vector3(0.5f, 0, 0);
     float _yaw, _pitch;
     PhysicsWorld _physics;
     PhysicsRaycastResult _rayCast;
@@ -109,7 +112,8 @@ namespace StarMap.Urho
     public void UpdateWithStars(IList<Star> stars, IUnique currentPosition)
     {
       var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
-      _cameraNode.Position = currentStar is null ? _earthPosition : new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
+      _cameraNode.Position = new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
+      CurrentLocation = currentStar;
 
       var existingNodesById = _plotNode.GetChildrenWithComponent<StarComponent>()
         .ToDictionary(x => x.Name, x => x);
@@ -134,16 +138,16 @@ namespace StarMap.Urho
         if (star.AbsoluteMagnitude < 2)
           scale = (float)Normalizer.Normalize(star.AbsoluteMagnitude, -14, 1, 2, 1.2);
 
-        //starNode.Scale = new Vector3(scale, scale, scale);
+        starNode.Scale = new Vector3(scale, scale, scale);
         // haha this throws error sometimes when moving away from the page
-        starNode.SetScale(scale);
+        //starNode.SetScale(scale);
 
         starNode.Position = new Vector3(star.X, star.Y, star.Z);
         starNode.LookAt(_cameraNode.Position, Vector3.Up);
         starNode.AddCollisionSupport(0.1f);
       }
 
-      MarkSun().SetDeepEnabled(currentStar != null);
+      MarkSun().SetDeepEnabled(!IsHome);
 
       foreach (var leftUnused in existingNodesById.Values)
       {
@@ -173,10 +177,8 @@ namespace StarMap.Urho
       if (HighlightedStars.IsNullOrEmpty())
         return;
 
-      foreach (var s in HighlightedStars)
-      {
-        s.Deselect2();
-      }
+      foreach (var star in HighlightedStars)
+        star.Dim();
 
       HighlightedStars.Clear();
     }
@@ -204,24 +206,14 @@ namespace StarMap.Urho
       _cameraNode.RemoveAllActions();
 
       Task travelTask = _cameraNode.RunActionsAsync(new MoveTo(duration, target.Position));
-
-      // TODO: calculate size by apparentMag
-      _plotNode.GetChildrenWithComponent<StarComponent>().ForEach(x => x.LookAt(target.Position, Vector3.Up));      
       
-      return Task.WhenAll(travelTask, MarkSun(star.Id != 0));
-    }
+      _plotNode.GetChildrenWithComponent<StarComponent>()
+        .ForEach(x => x.LookAt(target.Position, Vector3.Up));
 
-    public Task GoHome()
-    {
-      // Then u can travel non-stop changing the destination
-      _cameraNode.RemoveAllActions();
+      CurrentLocation = star;
 
-      Task task = _cameraNode.RunActionsAsync(new MoveTo(1, _earthPosition));
-
-      _plotNode.GetChildrenWithComponent<StarComponent>().ForEach(x => x.LookAt(_earthPosition, Vector3.Up));
-
-      return Task.WhenAll(task, MarkSun(false));
-    }
+      return Task.WhenAll(travelTask, MarkSun(!IsHome));
+    }    
 
     Node MarkSun()
     {
@@ -243,7 +235,7 @@ namespace StarMap.Urho
 
       return sol;
     }
-    Task MarkSun(bool enable) => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));
-    
+
+    Task MarkSun(bool enable) => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));    
   }
 }

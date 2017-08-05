@@ -7,6 +7,7 @@ using StarMap.Dal.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ConstellationEntity = StarMap.Dal.Database.Contracts.Constellation;
 using StarEntity = StarMap.Dal.Database.Contracts.Star;
@@ -30,14 +31,14 @@ namespace StarMap.Dal.Providers
     
     public async Task<StarDetail> GetStarDetailsAsync(int id)
     {
-      var entity = await Context.FindAsync<StarEntity>(id);
+      var entity = await Context.FindAsync<StarEntity>(id).ConfigureAwait(false);
 
       if (entity == null)
         throw new Exception("Element missing from the DB!");
 
       entity.Constellation = await Context.FindAsync<ConstellationEntity>(entity.ConstellationId).ConfigureAwait(false);
       
-      return Stars.MapDetail(entity);
+      return await Task.Run(() => Stars.MapDetail(entity)).ConfigureAwait(false);
     }
 
     public async Task<IEnumerable<Star>> GetStarsAsync(StarFilter filter)
@@ -55,15 +56,17 @@ namespace StarMap.Dal.Providers
          || search.Contains(x.ProperName)
          || search.Contains(x.BayerName)
          || search.Contains(x.FlamsteedName));
-
-      if (!filter.ConstellationsIds.IsNullOrEmpty())
-        query = query.Where(x => filter.ConstellationsIds.Contains(x.ConstellationId.GetValueOrDefault()));
-
-      if (filter.Limit.HasValue)
-        query = query.Take(filter.Limit.Value);
-
+                        
       var list = await query.ToListAsync().ConfigureAwait(false);
-      
+
+      // Aaah, how nice would be a PredicateBuilder! 
+      // Could easily do it myself using just a Func<StarEntity, bool>, but this SQLite
+      // doesn't allow anything else than Expressions in the where clause.
+      //
+      // Ensure the Sun is always there
+      if (!list.Any(x => x.Id == 0))
+        list.Add(await Context.FindAsync<StarEntity>(0).ConfigureAwait(false));
+            
       return await Task.Run(() => list.Select(x => Stars.Map(x))).ConfigureAwait(false);
     }
   }
