@@ -18,11 +18,13 @@
   <ListView.Header>
     <StackLayout Orientation="Horizontal" HorizontalOptions="EndAndExpand">
       <Button Text="Hide all" 
-                    Command="{Binding FilterConstellationsCommand}"
-                    CommandParameter="{StaticResource False}" />
+              Scale=".6"
+              Command="{Binding FilterConstellationsCommand}"
+              CommandParameter="{StaticResource False}" />
       <Button Text="Show all" 
-                    Command="{Binding FilterConstellationsCommand}" 
-                    CommandParameter="{StaticResource True}" />
+              Scale=".6"
+              Command="{Binding FilterConstellationsCommand}" 
+              CommandParameter="{StaticResource True}" />
     </StackLayout>
   </ListView.Header>
   <ListView.ItemTemplate>

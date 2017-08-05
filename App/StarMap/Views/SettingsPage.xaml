@@ -9,12 +9,18 @@
     <TableRoot Title="Settings">
       <TableSection Title="Location">
         <ViewCell>
-          <StackLayout Orientation="Horizontal">
-            <Button Command="{Binding UpdateLocationCommand}" Text="↺" FontSize="Large" FontAttributes="Bold" />
+          <StackLayout Orientation="Horizontal" Margin="15, 0, 10, 0">
             <!-- Although binding uses ToString, this StringFormat part here is needed. -->
-            <Label Text="{Binding GeoPosition.DmsLatitude, StringFormat='{0}'}" VerticalOptions="CenterAndExpand" />
-            <Label Text="{Binding GeoPosition.DmsLongitude, StringFormat='{0}'}" VerticalOptions="CenterAndExpand" />
-            <ActivityIndicator IsRunning="{Binding IsBusy}" />
+            <Label Text="{Binding GeoPosition.DmsLatitude, StringFormat='{0}'}" 
+                   VerticalOptions="Center" />
+            <Label Text="{Binding GeoPosition.DmsLongitude, StringFormat='{0}'}" 
+                   VerticalOptions="Center" />
+            <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                               HorizontalOptions="StartAndExpand" />
+            <Button Image="refresh.png" 
+                    WidthRequest="40" 
+                    HorizontalOptions="End"
+                    Command="{Binding UpdateLocationCommand}" />
           </StackLayout>
         </ViewCell>
       </TableSection>

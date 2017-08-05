@@ -150,6 +150,7 @@
     <Content Include="Assets\Icons\about.png" />
     <Content Include="Assets\Icons\constellation_filter.png" />
     <Content Include="Assets\Icons\refresh.png" />
+    <Content Include="Assets\Icons\rocket.png" />
     <Content Include="Assets\Icons\settings.png" />
     <Content Include="Assets\Icons\stars.png" />
     <Content Include="Assets\Icons\star_detail.png" />

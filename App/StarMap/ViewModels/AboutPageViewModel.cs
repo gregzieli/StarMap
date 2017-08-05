@@ -35,8 +35,9 @@ namespace StarMap.ViewModels
       new Source("UrhoSharp", "https://github.com/xamarin/urho"),
       new Source("Prism", "https://github.com/PrismLibrary/Prism"),
       new Source("Xamarin Plugins", "https://github.com/xamarin/XamarinComponents"),
-      new Source("Icons", "https://www.iconfinder.com"),
-      new Source("Star texture", "http://www.celestiamotherlode.net/catalog/extrasolar_stars.php")
+      new Source("Iconfinder", "https://www.iconfinder.com"),
+      new Source("Star texture", "http://www.celestiamotherlode.net/catalog/extrasolar_stars.php"),
+      new Source("Icon8", "http://ic8.link/33242")
     };
     public IList<Source> Sources => _sources;
 
