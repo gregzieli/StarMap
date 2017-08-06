@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using Urho.Forms;
 using Xamarin.Forms;
+using a = Urho;
 
 namespace StarMap.Views
 {
@@ -24,8 +25,9 @@ namespace StarMap.Views
       await ((IUrhoHandler)BindingContext).GenerateUrho(surface);      
     }
 
-    protected override void OnDisappearing()
+    protected override async void OnDisappearing()
     {
+      await a.Application.Current.Exit();
       UrhoSurface.OnDestroy();
       base.OnDisappearing();
     }

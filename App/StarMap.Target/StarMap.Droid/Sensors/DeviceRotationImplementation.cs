@@ -33,8 +33,6 @@ namespace StarMap.Droid.Sensors
       R = new float[9],
       rotatedR = new float[9];
 
-    int lastUpdate = 0;
-
     static readonly object _lock = new object();
 
     public DeviceRotationImplementation() : base()
@@ -70,10 +68,7 @@ namespace StarMap.Droid.Sensors
           case SensorType.Accelerometer:
             if (!_accReady)
             {
-              //e.Values.CopyTo(_gravity, 0);
-              // check if this works better
-              for (int i = 0; i < e.Values.Count; i++)
-                _gravity[i] = e.Values[i];
+              e.Values.CopyTo(_gravity, 0);
 
               _accReady = true;
             }              
@@ -81,9 +76,7 @@ namespace StarMap.Droid.Sensors
           case SensorType.MagneticField:
             if (!_magReady)
             {
-              //e.Values.CopyTo(_magnet, 0);
-              for (int i = 0; i < e.Values.Count; i++)
-                _magnet[i] = e.Values[i];
+              e.Values.CopyTo(_magnet, 0);
 
               _magReady = true;
             }              
@@ -95,38 +88,33 @@ namespace StarMap.Droid.Sensors
 
         _accReady = _magReady = false;
 
-        //var time = Environment.TickCount;
-        //if ((time - lastUpdate) < 3000)
-        //  return;
-        //lastUpdate = time;
-
         SensorManager.GetRotationMatrix(R, null, _gravity, _magnet);
 
 
         // Cellphone's natural orientation is portrait, tilted to the left it returns display (rotation) = 1,
         // to the right = 3.
         // However, a tablet is already in landscape, so the natural application displays are 0 or 2.
-        Axis x = Axis.X, y = Axis.Y;
-        switch (_windowManager.DefaultDisplay.Rotation)
-        {
-          case SurfaceOrientation.Rotation180:
-            x = Axis.MinusX;
-            y = Axis.MinusY;
-            break;
-          case SurfaceOrientation.Rotation270:
-            x = Axis.MinusY; // TODO: check if they are not in fact inverted.
-            y = Axis.X;
-            break;
-          case SurfaceOrientation.Rotation90: // phone tilted to the left
-            x = Axis.Y;
-            y = Axis.MinusX;
-            break;
-          default:
-            break;
-        }
+        //Axis x = Axis.X, y = Axis.Y;
+        //switch (_windowManager.DefaultDisplay.Rotation)
+        //{
+        //  case SurfaceOrientation.Rotation180:
+        //    x = Axis.MinusX;
+        //    y = Axis.MinusY;
+        //    break;
+        //  case SurfaceOrientation.Rotation270:
+        //    x = Axis.MinusY; // TODO: check if they are not in fact inverted.
+        //    y = Axis.X;
+        //    break;
+        //  case SurfaceOrientation.Rotation90: // phone tilted to the left
+        //    x = Axis.Y;
+        //    y = Axis.MinusX;
+        //    break;
+        //  default:
+        //    break;
+        //}
 
-        SensorManager.RemapCoordinateSystem(R, x, y, rotatedR);
-        SensorManager.GetOrientation(rotatedR, _orientation);
+        //SensorManager.RemapCoordinateSystem(R, x, y, rotatedR);
+        SensorManager.GetOrientation(R, _orientation);
         
         _rotationChanged?.Invoke(this, new RotationChangedEventArgs(_orientation));
       }

@@ -19,9 +19,6 @@ namespace StarMap.Urho
     {
       UnhandledException += (s, e) =>
       {
-#if DEBUG
-        Debugger.Break();
-#endif
         e.Handled = true;
       };
     }

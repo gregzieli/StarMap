@@ -7,7 +7,7 @@
              Title="{Binding Url}">
   
   <StackLayout>
-    <StackLayout Orientation="Horizontal" Padding="10,10">
+    <StackLayout Orientation="Horizontal" Padding="10, 1">
       <Button Text="◀" HorizontalOptions="Start" Clicked="backClicked" />
       <ActivityIndicator x:Name="preloader" HorizontalOptions="CenterAndExpand" IsRunning="True" />
       <Button Text="▶" HorizontalOptions="End" Clicked="forwardClicked" />

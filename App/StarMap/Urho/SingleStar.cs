@@ -111,15 +111,24 @@ namespace StarMap.Urho
 
       Node skyboxNode = _scene.CreateChild();
       skyboxNode.SetScale(100);
-      Skybox skybox = skyboxNode.CreateComponent<Skybox>();
-      skybox.Model = CoreAssets.Models.Box;
-      skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 2)}.png"));
+      try
+      {
+        Skybox skybox = skyboxNode.CreateComponent<Skybox>();
+        skybox.Model = CoreAssets.Models.Box;
+        skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 2)}.png"));
+        _starNode.Position = new Vector3(0, 0, 2);
 
-      _starNode.Position = new Vector3(0, 0, 2);
-      Sphere star = _starNode.CreateComponent<Sphere>();
-      star.SetMaterial(Material.FromImage("Textures/white-dwarf2.jpg"));
+        Sphere star = _starNode.CreateComponent<Sphere>();
+        star.SetMaterial(Material.FromImage("Textures/white-dwarf2.jpg"));
 
-      await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
+        await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
+      }
+      catch (Exception r)
+      {
+      }
+
+
+      
     }
 
     protected override void HandleException(Exception ex)

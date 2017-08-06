@@ -8,7 +8,6 @@ using StarMap.Cll.Abstractions.Services;
 using StarMap.Cll.Constants;
 using StarMap.Cll.Exceptions;
 using StarMap.Cll.Filters;
-using StarMap.Cll.Models.Core;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Abstractions;
 using StarMap.Core.Extensions;
@@ -19,11 +18,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Urho;
-using Urho.Forms;
 
 namespace StarMap.ViewModels
 {
@@ -130,7 +127,7 @@ namespace StarMap.ViewModels
     {
       //Another option:
       //Navigate($"StarDetailPage?id={SelectedStar.Id}");
-      //=> await Navigate("StarDetailPage", "id", SelectedStar.Id);
+      //await Navigate("StarDetailPage", Navigation.Keys.StarId, SelectedStar.Id);
       await Navigate(new Uri(Navigation.DetailAbsolute, UriKind.Absolute), Navigation.Keys.StarId, SelectedStar.Id);
     }
 
@@ -158,8 +155,7 @@ namespace StarMap.ViewModels
 
     async void OnConstellationFiltered(object sender, PropertyChangedEventArgs e)
     {
-      Constellation c = sender as Constellation;
-      Debug.WriteLine($"{c.Name} is {(c.IsOn ? "visible" : "hidden")}");
+      var c = (Constellation)sender;
       await Foo(VisibleStars.Where(x => x.ConstellationId == c.Id), c.IsOn);
     }
 
@@ -220,11 +216,7 @@ namespace StarMap.ViewModels
       StarFilter = new StarFilter();
       GetStars();
     }
-    #endregion
-
-
-
-    
+    #endregion    
 
     protected override async void Restore(NavigationParameters parameters)
     {
@@ -239,7 +231,7 @@ namespace StarMap.ViewModels
       {
         StarFilter = _starManager.LoadFilter();
 
-        return Task.WhenAll(GetConstellations(), GetStarsFromDatabase());
+        return GetConstellations();
       });
     }    
 
@@ -247,14 +239,12 @@ namespace StarMap.ViewModels
     {
       SensorStop();
       Constellations.ElementChanged -= OnConstellationFiltered;
-      //Constellations.Clear();
-      //VisibleStars.Clear();
       base.CleanUp();
     }
 
     private void OnRotationChanged(object sender, RotationChangedEventArgs e)
     {
-      UrhoApplication?.SetRotation(e.Azimuth, e.Pitch, e.Roll);
+      UrhoApplication?.SetRotation(e.Orientation);
     }
 
     public void OnResume()
@@ -285,10 +275,10 @@ namespace StarMap.ViewModels
       }
     }
 
-    public override async Task OnUrhoGenerated()
+    public override void OnUrhoGenerated()
     {
       UrhoApplication.Input.TouchEnd += SelectStar;
-      await UpdateUrho();
+      GetStars();
     }
 
     private async void SelectStar(TouchEndEventArgs obj)

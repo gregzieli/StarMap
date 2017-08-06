@@ -36,7 +36,10 @@ namespace StarMap.Urho
     Camera _camera;
     const float touchSensitivity = 2;
     const float VELOCITY = 3;//[pc/s]
+    const float AAA = 180 / (float)Math.PI;
     float _yaw, _pitch, _roll;
+    
+    float[] _orientation = new float[3];
     bool _usingSensors = false;
     PhysicsWorld _physics;
     PhysicsRaycastResult _rayCast;
@@ -93,12 +96,12 @@ namespace StarMap.Urho
       return SelectedStar?.Node.Name;
     }
 
-    public void SetRotation(float yaw, float pitch, float roll)
+    public void SetRotation(float[] orientation)
     {
       _usingSensors = true;
-      _yaw = yaw;
-      _pitch = pitch;
-      _roll = roll;
+      _orientation[0] = orientation[0] * AAA;
+      _orientation[1] = orientation[1] * AAA;
+      _orientation[2] = orientation[2] * AAA;
     }
     
     protected override void OnUpdate(float timeStep)
@@ -113,7 +116,9 @@ namespace StarMap.Urho
 
     void UpdateBySensor()
     {
-      _cameraNode.Rotation = new Quaternion(_pitch, _yaw, _roll);
+      //_yaw += _orientation[0]; _pitch += _orientation[1]; _roll += _orientation[2];
+      _cameraNode.Rotation = new Quaternion(_orientation[0], _orientation[1], _orientation[2]);
+      //_cameraNode.Rotate(new Quaternion(_orientation[2], _orientation[1], _orientation[0]), TransformSpace.World);
     }
 
     void UpdateByTouch()
@@ -259,5 +264,6 @@ namespace StarMap.Urho
     }
 
     Task MarkSun(bool enable) => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));    
+    
   }
 }

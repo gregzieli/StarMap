@@ -70,11 +70,22 @@ namespace StarMap.ViewModels.Core
           // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
         };
 
-        UrhoApplication = await surface.Show<TUhroApp>(options);
-        await OnUrhoGenerated();
+        if (this is StarDetailPageViewModel)
+        {
+          XF.Device.BeginInvokeOnMainThread(async () =>
+          {
+            UrhoApplication = await surface.Show<TUhroApp>(options);
+            OnUrhoGenerated();
+          });
+        }
+        else
+        {
+          UrhoApplication = await surface.Show<TUhroApp>(options);
+          OnUrhoGenerated();
+        }
       });
     }
 
-    public abstract Task OnUrhoGenerated();
+    public abstract void OnUrhoGenerated();
   }
 }

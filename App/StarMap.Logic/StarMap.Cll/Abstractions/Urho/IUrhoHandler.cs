@@ -7,6 +7,6 @@ namespace StarMap.Cll.Abstractions.Urho
   {
     Task GenerateUrho(UrhoSurface surface);
 
-    Task OnUrhoGenerated();
+    void OnUrhoGenerated();
   }
 }
