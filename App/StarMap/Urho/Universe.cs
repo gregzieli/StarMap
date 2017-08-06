@@ -36,7 +36,8 @@ namespace StarMap.Urho
     Camera _camera;
     const float touchSensitivity = 2;
     const float VELOCITY = 3;//[pc/s]
-    float _yaw, _pitch;
+    float _yaw, _pitch, _roll;
+    bool _usingSensors = false;
     PhysicsWorld _physics;
     PhysicsRaycastResult _rayCast;
 
@@ -91,8 +92,31 @@ namespace StarMap.Urho
 
       return SelectedStar?.Node.Name;
     }
+
+    public void SetRotation(float yaw, float pitch, float roll)
+    {
+      _usingSensors = true;
+      _yaw = yaw;
+      _pitch = pitch;
+      _roll = roll;
+    }
     
     protected override void OnUpdate(float timeStep)
+    {
+      if (_usingSensors)
+        UpdateBySensor();
+      else
+        UpdateByTouch();
+
+      base.OnUpdate(timeStep);
+    }
+
+    void UpdateBySensor()
+    {
+      _cameraNode.Rotation = new Quaternion(_pitch, _yaw, _roll);
+    }
+
+    void UpdateByTouch()
     {
       if (Input.NumTouches == 1)
       {
@@ -102,8 +126,6 @@ namespace StarMap.Urho
 
         _cameraNode.Rotation = new Quaternion(_pitch, _yaw, 0);
       }
-
-      base.OnUpdate(timeStep);
     }
 
     protected override void HandleException(Exception ex)

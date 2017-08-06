@@ -254,7 +254,7 @@ namespace StarMap.ViewModels
 
     private void OnRotationChanged(object sender, RotationChangedEventArgs e)
     {
-      //Debug.WriteLine($"{e.Azimuth}, {e.Pitch}, {e.Roll}");
+      UrhoApplication?.SetRotation(e.Azimuth, e.Pitch, e.Roll);
     }
 
     public void OnResume()

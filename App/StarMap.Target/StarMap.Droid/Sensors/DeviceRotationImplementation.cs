@@ -8,6 +8,7 @@ using StarMap.Core.Models;
 using StarMap.Droid.Sensors;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Security;
 using Axis = Android.Hardware.Axis;
 
@@ -16,11 +17,15 @@ namespace StarMap.Droid.Sensors
 {
   // Thanks to Java.Lang.Object, I don't have to (neither should I) implement the IntPtr Handle from the IJavaObject interface
   // (inherited by ISensorEventListener).
-  public class DeviceRotationImplementation : Java.Lang.Object, ISensorEventListener, IDeviceRotation
+  [Preserve(AllMembers = true)]
+  public class DeviceRotationImplementation : Java.Lang.Object, ISensorEventListener, IDeviceRotation, IDisposable
   {
     IWindowManager _windowManager;
     SensorManager _sensorManager;
-    IList<Sensor> _sensors;
+
+    Sensor _accelerometer;
+    Sensor _magnetometer;
+    
     bool _on, _accReady, _magReady;
     float[] _gravity = new float[3],
       _magnet = new float[3],
@@ -28,9 +33,11 @@ namespace StarMap.Droid.Sensors
       R = new float[9],
       rotatedR = new float[9];
 
+    int lastUpdate = 0;
+
     static readonly object _lock = new object();
 
-    public DeviceRotationImplementation()
+    public DeviceRotationImplementation() : base()
     {
       Init();
     }
@@ -40,11 +47,9 @@ namespace StarMap.Droid.Sensors
       var context = Application.Context;
       _windowManager = context.GetSystemService(Context.WindowService).JavaCast<IWindowManager>(); // TODO: check if this funny casting is a must
       _sensorManager = (SensorManager)context.GetSystemService(Context.SensorService);
-      _sensors = new List<Sensor>()
-      {
-        _sensorManager.GetDefaultSensor(SensorType.Accelerometer),
-        _sensorManager.GetDefaultSensor(SensorType.MagneticField)
-      };
+
+      _accelerometer = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
+      _magnetometer = _sensorManager.GetDefaultSensor(SensorType.MagneticField);
     }
 
     #region ISensorEventListener implementation
@@ -63,23 +68,40 @@ namespace StarMap.Droid.Sensors
         switch (e.Sensor.Type)
         {
           case SensorType.Accelerometer:
-            if (_accReady = !_accReady)
-              e.Values.CopyTo(_gravity, 0);
+            if (!_accReady)
+            {
+              //e.Values.CopyTo(_gravity, 0);
+              // check if this works better
+              for (int i = 0; i < e.Values.Count; i++)
+                _gravity[i] = e.Values[i];
+
+              _accReady = true;
+            }              
             break;
           case SensorType.MagneticField:
-            if (_magReady = !_magReady)
-              e.Values.CopyTo(_magnet, 0);
+            if (!_magReady)
+            {
+              //e.Values.CopyTo(_magnet, 0);
+              for (int i = 0; i < e.Values.Count; i++)
+                _magnet[i] = e.Values[i];
+
+              _magReady = true;
+            }              
             break;
         }
 
         if (!(_accReady && _magReady))
           return;
 
-        SensorManager.GetRotationMatrix(R, null, _gravity, _magnet);
-        // I don't really see the point in setting this here, and checking upon copying if is not ready (i.e. new).
-        // So what, if I send an event with just one sensor updated, the other one with an old value. But anyway, that;s what this does
-        // might as well keep it. 
         _accReady = _magReady = false;
+
+        //var time = Environment.TickCount;
+        //if ((time - lastUpdate) < 3000)
+        //  return;
+        //lastUpdate = time;
+
+        SensorManager.GetRotationMatrix(R, null, _gravity, _magnet);
+
 
         // Cellphone's natural orientation is portrait, tilted to the left it returns display (rotation) = 1,
         // to the right = 3.
@@ -98,6 +120,8 @@ namespace StarMap.Droid.Sensors
           case SurfaceOrientation.Rotation90: // phone tilted to the left
             x = Axis.Y;
             y = Axis.MinusX;
+            break;
+          default:
             break;
         }
 
@@ -145,8 +169,8 @@ namespace StarMap.Droid.Sensors
     {
       if (_on) return;
 
-      foreach (var sensor in _sensors)
-        _sensorManager.RegisterListener(this, sensor, SensorDelay.Normal);
+      _sensorManager.RegisterListener(this, _accelerometer, SensorDelay.Normal);
+      _sensorManager.RegisterListener(this, _magnetometer, SensorDelay.Normal);
 
       _on = true;
     }
@@ -156,9 +180,12 @@ namespace StarMap.Droid.Sensors
     {
       if (!_on) return;
 
-      _sensorManager.UnregisterListener(this);
-      _on = false;
+      if (_accelerometer != null)
+        _sensorManager?.UnregisterListener(this, _accelerometer);
+      if (_magnetometer != null)
+        _sensorManager?.UnregisterListener(this, _magnetometer);
 
+      _on = false;
     }
 
 
@@ -188,8 +215,12 @@ namespace StarMap.Droid.Sensors
       if (disposing)
       {
         Stop();
+        _sensorManager?.Dispose();
         _sensorManager = null;
-        _sensors.Clear();
+        _accelerometer.Dispose();
+        _accelerometer = null;
+        _magnetometer.Dispose();
+        _magnetometer = null;
       }
 
       disposed = true;
