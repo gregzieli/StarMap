@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarMap.Core.Extensions;
+using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Urho;
@@ -67,17 +68,12 @@ namespace StarMap.Urho
       // Must be main thread, else Android gets an exception "Can't create handler inside thread that has not called Looper.prepare()"
       => XF.Device.BeginInvokeOnMainThread(() => XF.MessagingCenter.Send(payload, string.Empty));
 
-    protected async Task RhunAsync(Func<Task> fn)
+    protected override void Stop()
     {
-      try
-      {
-        await fn?.Invoke();
-      }
-      catch (Exception e)
-      {
-        HandleException(e);
-        await Exit();
-      }
+      // does not help.
+      _scene.RemoveChildren(true, true, true);
+      _scene.Remove();
+      base.Stop();
     }
   }
 }

@@ -19,7 +19,7 @@ namespace StarMap.Urho
   public class SingleStar : UrhoBase
   {
     public SingleStar(ApplicationOptions options) : base(options) { }
-
+    
     Node _starNode;
     
     public StarDetail Star { get; set; }
@@ -105,30 +105,32 @@ namespace StarMap.Urho
       base.OnUpdate(timeStep);
     }
 
-    protected override async void FillScene()
+    protected override void FillScene()
     {
-      _starNode = _scene.CreateChild();
-
-      Node skyboxNode = _scene.CreateChild();
-      skyboxNode.SetScale(100);
-      try
+      InvokeOnMain(() =>
       {
-        Skybox skybox = skyboxNode.CreateComponent<Skybox>();
-        skybox.Model = CoreAssets.Models.Box;
-        skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 2)}.png"));
-        _starNode.Position = new Vector3(0, 0, 2);
+        try
+        {
+          _starNode = _scene.CreateChild();
 
-        Sphere star = _starNode.CreateComponent<Sphere>();
-        star.SetMaterial(Material.FromImage("Textures/white-dwarf2.jpg"));
+          Node skyboxNode = _scene.CreateChild();
+          skyboxNode.SetScale(100);
 
-        await _starNode.RunActionsAsync(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
-      }
-      catch (Exception r)
-      {
-      }
+          Skybox skybox = skyboxNode.CreateComponent<Skybox>();
+          skybox.Model = CoreAssets.Models.Box;
+          skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 2)}.png"));
+          _starNode.Position = new Vector3(0, 0, 2);
 
+          Sphere star = _starNode.CreateComponent<Sphere>();
+          star.SetMaterial(Material.FromImage("Textures/white-dwarf2.jpg"));
 
-      
+          _starNode.RunActions(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
+        }
+        catch
+        {
+          throw;
+        }
+      });      
     }
 
     protected override void HandleException(Exception ex)

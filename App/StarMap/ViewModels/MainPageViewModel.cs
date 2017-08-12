@@ -21,11 +21,12 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Urho;
+using Urho.Forms;
 
 namespace StarMap.ViewModels
 {
   // TODO: maybe not another parent, but make this class into partial classes, there's way too much code in here for me.
-  public class MainPageViewModel : StarGazer<Universe, UniverseUrhoException>, IApplicationLifecycle
+  public class MainPageViewModel : StarGazer<Universe, UniverseUrhoException>
   {
     IDeviceRotation _motionDetector;
 
@@ -247,13 +248,15 @@ namespace StarMap.ViewModels
       UrhoApplication?.SetRotation(e.Orientation);
     }
 
-    public void OnResume()
+    public override void OnResume()
     {
+      base.OnResume();
       SensorStart();
     }
 
-    public void OnSleep()
+    public override void OnSleep()
     {
+      base.OnSleep();
       SensorStop();
     }
 

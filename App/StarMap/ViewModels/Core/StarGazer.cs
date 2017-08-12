@@ -1,8 +1,10 @@
-﻿using Prism.Navigation;
+﻿using Prism.AppModel;
+using Prism.Navigation;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Abstractions.Urho;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Forms;
@@ -12,7 +14,7 @@ namespace StarMap.ViewModels.Core
 {
   // Not sure about this name now. Let's just assume, that this is just to take some load off the MainPageVM, not to store all the code in one place; 
   // The ethods here are more 'GENERAL', but I don't think any other VM would inherit this class.
-  public abstract class StarGazer<TUhroApp, TUrhoException> : Navigator, IUrhoHandler
+  public abstract class StarGazer<TUhroApp, TUrhoException> : Navigator, IUrhoHandler, IApplicationLifecycle
     where TUhroApp : Application
     where TUrhoException : Exception
   {
@@ -56,6 +58,11 @@ namespace StarMap.ViewModels.Core
     {      
       await CallAsync(async () =>
       {
+
+        // As it happens, MainPanel's Urho doesn't get disposed before 
+        // starting this one. Believe me, I tryied many other ways.
+        await Task.Delay(1000);
+
         // Moving this piece of code to here from the View doesn't change much, it's really just for consistency;
         // I still am unable to catch any exception that occurs upon creating the UrhoApplication.
         // That is why it is needed to be handled separately, as another layer.
@@ -70,20 +77,19 @@ namespace StarMap.ViewModels.Core
           // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
         };
 
-        if (this is StarDetailPageViewModel)
-        {
-          XF.Device.BeginInvokeOnMainThread(async () =>
-          {
-            UrhoApplication = await surface.Show<TUhroApp>(options);
-            OnUrhoGenerated();
-          });
-        }
-        else
-        {
-          UrhoApplication = await surface.Show<TUhroApp>(options);
-          OnUrhoGenerated();
-        }
+        UrhoApplication = await surface.Show<TUhroApp>(options);
+        OnUrhoGenerated();
       });
+    }
+
+    public virtual void OnResume()
+    {
+      UrhoSurface.OnResume();
+    }
+
+    public virtual void OnSleep()
+    {
+      UrhoSurface.OnPause();
     }
 
     public abstract void OnUrhoGenerated();

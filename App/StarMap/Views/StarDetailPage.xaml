@@ -18,7 +18,7 @@
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <!--<urho:UrhoSurface x:Name="surface" Margin="10, 40" />-->
+    <urho:UrhoSurface x:Name="surface" Margin="10, 40" />
 
     <TableView Intent="Data" Grid.Column="1" Margin="10">
       <TableSection>

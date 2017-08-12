@@ -62,7 +62,7 @@ namespace StarMap.Urho
       light.Range = 1000;
 
       StarSprite = ResourceCache.GetSprite2D("Sprites/star.png");
-
+      
       HighlightedStars = new List<StarComponent>();
     }
 
@@ -263,7 +263,8 @@ namespace StarMap.Urho
       return sol;
     }
 
-    Task MarkSun(bool enable) => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));    
+    Task MarkSun(bool enable) 
+      => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));
     
   }
 }

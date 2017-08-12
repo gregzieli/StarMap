@@ -1,7 +1,7 @@
 ﻿using StarMap.Cll.Abstractions.Urho;
 using StarMap.Controls;
 using System;
-using System.Diagnostics;
+using System.Threading.Tasks;
 using Urho.Forms;
 using Xamarin.Forms;
 using a = Urho;
@@ -16,7 +16,7 @@ namespace StarMap.Views
 
     protected override async void OnAppearing()
     {
-      base.OnAppearing();
+      base.OnAppearing();      
 
       RightPanel = new Overlay(rightOverlay, DockSide.Right, rightPanelButtons.Width + rightOverlay.Padding.Left * 2);
 
@@ -27,9 +27,9 @@ namespace StarMap.Views
 
     protected override async void OnDisappearing()
     {
+      base.OnDisappearing();
       await a.Application.Current.Exit();
       UrhoSurface.OnDestroy();
-      base.OnDisappearing();
     }
 
     void OnConstellationsButtonClicked(object sender, EventArgs args)
