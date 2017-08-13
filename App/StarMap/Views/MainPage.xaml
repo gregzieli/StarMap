@@ -12,6 +12,13 @@
     <urho:UrhoSurface x:Name="surface" 
                       AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                       AbsoluteLayout.LayoutFlags="All" />
+
+    <ContentView IsVisible="{Binding Loading}" BackgroundColor="{StaticResource OverlayBackground}" 
+                 InputTransparent="True" 
+                 AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                 AbsoluteLayout.LayoutFlags="All">
+      <ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" IsRunning="True" />
+    </ContentView>
     
     <Grid x:Name="rightOverlay"
           AbsoluteLayout.LayoutBounds="1, 0, .4, .9" 

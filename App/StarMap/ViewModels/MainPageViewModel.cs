@@ -1,5 +1,4 @@
-﻿using Prism.AppModel;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using StarMap.Bll.Helpers;
@@ -18,10 +17,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Urho;
-using Urho.Forms;
 
 namespace StarMap.ViewModels
 {
@@ -38,6 +37,13 @@ namespace StarMap.ViewModels
     }
 
     public IUnique Sol { get; set; }
+
+    private bool _loading = true;
+    public bool Loading
+    {
+      get { return _loading; }
+      set { SetProperty(ref _loading, value); }
+    }
 
     private ObservantCollection<Constellation> _constellations;
     public ObservantCollection<Constellation> Constellations
@@ -73,35 +79,43 @@ namespace StarMap.ViewModels
       get { return _selectedConstellation; }
       set { SetProperty(ref _selectedConstellation, value, () => OnConstellationSelected(value)); }
     }
-
-    private DelegateCommand _resetFiltersCommand;
-    public DelegateCommand ResetFiltersCommand =>
-        _resetFiltersCommand ?? (_resetFiltersCommand = new DelegateCommand(ResetFilter));
-
-    // Setting individual switches should be handled maybe:
-    // extending the model here with an INotifyPropChanged implementation
-    // that could add/remove the value to some collection in this VM
-    // and each time that collection changes, GetStars is called with the filtered constellations.
-    private DelegateCommand<object> _filterConstellationsCommand;
-    public DelegateCommand<object> FilterConstellationsCommand =>
-      // T could not be bool, weird.
-        _filterConstellationsCommand ?? (_filterConstellationsCommand = new DelegateCommand<object>(FilterConstellations, x => CanExecute()));
-
-    private DelegateCommand _getStarsCommand;
-    public DelegateCommand GetStarsCommand =>
-        _getStarsCommand ?? (_getStarsCommand = new DelegateCommand(GetStars));
-
-    public DelegateCommand SelectStarCommand { get; private set; }
-    public DelegateCommand ShowStarDetailsCommand { get; private set; }
-
-    private DelegateCommand _travelCommand;
-    public DelegateCommand TravelCommand =>
-        _travelCommand ?? (_travelCommand = new DelegateCommand(() => Travel(SelectedStar), () => SelectedStar != null).ObservesProperty(() => SelectedStar));
-
-    private DelegateCommand _goHomeCommand;
-    public DelegateCommand GoHomeCommand =>
-        _goHomeCommand ?? (_goHomeCommand = new DelegateCommand(() => Travel(Sol)));
+    // T could not be bool, weird.
+    public DelegateCommand<object> FilterConstellationsCommand { get; private set; }
     
+    public DelegateCommand ResetFiltersCommand { get; private set; }
+    
+    public DelegateCommand GetStarsCommand { get; private set; }
+
+    public DelegateCommand ShowStarDetailsCommand { get; private set; }
+    
+    public DelegateCommand TravelCommand { get; private set; }
+    
+    public DelegateCommand GoHomeCommand { get; private set; }
+
+    void SetCommands()
+    {
+      // Cannot use ObservesCanExecute extension here because it observes a bool property only, but it's OK to use ObservesProperty
+      // (That way I dont have to ShowStarDetailsCommand.RaiseCanExecuteChanged() in the SelectedStar setter)
+      // And it's fluent, and u can observe as many props as u want
+      ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
+        .ObservesProperty(() => SelectedStar);
+
+      TravelCommand = new DelegateCommand(() => Travel(SelectedStar), () => SelectedStar != null)
+        .ObservesProperty(() => SelectedStar);
+
+      GoHomeCommand = new DelegateCommand(() => Travel(Sol));
+
+      FilterConstellationsCommand = new DelegateCommand<object>(FilterConstellations)
+        .ObservesCanExecute(() => CanExecute);
+
+      ResetFiltersCommand = new DelegateCommand(ResetFilter)
+        .ObservesCanExecute(() => CanExecute);
+
+      GetStarsCommand = new DelegateCommand(GetStars)
+        .ObservesCanExecute(() => CanExecute);
+
+    }
+
     private async void Travel(IUnique target)
     {
       await CallAsync(() => UrhoApplication.Travel(target));
@@ -109,17 +123,14 @@ namespace StarMap.ViewModels
       Settings.Astrolocation = CurrentPosition.Id;
     }
 
+    protected override bool CanExecute => base.CanExecute && !_loading;
+
     public MainPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager, IDeviceRotation motionDetector) 
       : base(navigationService, pageDialogService, starManager)
     {
       _motionDetector = motionDetector;
 
-      //SelectStarCommand = new DelegateCommand(SelectStar);
-      ShowStarDetailsCommand = new DelegateCommand(ShowStarDetails, () => SelectedStar != null)
-           // Cannot use ObservesCanExecute extension here because it observes a bool property only, but it's OK to use ObservesProperty
-           // (That way I dont have to ShowStarDetailsCommand.RaiseCanExecuteChanged() in the SelectedStar setter)
-           // And it's fluent, and u can observe as many props as u want
-           .ObservesProperty(() => SelectedStar);
+      SetCommands();
     }
 
     #region methods
@@ -175,10 +186,15 @@ namespace StarMap.ViewModels
 
     private async void GetStars()
     {
+      Debug.WriteLine("   #####   GetStars   #####   ");
       await CallAsync(async () =>
       {
+        Loading = true;
         await GetStarsFromDatabase();
         await UpdateUrho();
+      }, always: () =>
+      {
+        Loading = false;
       });
     }
 

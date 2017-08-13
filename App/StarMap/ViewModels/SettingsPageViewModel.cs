@@ -36,7 +36,9 @@ namespace StarMap.ViewModels
 
     DelegateCommand _updateLocationCommand;
     public DelegateCommand UpdateLocationCommand =>
-        _updateLocationCommand ?? (_updateLocationCommand = new DelegateCommand(UpdateLocation, CanExecute).ObservesProperty(() => IsBusy));
+        _updateLocationCommand ?? (_updateLocationCommand = new DelegateCommand(UpdateLocation)
+        // If IsBusy didn't RaisePropertyChanged on CanExecute, this code could stay, but with ObservesProperty.
+        .ObservesCanExecute(() => CanExecute));
     
 
     async void UpdateLocation()
