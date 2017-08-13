@@ -223,7 +223,7 @@ namespace StarMap.Urho
       }
     }
 
-    public Task Travel(IUnique star)
+    public async Task Travel(IUnique star)
     {
       var target = _plotNode.GetChild(star.Id.ToString());
       
@@ -237,9 +237,10 @@ namespace StarMap.Urho
       _plotNode.GetChildrenWithComponent<StarComponent>()
         .ForEach(x => x.LookAt(target.Position, Vector3.Up));
 
-      CurrentLocation = star;
+      await travelTask;
 
-      return Task.WhenAll(travelTask, MarkSun(!IsHome));
+      CurrentLocation = star;
+      await MarkSun(!IsHome);
     }    
 
     Node MarkSun()

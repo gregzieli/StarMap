@@ -40,7 +40,7 @@ namespace StarMap.Views
         RightPanel.Expand(Easing.CubicIn);
 
       starFilters.IsVisible = false;
-      constellationFilters.IsVisible = true;      
+      constellationFilters.IsVisible = true;
     }
 
     void OnStarFilterPanelButtonClicked(object sender, EventArgs args)
