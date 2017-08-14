@@ -1,5 +1,4 @@
 ﻿using System.Threading;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace StarMap.Views

@@ -136,7 +136,8 @@ namespace StarMap.Urho
     protected override void HandleException(Exception ex)
      => PublishError(new UniverseUrhoException(ex));
 
-    public void UpdateWithStars(IList<Star> stars, IUnique currentPosition)
+    [Obsolete("I thought this algorithm would be helpful, but as it turns out, it's much slower than simply *plotNode.RemoveAll*")]
+    public void UpdateWithStars2(IList<Star> stars, IUnique currentPosition)
     {
       var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
       _cameraNode.Position = new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
@@ -184,7 +185,43 @@ namespace StarMap.Urho
       }
       existingNodesById.Clear();
     }
-    
+
+
+    public void UpdateWithStars(IList<Star> stars, IUnique currentPosition)
+    {
+      var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
+      _cameraNode.Position = new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
+      CurrentLocation = currentStar;
+
+      _plotNode.RemoveAllChildren();
+
+      string id;
+      foreach (var star in stars)
+      {
+        id = star.Id.ToString();
+
+        Node starNode = _plotNode.CreateChild(id, CreateMode.Local);
+        var starComponent = starNode.CreateComponent<StarComponent>();
+
+        starComponent.Sprite = StarSprite;
+        float scale = 1;
+
+        // Scale by absolute magnitude
+        if (star.AbsoluteMagnitude < 2)
+          scale = (float)Normalizer.Normalize(star.AbsoluteMagnitude, -14, 1, 2, 1.2);
+
+        starNode.Scale = new Vector3(scale, scale, scale);
+        // haha this throws error sometimes when moving away from the page
+        //starNode.SetScale(scale);
+
+        starNode.Position = new Vector3(star.X, star.Y, star.Z);
+        starNode.LookAt(_cameraNode.Position, Vector3.Up);
+        starNode.AddCollisionSupport(0.1f);
+      }
+
+      MarkSun().SetDeepEnabled(!IsHome);
+    }
+
     public void HighlightStars(IEnumerable<IUnique> selectedStars)
     {
       ResetHighlight();

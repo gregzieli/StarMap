@@ -9,6 +9,8 @@ namespace StarMap.Cll.Abstractions
   {
     StarFilter LoadFilter();
 
+    bool CheckFilterChanged(StarFilter filter);
+
     Task<IList<Constellation>> GetConstellationsAsync();
 
     Task<IEnumerable<Star>> GetStarsAsync(StarFilter filter);

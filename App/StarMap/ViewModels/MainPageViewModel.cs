@@ -15,7 +15,6 @@ using StarMap.Urho;
 using StarMap.ViewModels.Core;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,7 +22,6 @@ using Urho;
 
 namespace StarMap.ViewModels
 {
-  // TODO: maybe not another parent, but make this class into partial classes, there's way too much code in here for me.
   public class MainPageViewModel : StarGazer<Universe, UniverseUrhoException>
   {
     IDeviceRotation _motionDetector;    
@@ -33,12 +31,7 @@ namespace StarMap.ViewModels
 
     protected override bool CanExecute => !_loading;
 
-    private IUnique _currentPosition;
-    public IUnique CurrentPosition
-    {
-      get { return _currentPosition; }
-      set { SetProperty(ref _currentPosition, value); }
-    }
+    public IList<Star> Stars { get; set; }
 
     private bool _loading = true;
     public bool Loading
@@ -54,13 +47,6 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _constellations, value); }
     }
 
-    private Star _selectedStar;
-    public Star SelectedStar
-    {
-      get { return _selectedStar; }
-      set { SetProperty(ref _selectedStar, value); }
-    }
-
     private StarFilter _starFilter;
     public StarFilter StarFilter
     {
@@ -68,11 +54,18 @@ namespace StarMap.ViewModels
       set { SetProperty(ref _starFilter, value); }
     }
 
-    private ObservableCollection<Star> _visibleStars;
-    public ObservableCollection<Star> VisibleStars
+    private IUnique _currentPosition;
+    public IUnique CurrentPosition
     {
-      get { return _visibleStars; }
-      set { SetProperty(ref _visibleStars, value); }
+      get { return _currentPosition; }
+      set { SetProperty(ref _currentPosition, value); }
+    }
+
+    private Star _selectedStar;
+    public Star SelectedStar
+    {
+      get { return _selectedStar; }
+      set { SetProperty(ref _selectedStar, value); }
     }
 
     private Constellation _selectedConstellation;
@@ -131,9 +124,7 @@ namespace StarMap.ViewModels
       GetStarsCommand = new DelegateCommand(ShowStars)
         .ObservesCanExecute(() => CanExecute);
     }
-
-
-
+    
     #region Command methods
 
     async void GoToDetails()
@@ -148,7 +139,7 @@ namespace StarMap.ViewModels
     {
       await CallAsync(async () =>
       {
-        if (!FilterChanged())
+        if (!_starManager.CheckFilterChanged(StarFilter))
           return;
 
         Loading = true;
@@ -179,7 +170,7 @@ namespace StarMap.ViewModels
         foreach (var c in Constellations)
           c.IsOn = action;
 
-        return ToggleConstellations(VisibleStars.Where(x => x.ConstellationId.HasValue), action);
+        return ToggleConstellations(Stars.Where(x => x.ConstellationId.HasValue), action);
       }, onDone: () => // Subscribe back on
         Constellations.ElementChanged += OnConstellationFiltered);
     }
@@ -194,14 +185,39 @@ namespace StarMap.ViewModels
 
     #endregion
 
+    #region Event Handlers
 
-    #region methods
-    
-    bool FilterChanged()
+    protected override async void Restore(NavigationParameters parameters)
     {
-      var previous = _starManager.LoadFilter();
+      await CallAsync(() =>
+      {
+        base.Restore(parameters);
 
-      return !StarFilter.Equals(previous);
+        StartSensors();
+
+        StarFilter = _starManager.LoadFilter();
+
+        return GetConstellations();
+      });
+    }
+
+    protected override void CleanUp()
+    {
+      StopSensors();
+      Constellations.ElementChanged -= OnConstellationFiltered;
+      base.CleanUp();
+    }
+
+    public override void OnResume()
+    {
+      base.OnResume();
+      StartSensors();
+    }
+
+    public override void OnSleep()
+    {
+      base.OnSleep();
+      StopSensors();
     }
 
     async void OnConstellationSelected(Constellation c)
@@ -212,18 +228,10 @@ namespace StarMap.ViewModels
           UrhoApplication.ResetHighlight();
         else
         {
-          var selection = VisibleStars.Where(x => x.ConstellationId == c.Id);
+          var selection = Stars.Where(x => x.ConstellationId == c.Id);
           UrhoApplication.HighlightStars(selection);
         }
       });      
-    }
-
-    Task ToggleConstellations(IEnumerable<IUnique> stars, bool turnOn)
-    {
-      return Application.InvokeOnMainAsync(() =>
-      {
-        UrhoApplication.ToggleConstellations(stars, turnOn);
-      });
     }
 
     async void OnConstellationFiltered(object sender, PropertyChangedEventArgs e)
@@ -231,63 +239,18 @@ namespace StarMap.ViewModels
       await CallAsync(() =>
       {
         var c = (Constellation)sender;
-        return ToggleConstellations(VisibleStars.Where(x => x.ConstellationId == c.Id), c.IsOn);
-      });      
-    }
-
-    
-
-    
-
-    async Task GetStars()
-    {
-      var stars = await _starManager.GetStarsAsync(StarFilter).ConfigureAwait(false);
-      // Since the size of the collection may differ, it's better memorywise to instantiate a new one,
-      // rather than reuse the already allocated list with a completely different size.
-      VisibleStars = new ObservableCollection<Star>(stars);
-
-      _sol = stars.First(x => x.Id == 0);
-    }
-
-    async Task UpdateUrho()
-    {
-      var currentLocation = VisibleStars.FirstOrDefault(x => x.Id == Settings.Astrolocation);
-      if (currentLocation != null && currentLocation.Constellation is null && currentLocation.ConstellationId != null)
-        currentLocation.Constellation = Constellations.First(x => x.Id == currentLocation.ConstellationId);
-
-      CurrentPosition = currentLocation ?? _sol;
-      await Application.InvokeOnMainAsync(() => UrhoApplication.UpdateWithStars(VisibleStars, CurrentPosition));
-    }
-
-    async Task GetConstellations()
-    {
-      var constellations = await _starManager.GetConstellationsAsync();
-      Constellations = new ObservantCollection<Constellation>(constellations);
-      Constellations.ElementChanged += OnConstellationFiltered;
-    }
-
-    
-    #endregion    
-
-    protected override async void Restore(NavigationParameters parameters)
-    {
-      await CallAsync(() =>
-      {
-        base.Restore(parameters);
-
-        SensorStart();
-
-        StarFilter = _starManager.LoadFilter();
-
-        return GetConstellations();
+        return ToggleConstellations(Stars.Where(x => x.ConstellationId == c.Id), c.IsOn);
       });
-    }    
+    }
 
-    protected override void CleanUp()
+    public override async void OnUrhoGenerated()
     {
-      SensorStop();
-      Constellations.ElementChanged -= OnConstellationFiltered;
-      base.CleanUp();
+      await CallAsync(async () =>
+      {
+        UrhoApplication.Input.TouchEnd += OnStarSelected;
+        await GetStars();
+        await UpdateUrho();
+      }, always: () => Loading = false);
     }
 
     void OnRotationChanged(object sender, RotationChangedEventArgs e)
@@ -295,61 +258,20 @@ namespace StarMap.ViewModels
       UrhoApplication?.SetRotation(e.Orientation);
     }
 
-    public override void OnResume()
-    {
-      base.OnResume();
-      SensorStart();
-    }
-
-    public override void OnSleep()
-    {
-      base.OnSleep();
-      SensorStop();
-    }
-
-    void SensorStart()
-    {
-      if (Settings.SensorsOn)
-      {
-        _motionDetector.Start();
-        _motionDetector.RotationChanged += OnRotationChanged;
-      }
-    }
-
-    void SensorStop()
-    {
-      if (Settings.SensorsOn)
-      {
-        _motionDetector.Stop();
-        _motionDetector.RotationChanged -= OnRotationChanged;
-      }
-    }
-
-    public override async void OnUrhoGenerated()
-    {
-      await CallAsync(async () =>
-      {
-        UrhoApplication.Input.TouchEnd += SelectStar;
-        await GetStars();
-        await UpdateUrho();
-      }, always: () => Loading = false);
-      
-    }
-
-    async void SelectStar(TouchEndEventArgs obj)
+    async void OnStarSelected(TouchEndEventArgs obj)
     {
       await Call(() =>
       {
         var id = UrhoApplication.OnTouched(obj, out float relativeDistance);
         if (!id.IsNullOrEmpty())
         {
-          var star = VisibleStars.FirstOrDefault(x => x.Id == int.Parse(id));
+          var star = Stars.FirstOrDefault(x => x.Id == int.Parse(id));
           // NB: I could set refs to constellations for all the stars upon retrieving from db,
           //     it's the obvious thing to do. But, in most operations I need only the Id. 
           //     The Constellation ref is needed only to display proper designation.
           //     And no one is going to select every star there is. That's why i decided to get the constellation ref
           //     here, which can be misleading.
-          
+
           if (star.Constellation is null && star.ConstellationId != null)
             star.Constellation = Constellations.First(x => x.Id == star.ConstellationId);
 
@@ -360,7 +282,63 @@ namespace StarMap.ViewModels
         {
           SelectedStar = null;
         }
-      });      
+      });
+    }
+
+    #endregion
+
+    Task ToggleConstellations(IEnumerable<IUnique> stars, bool turnOn)
+    {
+      return Application.InvokeOnMainAsync(() =>
+      {
+        UrhoApplication.ToggleConstellations(stars, turnOn);
+      });
+    }
+
+    async Task GetConstellations()
+    {
+      var constellations = await _starManager.GetConstellationsAsync().ConfigureAwait(false);
+      Constellations = new ObservantCollection<Constellation>(constellations);
+      Constellations.ElementChanged += OnConstellationFiltered;
+    }
+
+    async Task GetStars()
+    {
+      var stars = await _starManager.GetStarsAsync(StarFilter).ConfigureAwait(false);
+      // Since the size of the collection may differ, it's better memorywise to instantiate a new one,
+      // rather than reuse the already allocated list with a completely different size.
+      Stars = new List<Star>(stars);
+
+      if (_sol is null)
+        _sol = stars.First(x => x.Id == 0);
+    }
+
+    async Task UpdateUrho()
+    {
+      var currentLocation = Stars.FirstOrDefault(x => x.Id == Settings.Astrolocation);
+      if (currentLocation != null && currentLocation.Constellation is null && currentLocation.ConstellationId != null)
+        currentLocation.Constellation = Constellations.First(x => x.Id == currentLocation.ConstellationId);
+
+      CurrentPosition = currentLocation ?? _sol;
+      await Application.InvokeOnMainAsync(() => UrhoApplication.UpdateWithStars(Stars, CurrentPosition));
+    }
+
+    void StartSensors()
+    {
+      if (Settings.SensorsOn)
+      {
+        _motionDetector.Start();
+        _motionDetector.RotationChanged += OnRotationChanged;
+      }
+    }
+
+    void StopSensors()
+    {
+      if (Settings.SensorsOn)
+      {
+        _motionDetector.Stop();
+        _motionDetector.RotationChanged -= OnRotationChanged;
+      }
     }
   }
 }

@@ -54,6 +54,13 @@ namespace StarMap.Bll.Managers
       return star;
     }
 
+    public bool CheckFilterChanged(StarFilter filter)
+    {
+      var previous = LoadFilter();
+
+      return !filter.Equals(previous);
+    }
+
     public StarFilter LoadFilter()
     {
       string filter = Settings.Filter;
@@ -71,5 +78,7 @@ namespace StarMap.Bll.Managers
       if (star.ColorIndex.HasValue)
         star.TemperatureKelvin = _astronomer.GetTemperature(star.ColorIndex.Value);
     }
+
+    
   }
 }

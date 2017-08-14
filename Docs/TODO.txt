@@ -1,6 +1,4 @@
 ﻿TODO:
-
- - własna implementacja INotifyProperty..., żeby usunąc referencje do prism w Cll.
  - onNavigated - albo w Navigator restore i cleanup return Task, i w onNavigated robić CallAsync, a w implementacjach restore i cleanup nie, albo zrobić całkiem void, i w implementacjach async void.
 
  - [LOW PRIORITY] setting: choose dist in ly/pc

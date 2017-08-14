@@ -12,13 +12,13 @@
     </ResourceDictionary>
   </ContentPage.Resources>
 
-  <Grid Padding="10" ColumnSpacing="10" RowSpacing="10" BindingContext="{Binding Star}">
+  <Grid x:Name="grid" Padding="10" ColumnSpacing="10" BindingContext="{Binding Star}">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
 
-    <urho:UrhoSurface x:Name="surface" Margin="10, 40" />
+    <urho:UrhoSurface x:Name="surface"  /> <!--Margin="10, 40"-->
 
     <TableView Intent="Data" Grid.Column="1" Margin="10">
       <TableSection>

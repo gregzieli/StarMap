@@ -1,6 +1,7 @@
 ﻿using StarMap.Core.Abstractions;
 using System;
 using static StarMap.Cll.Constants.Filters;
+
 namespace StarMap.Cll.Filters
 {
   public class StarFilter : ObservableBase, IEquatable<StarFilter>
