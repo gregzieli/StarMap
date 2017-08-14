@@ -192,9 +192,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Controls\StatusPanel.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>

@@ -77,9 +77,9 @@ namespace StarMap.ViewModels.Core
           // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
         };
 
-        UrhoApplication = await surface.Show<TUhroApp>(options);
-        OnUrhoGenerated();
-      });
+        UrhoApplication = await surface.Show<TUhroApp>(options);        
+      }, onDone: () =>
+        OnUrhoGenerated());
     }
 
     public virtual void OnResume()

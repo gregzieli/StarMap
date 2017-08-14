@@ -35,5 +35,15 @@ namespace StarMap.Core.Extensions
       while (enumerator.MoveNext())
         destination[i++] = enumerator.Current;
     }
+
+    public static string ToHumanString<TKey, TValue>(this ICollection<KeyValuePair<TKey, TValue>> source, string separator = "; ")
+    {
+      return string.Join(separator, source);
+    }
+
+    public static string ToHumanString<T>(this ICollection<T> source, string separator = "; ")
+    {
+      return string.Join(separator, source);
+    }
   }
 }

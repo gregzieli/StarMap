@@ -6,7 +6,6 @@ using StarMap.Cll.Exceptions;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Urho;
 using StarMap.ViewModels.Core;
-using System.Threading.Tasks;
 
 namespace StarMap.ViewModels
 {
@@ -24,7 +23,7 @@ namespace StarMap.ViewModels
     
     protected override async void Restore(NavigationParameters parameters)
     {
-      base.Restore(parameters); // TODO: check if this was causing the errors
+      base.Restore(parameters);
       await CallAsync(() => 
         _starManager.GetStarDetailsAsync((int)parameters[Navigation.Keys.StarId]), 
         star => 

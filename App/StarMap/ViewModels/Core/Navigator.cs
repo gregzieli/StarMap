@@ -22,9 +22,6 @@ namespace StarMap.ViewModels.Core
       GoBackCommand = new DelegateCommand(GoBack);
     }
 
-    public async void GoBack()
-     => await CallAsync(() => _navigationService.GoBackAsync());
-
     protected async void Navigate(string path) 
       => await Navigate(path, null);
 
@@ -48,6 +45,9 @@ namespace StarMap.ViewModels.Core
 
     protected Task Navigate(Uri uri, NavigationParameters navParams)
       => CallAsync(() => _navigationService.NavigateAsync(uri, navParams));
+
+    public async void GoBack()
+     => await CallAsync(() => _navigationService.GoBackAsync());
 
     public virtual void OnNavigatedFrom(NavigationParameters parameters)
       => CleanUp();

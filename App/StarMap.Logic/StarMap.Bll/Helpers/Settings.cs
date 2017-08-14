@@ -44,7 +44,7 @@ namespace StarMap.Bll.Helpers
 
     public static bool SensorsOn
     {
-      get { return AppSettings.GetValueOrDefault(SensorsKey, false); } // now to false, but on release should be true.
+      get { return AppSettings.GetValueOrDefault(SensorsKey, false); }
       set { AppSettings.AddOrUpdateValue(SensorsKey, value); }
     }
   }

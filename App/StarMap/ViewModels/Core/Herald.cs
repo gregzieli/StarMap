@@ -12,8 +12,7 @@ namespace StarMap.ViewModels.Core
     {
       _pageDialogService = pageDialogService;
     }
-
-    // TODO: CONSTANTS!!!!
+    
     protected async Task DisplayAlertAsync(string title, string message, string closeButton = "OK")
     {
       await _pageDialogService.DisplayAlertAsync(title, message, closeButton);

@@ -45,8 +45,7 @@ namespace StarMap.ViewModels.Core
       }
       finally
       {
-        always?.Invoke();
-        IsBusy = false;
+        Finalize(always);
       }
     }
 
@@ -56,13 +55,15 @@ namespace StarMap.ViewModels.Core
     /// </summary>
     /// <param name="fn">Delegate to execute.</param>
     /// <param name="onException">An action to execute upon catching an exception.</param>
+    /// <param name="onDone">An action to execute after the asynchronous code completes.</param>
     /// <param name="always">An action to execute always, no matter if an error occured or not.</param>
-    protected async Task CallAsync(Func<Task> fn, Action always = null)
+    protected async Task CallAsync(Func<Task> fn, Action onDone = null, Action always = null)
     {
       try
       {
         IsBusy = true;
         await fn();
+        onDone?.Invoke();
       }
       catch (Exception ex)
       {
@@ -70,8 +71,7 @@ namespace StarMap.ViewModels.Core
       }
       finally
       {
-        always?.Invoke();
-        IsBusy = false;
+        Finalize(always);
       }
     }
 
@@ -98,29 +98,14 @@ namespace StarMap.ViewModels.Core
       }
       finally
       {
-        always?.Invoke();
-        IsBusy = false;
+        Finalize(always);
       }
     }
 
-    protected async Task CallAsync(Func<Task> fn, Action callback, Action always = null)
+    void Finalize(Action always = null)
     {
-      try
-      {
-        IsBusy = true;
-        await fn();
-        // just to keep the synchronous code in the try block.
-        callback();
-      }
-      catch (Exception ex)
-      {
-        await HandleException(ex);
-      }
-      finally
-      {
-        always?.Invoke();
-        IsBusy = false;
-      }
+      always?.Invoke();
+      IsBusy = false;
     }
   }
 }

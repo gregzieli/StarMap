@@ -144,7 +144,7 @@ namespace StarMap.Urho
 
       var existingNodesById = _plotNode.GetChildrenWithComponent<StarComponent>()
         .ToDictionary(x => x.Name, x => x);
-
+      
       foreach (var star in stars)
       {
         string id = star.Id.ToString();
@@ -175,7 +175,7 @@ namespace StarMap.Urho
       }
 
       MarkSun().SetDeepEnabled(!IsHome);
-
+      
       foreach (var leftUnused in existingNodesById.Values)
       {
         leftUnused.RemoveComponent<StarComponent>();
@@ -184,7 +184,7 @@ namespace StarMap.Urho
       }
       existingNodesById.Clear();
     }
-
+    
     public void HighlightStars(IEnumerable<IUnique> selectedStars)
     {
       ResetHighlight();
