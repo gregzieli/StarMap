@@ -1,4 +1,4 @@
-﻿using Prism.Mvvm;
+﻿using StarMap.Core.Abstractions;
 
 namespace StarMap.Cll.Models.Core.Bindable
 {
@@ -9,9 +9,7 @@ namespace StarMap.Cll.Models.Core.Bindable
   // 3. that child would have this property....
   // Or, a wrapper class, not a child. 
   // Those would adhere to the Open-Close principle.
-  // For now, let's leave it like this - with one TODO - if there's time, to avoid prism dependency,
-  // implement just INotifyPropertyChanged
-  public class MultiSelectable : BindableBase
+  public class MultiSelectable : ObservableBase
   {
     private bool _isOn = true;
     public bool IsOn

@@ -1,8 +1,9 @@
-﻿using StarMap.Core.Utils;
+﻿using StarMap.Core.Abstractions;
+using StarMap.Core.Utils;
 
 namespace StarMap.LogicTest.Classes
 {
-  public class Dog : ObservableImplementation
+  public class Dog : ObservableBase
   {
     public Dog()
     {

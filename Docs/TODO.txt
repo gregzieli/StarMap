@@ -19,5 +19,8 @@ NOTES:
  - chciałem zostawić ConstellationIds w filtrze (tylko do testów), ale Sqlute.net nie radzi sobie 
   ze skompilowaniem najprostrzego query.Where(x => x.ConstellationId.HasValue ? filter.ConstellationsIds.Contains(x.ConstellationId.Value) : true);
 
+
+ - masterDetail.xaml.cs - IsPresented = true; - zrezygnowałem na rzecz animacji strzałki na stronie tytułowej.
+
 BIBLIOGRAFIA: 
 https://developer.xamarin.com/workbooks/ - Exploring Urho Coordinates

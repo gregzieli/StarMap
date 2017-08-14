@@ -1,9 +1,9 @@
-﻿using Prism.Mvvm;
+﻿using StarMap.Core.Abstractions;
 using System;
 using static StarMap.Cll.Constants.Filters;
 namespace StarMap.Cll.Filters
 {
-  public class StarFilter : BindableBase, IEquatable<StarFilter>
+  public class StarFilter : ObservableBase, IEquatable<StarFilter>
   {
     private double _distanceTo = DEF_DIST;
     public double DistanceTo

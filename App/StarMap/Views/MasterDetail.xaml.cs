@@ -9,11 +9,5 @@ namespace StarMap.Views
     {
       InitializeComponent();
     }
-
-    protected override void OnAppearing()
-    {
-      base.OnAppearing();
-      IsPresented = true;
-    }
   }
 }

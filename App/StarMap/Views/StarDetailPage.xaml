@@ -38,8 +38,8 @@
                   Detail="{Binding AbsoluteMagnitude, StringFormat='{0:N1}'}" />        
         <TextCell Text="Spectral type" 
                   Detail="{Binding SpectralType}" />
-        <TextCell Text="Luminosity (times Sun's luminosity)" 
-                  Detail="{Binding Luminosity, StringFormat='{0:F1}'}" />
+        <TextCell Text="Luminosity (relative to Sun)" 
+                  Detail="{Binding LuminosityDescription}" />
         <TextCell Text="Temperature" 
                   Detail="{Binding TemperatureKelvin, StringFormat='{0:F0} K'}" />
       </TableSection>

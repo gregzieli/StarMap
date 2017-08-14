@@ -32,6 +32,8 @@ namespace StarMap.Cll.Models.Cosmos
     // Star's luminosity as a multiple of Solar luminosity
     public double Luminosity { get; set; }
 
+    public string LuminosityDescription => $"{Luminosity.ToString("F1")} times {(Luminosity < 1 ? "as bright" : "brighter")}";
+
     public double? TemperatureKelvin { get; set; }
 
     public double? TemperatureCelcius => TemperatureKelvin.HasValue ? TemperatureKelvin - 273.15 : null;

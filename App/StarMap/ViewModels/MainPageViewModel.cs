@@ -152,6 +152,8 @@ namespace StarMap.ViewModels
           return;
 
         Loading = true;
+        SelectedStar = null;
+
         await GetStars();
         await UpdateUrho();
       }, always: () => Loading = false);
@@ -184,7 +186,6 @@ namespace StarMap.ViewModels
 
     void ResetFilter()
     {
-      SelectedStar = null;
       // Execute only if there was a change
       StarFilter.Reset();
       ShowStars();

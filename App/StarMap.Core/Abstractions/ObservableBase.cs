@@ -2,12 +2,12 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace StarMap.LogicTest.Classes
+namespace StarMap.Core.Abstractions
 {
   /// <summary>
-  /// Plain INotifyPropertyChanged implementation.
+  /// Custom  implementation of INotifyPropertyChanged
   /// </summary>
-  public class ObservableImplementation : INotifyPropertyChanged
+  public abstract class ObservableBase : INotifyPropertyChanged
   {
     public event PropertyChangedEventHandler PropertyChanged;
 
