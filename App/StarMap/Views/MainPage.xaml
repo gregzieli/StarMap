@@ -13,7 +13,8 @@
                       AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                       AbsoluteLayout.LayoutFlags="All" />
 
-    <ContentView IsVisible="{Binding Loading}" BackgroundColor="{StaticResource OverlayBackground}" 
+    <ContentView IsVisible="{Binding Loading}" 
+                 BackgroundColor="{StaticResource OverlayBackground}" 
                  InputTransparent="True" 
                  AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                  AbsoluteLayout.LayoutFlags="All">

@@ -71,7 +71,7 @@ namespace StarMap.Urho
     protected override void Stop()
     {
       // does not help.
-      _scene.RemoveChildren(true, true, true);
+      _scene.RemoveAllChildren();
       _scene.Remove();
       base.Stop();
     }

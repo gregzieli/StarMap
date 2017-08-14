@@ -5,6 +5,12 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="StarMap.Views.StartPage">
   <AbsoluteLayout>
+    <Label AbsoluteLayout.LayoutBounds="0, .2, 1, .5" 
+           AbsoluteLayout.LayoutFlags="All"
+           HorizontalOptions="Center"           
+           FontSize="36"
+           Text="Star Map" />
+
     <Label x:Name="navArrow"
            AbsoluteLayout.LayoutBounds="0, .5, 1, 1" 
            AbsoluteLayout.LayoutFlags="All"

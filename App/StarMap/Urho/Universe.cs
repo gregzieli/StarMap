@@ -186,7 +186,6 @@ namespace StarMap.Urho
       existingNodesById.Clear();
     }
 
-
     public void UpdateWithStars(IList<Star> stars, IUnique currentPosition)
     {
       var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
@@ -251,11 +250,11 @@ namespace StarMap.Urho
     {
       foreach (var s in selectedStars)
       {
-        var a = _plotNode.GetChild(s.Id.ToString());
-        if (a != null)
+        var node = _plotNode.GetChild(s.Id.ToString());
+        if (node != null)
         {
-          a.Enabled = turnOn;
-          a.GetChild("collision").Enabled = turnOn;
+          node.Enabled = turnOn;
+          node.GetChild("collision").Enabled = turnOn;
         }
       }
     }
