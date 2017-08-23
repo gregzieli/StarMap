@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Prism.Events;
 using Prism.Navigation;
 using Prism.Services;
-using Prism.Events;
+using System.Threading.Tasks;
 
 namespace StarMap.ViewModels.Core
 {

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace StarMap.Core.Abstractions
 {
   /// <summary>
-  /// Custom  implementation of INotifyPropertyChanged
+  /// Custom implementation of INotifyPropertyChanged
   /// </summary>
   public abstract class ObservableBase : INotifyPropertyChanged
   {

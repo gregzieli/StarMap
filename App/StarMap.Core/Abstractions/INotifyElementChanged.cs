@@ -2,6 +2,9 @@
 
 namespace StarMap.Core.Abstractions
 {
+  /// <summary>
+  /// Notifies clients that a collection's element value has changed.
+  /// </summary>
   public interface INotifyElementChanged
   {
     /// <summary>

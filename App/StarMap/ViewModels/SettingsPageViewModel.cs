@@ -60,9 +60,7 @@ namespace StarMap.ViewModels
       });
     }
 
-    protected override async Task HandleException(Exception ex)
-    {
-      await DisplayAlertAsync("Localization error", "Cannot get localization for this device. The position will not update.");
-    }
+    protected override Task HandleException(Exception ex)
+      => DisplayAlertAsync("Localization error", "Cannot get localization for this device. The position will not update.");
   }
 }

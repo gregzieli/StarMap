@@ -39,6 +39,5 @@ namespace StarMap.Bll.Managers
 
       return new ExtendedPosition(position);
     }
-    
   }
 }

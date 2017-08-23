@@ -20,5 +20,7 @@ NOTES:
 
  - masterDetail.xaml.cs - IsPresented = true; - zrezygnowałem na rzecz animacji strzałki na stronie tytułowej.
 
+ - Słaby jest brak multi-bindingu do labelek - a w standarodwym xamlu jest coś takiego. Jest co prawda te SPANS w formattedString, ale binding tam nie działa.
+
 BIBLIOGRAFIA: 
 https://developer.xamarin.com/workbooks/ - Exploring Urho Coordinates

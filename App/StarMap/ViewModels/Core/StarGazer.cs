@@ -4,7 +4,6 @@ using Prism.Services;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Abstractions.Urho;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Forms;

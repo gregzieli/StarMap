@@ -33,6 +33,29 @@ namespace StarMap.LogicTest
     }
 
     [Test]
+    public void AsyncVoidTest()
+    {
+      async void Foo()
+      {
+        await Task.Delay(100);
+        throw new Exception();
+      }
+
+      bool wasCaught = false;
+
+      try
+      {
+        Foo();
+      }
+      catch (Exception)
+      {
+        wasCaught = true;
+      }
+
+      Assert.IsFalse(wasCaught);
+    }
+
+    [Test]
     public void Miscellaneous()
     {
       
