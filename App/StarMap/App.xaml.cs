@@ -54,10 +54,10 @@ namespace StarMap
         .RegisterTypeForNavigation<StartPage, StartPageViewModel>()
         .RegisterTypeForNavigation<MasterDetail, MasterDetailViewModel>()
         .RegisterTypeForNavigation<StarDetailPage, StarDetailPageViewModel>()
-        .RegisterTypeForNavigation<SettingsPage>()
-        .RegisterTypeForNavigation<AboutPage>()
-        .RegisterTypeForNavigation<MainPage>()
-        .RegisterTypeForNavigation<WebViewPage>();
+        .RegisterTypeForNavigation<SettingsPage, SettingsPageViewModel>()
+        .RegisterTypeForNavigation<AboutPage, AboutPageViewModel>()
+        .RegisterTypeForNavigation<MainPage, MainPageViewModel>()
+        .RegisterTypeForNavigation<WebViewPage, WebViewPageViewModel>();
     }
   }
 }

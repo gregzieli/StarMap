@@ -13,10 +13,10 @@ namespace StarMap
     {
       // Nice fluent syntax
       container
-        .RegisterType<ILocationManager, LocationManager>()
-        .RegisterType<IAstronomer, Astronomer>()
-        .RegisterType<IStarManager, StarManager>()
-        .RegisterType<IStarDataAsyncProvider, StarDatabaseAsyncProvider>();
+        .RegisterType<ILocationManager, LocationManager>(new ContainerControlledLifetimeManager())
+        .RegisterType<IAstronomer, Astronomer>(new ContainerControlledLifetimeManager())
+        .RegisterType<IStarManager, StarManager>(new ContainerControlledLifetimeManager())
+        .RegisterType<IStarDataAsyncProvider, StarDatabaseAsyncProvider>(new ContainerControlledLifetimeManager());
         //.RegisterType<IStarDataProvider, StarDatabaseProvider>(
         //// Thanks to Prism, the  xamarin DependencyService registrations are done automatically
         //// https://github.com/PrismLibrary/Prism/blob/master/docs/Xamarin-Forms/5-Dependency-Service.md

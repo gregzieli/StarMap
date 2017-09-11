@@ -1,13 +1,11 @@
 ﻿using StarMap.Cll.Abstractions;
 using StarMap.Cll.Filters;
-using StarMap.Cll.Models;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
 using StarMap.Dal.Mappers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using ConstellationEntity = StarMap.Dal.Database.Contracts.Constellation;
 using StarEntity = StarMap.Dal.Database.Contracts.Star;

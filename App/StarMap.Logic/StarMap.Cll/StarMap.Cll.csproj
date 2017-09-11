@@ -48,7 +48,7 @@
     <Compile Include="Constants\Navigation.cs" />
     <Compile Include="Exceptions\UniverseUrhoException.cs" />
     <Compile Include="Exceptions\StarDetailUrhoException.cs" />
-    <Compile Include="Filters\StarFilter.cs" />
+    <Compile Include="Models\Filters\StarFilter.cs" />
     <Compile Include="Models\Core\IReferencable.cs" />
     <Compile Include="Models\Cosmos\Constellation.cs" />
     <Compile Include="Models\Core\Bindable\MultiSelectable.cs" />

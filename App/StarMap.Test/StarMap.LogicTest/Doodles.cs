@@ -58,7 +58,17 @@ namespace StarMap.LogicTest
     [Test]
     public void Miscellaneous()
     {
-      
+      bool a = true, b = false;
+      Assert.IsTrue(a ^ b);
+
+      string c = "", d = string.Empty;
+      Assert.AreEqual(c, d);
+
+      string e = default(string);
+      Assert.IsNull(e);
+
+      List<int> f = new List<int> { 1, 2, 3, 4, 5 };
+      Assert.DoesNotThrow(new TestDelegate(() => f.Remove(6546)));
     }
   }
 }

@@ -11,7 +11,7 @@ namespace StarMap.ViewModels.Core
     {
       get { return _isBusy; }
       set { SetProperty(ref _isBusy, value, 
-        onChanged: () => RaisePropertyChanged("CanExecute")); }
+        onChanged: () => RaisePropertyChanged(nameof(CanExecute))); }
     }
 
     /// <summary>
@@ -80,9 +80,9 @@ namespace StarMap.ViewModels.Core
     /// </summary>
     /// <typeparam name="A">Return type of the async call.</typeparam>
     /// <param name="fn">Asynchronous delegate.</param>
-    /// <param name="callback">Delegate that operates on the data awaited.</param>
+    /// <param name="onDone">Delegate that operates on the data awaited.</param>
     /// <param name="always">An action to execute always, no matter if an error occured or not.</param>
-    protected async Task CallAsync<A>(Func<Task<A>> fn, Action<A> callback, Action always = null)
+    protected async Task CallAsync<A>(Func<Task<A>> fn, Action<A> onDone, Action always = null)
     {
       try
       {
@@ -90,7 +90,7 @@ namespace StarMap.ViewModels.Core
         var result = await fn();
         // In simple cases, instead of awaiting a long lambda (that needs the async await keywords),
         // the call could be broken into two parameters.
-        callback(result);
+        onDone(result);
       }
       catch (Exception ex)
       {
