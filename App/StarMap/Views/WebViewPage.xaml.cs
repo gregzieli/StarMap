@@ -30,7 +30,7 @@ namespace StarMap.Views
     }
 
     void webOnNavigating(object sender, WebNavigatingEventArgs e)
-      => preloader.IsVisible = true;
+      => preloader.IsRunning = true;
 
     void webOnEndNavigating(object sender, WebNavigatedEventArgs e)
       => preloader.IsRunning = false;
