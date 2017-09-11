@@ -69,7 +69,9 @@ namespace StarMap.ViewModels.Core
 
 
 
-    // TODO Check which is better
+    // TODO: Check which is better
+    //      OK checked, this would be bad design, because not always the code in Cleanup or restore is asynchronous.
+    //      So neither CallAsync not Call wouldn't work for all.
     public virtual async void OnNavigatedFrom2(NavigationParameters parameters)
       => await CallAsync(CleanUp2);
     public virtual async void OnNavigatedTo2(NavigationParameters parameters)
