@@ -29,15 +29,18 @@ namespace StarMap.ViewModels
 
     #region Properties
 
-    protected override bool CanExecute => !_loading;
-
     public IList<Star> Stars { get; set; }
+
+    // Just a getter, by itself it is not observable
+    protected override bool CanExecute => !_loading;
 
     private bool _loading = true;
     public bool Loading
     {
       get { return _loading; }
-      set { SetProperty(ref _loading, value); }
+      set { SetProperty(ref _loading, value, 
+        // This way we make the getter Observable, so it can easily be used in *ObservesCanExecute*
+        onChanged: () => RaisePropertyChanged(nameof(CanExecute))); }
     }
 
     private ObservantCollection<Constellation> _constellations;
