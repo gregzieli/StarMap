@@ -39,5 +39,28 @@ namespace StarMap.LogicTest
       a.CopyTo(dest, 0);
       a.ShallowCopy(dest);
     }
+
+    [Test]
+    public void Normalization()
+    {
+      Assert.AreEqual(0.5, 5.Normalize(0, 10));
+      Assert.AreEqual(0, 5.Normalize(0, 10, -10, 10));
+      Assert.AreEqual(0.25, 1.Normalize(0, 4));
+      Assert.AreEqual(25, 1.Normalize(0, 4, 0, 100));
+      Assert.AreEqual(12.5, 1.Normalize(0, 4, 0, 50));
+
+      var a = -15.1.Normalize(-8, 8, 1.2, 0.5);
+      var b = -15.1.Normalize(-8, 8, 1.2, 0.5);
+      Assert.AreEqual(a, b);
+
+      var aa = 123.Normalize(12, 986);
+      var aaa = 123.Normalize(12f, 986f);
+      var bb = 123f.Normalize(12, 986);
+      var bbb = 123f.Normalize(12f, 986f);
+      var cc = 123.0.Normalize(12, 986);
+      var ccc = 123.0.Normalize(12.0, 986.0);
+      Assert.IsTrue(aa == aaa && aaa == bb && bb == bbb);
+      Assert.AreEqual(cc, ccc);
+    }
   }
 }

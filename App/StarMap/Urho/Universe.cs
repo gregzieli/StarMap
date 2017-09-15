@@ -38,7 +38,6 @@ namespace StarMap.Urho
     const float VELOCITY = 3;//[pc/s]
     const float RAD2DEG = 180 / (float)Math.PI;
     float _yaw, _pitch, _roll;
-    float _graphicsWidth, _graphicsHeight;
     
     //int[] _orientation = new int[3];
     bool _usingSensors = false;
@@ -65,16 +64,14 @@ namespace StarMap.Urho
       StarSprite = ResourceCache.GetSprite2D("Sprites/star.png");
       
       HighlightedStars = new List<StarComponent>();
-
-      _graphicsHeight = Graphics.Height;
-      _graphicsWidth = Graphics.Width;
+      
     }
 
 
     public string OnTouched(TouchEndEventArgs e, out float relativeDistance)
     {
       relativeDistance = default(float);
-      Ray cameraRay = _camera.GetScreenRay(e.X / _graphicsWidth, e.Y / _graphicsHeight);
+      Ray cameraRay = _camera.GetScreenRay(e.X.Normalize(Graphics.Width), e.Y.Normalize(Graphics.Height));
 
       _physics.SphereCast(ref _rayCast, cameraRay, 0.4f, 10000);
       if (_rayCast.Body != null)
@@ -128,8 +125,8 @@ namespace StarMap.Urho
       if (Input.NumTouches == 1)
       {
         TouchState state = Input.GetTouch(0);
-        _yaw += touchSensitivity * _camera.Fov / _graphicsHeight * state.Delta.X;
-        _pitch += touchSensitivity * _camera.Fov / _graphicsWidth * state.Delta.Y;
+        _yaw += touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.X;
+        _pitch += touchSensitivity * _camera.Fov / Graphics.Width * state.Delta.Y;
 
         _cameraNode.Rotation = new Quaternion(_pitch, _yaw, 0);
       }
@@ -166,7 +163,7 @@ namespace StarMap.Urho
 
         // Scale by absolute magnitude
         if (star.AbsoluteMagnitude < 2)
-          scale = (float)Normalizer.Normalize(star.AbsoluteMagnitude, -14, 1, 2, 1.2);
+          scale = (float)star.AbsoluteMagnitude.Normalize(-14, 1, 2, 1.2);
 
         starNode.Scale = new Vector3(scale, scale, scale);
         // haha this throws error sometimes when moving away from the page
@@ -209,7 +206,7 @@ namespace StarMap.Urho
 
         // Scale by absolute magnitude
         if (star.AbsoluteMagnitude < 2)
-          scale = (float)Normalizer.Normalize(star.AbsoluteMagnitude, -14, 1, 2, 1.2);
+          scale = (float)star.AbsoluteMagnitude.Normalize(-14, 1, 2, 1.2);
 
         starNode.Scale = new Vector3(scale, scale, scale);
         // haha this throws error sometimes when moving away from the page

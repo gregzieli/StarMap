@@ -1,9 +1,9 @@
 ﻿using StarMap.Cll.Exceptions;
 using StarMap.Cll.Models.Cosmos;
+using StarMap.Core.Extensions;
 using StarMap.Core.Utils;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Urho;
 using Urho.Actions;
 using Urho.Shapes;
@@ -87,7 +87,7 @@ namespace StarMap.Urho
     {
       Star = star;
 
-      var scale = Normalizer.Normalize(star.AbsoluteMagnitude, -8, 10, 1.5, 0.5);
+      var scale = star.AbsoluteMagnitude.Normalize(-8, 10, 1.5, 0.5);
       _starNode?.SetScale(Convert.ToSingle(scale));
 
       var light = _lightNode?.GetComponent<Light>();
