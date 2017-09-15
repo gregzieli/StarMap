@@ -3,6 +3,9 @@ using StarMap.Core.Abstractions;
 
 namespace StarMap.Dal.Database.Contracts
 {
+  /// <summary>
+  /// Reprsents the Star table in the database
+  /// </summary>
   public class Star : IUnique
   {
     [PrimaryKey, AutoIncrement, Column("_id")]

@@ -5,6 +5,11 @@ namespace StarMap.Urho
 {
   public static class Extensions
   {
+    /// <summary>
+    /// Adds components to the node introducing it to the PhysicsWorld.
+    /// </summary>
+    /// <param name="size">Size of the node's <see cref="CollisionShape"/>.</param>
+    /// <returns>The node that's been modified.</returns>
     public static Node AddCollisionSupport(this Node node, float size)
     {
       var collisionNode = node.CreateChild("collision");

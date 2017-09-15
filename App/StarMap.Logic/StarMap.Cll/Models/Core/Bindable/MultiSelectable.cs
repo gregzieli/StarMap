@@ -8,7 +8,7 @@ namespace StarMap.Cll.Models.Core.Bindable
   // 2. create a child in the VM namespace of the class that extended this one
   // 3. that child would have this property....
   // Or, a wrapper class, not a child. 
-  // Those would adhere to the Open-Close principle.
+  // Those would adhere to the Open-Closed principle.
   public class MultiSelectable : ObservableBase
   {
     private bool _isOn = true;

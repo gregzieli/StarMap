@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Urho;
+﻿using Urho;
 using Urho.Actions;
 using Urho.Shapes;
 using Urho.Urho2D;

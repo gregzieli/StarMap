@@ -34,12 +34,13 @@ namespace StarMap.Urho
 
     Node _plotNode;
     Camera _camera;
-    const float touchSensitivity = 2;
+    const float touchSensitivity = 1f;
     const float VELOCITY = 3;//[pc/s]
-    const float AAA = 180 / (float)Math.PI;
+    const float RAD2DEG = 180 / (float)Math.PI;
     float _yaw, _pitch, _roll;
+    float _graphicsWidth, _graphicsHeight;
     
-    float[] _orientation = new float[3];
+    //int[] _orientation = new int[3];
     bool _usingSensors = false;
     PhysicsWorld _physics;
     PhysicsRaycastResult _rayCast;
@@ -64,15 +65,18 @@ namespace StarMap.Urho
       StarSprite = ResourceCache.GetSprite2D("Sprites/star.png");
       
       HighlightedStars = new List<StarComponent>();
+
+      _graphicsHeight = Graphics.Height;
+      _graphicsWidth = Graphics.Width;
     }
 
 
     public string OnTouched(TouchEndEventArgs e, out float relativeDistance)
     {
       relativeDistance = default(float);
-      Ray cameraRay = _camera.GetScreenRay((float)e.X / Graphics.Width, (float)e.Y / Graphics.Height);
+      Ray cameraRay = _camera.GetScreenRay(e.X / _graphicsWidth, e.Y / _graphicsHeight);
 
-      _physics.SphereCast(ref _rayCast, cameraRay, 0.3f, 1000);
+      _physics.SphereCast(ref _rayCast, cameraRay, 0.4f, 10000);
       if (_rayCast.Body != null)
       {
         // It's a bit annoying to get the component only to operate on it's node,
@@ -99,9 +103,9 @@ namespace StarMap.Urho
     public void SetRotation(float[] orientation)
     {
       _usingSensors = true;
-      _orientation[0] = orientation[0] * AAA;
-      _orientation[1] = orientation[1] * AAA;
-      _orientation[2] = orientation[2] * AAA;
+      _yaw = (int)Math.Round(orientation[0] * RAD2DEG);
+      _pitch = (int)Math.Round(orientation[1] * RAD2DEG);
+      //_roll = (int)Math.Round(orientation[2] * RAD2DEG);
     }
     
     protected override void OnUpdate(float timeStep)
@@ -116,9 +120,7 @@ namespace StarMap.Urho
 
     void UpdateBySensor()
     {
-      //_yaw += _orientation[0]; _pitch += _orientation[1]; _roll += _orientation[2];
-      _cameraNode.Rotation = new Quaternion(_orientation[0], _orientation[1], _orientation[2]);
-      //_cameraNode.Rotate(new Quaternion(_orientation[2], _orientation[1], _orientation[0]), TransformSpace.World);
+      _cameraNode.Rotation = new Quaternion(_pitch, _yaw, 0);
     }
 
     void UpdateByTouch()
@@ -126,8 +128,8 @@ namespace StarMap.Urho
       if (Input.NumTouches == 1)
       {
         TouchState state = Input.GetTouch(0);
-        _yaw += touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.X;
-        _pitch += touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.Y;
+        _yaw += touchSensitivity * _camera.Fov / _graphicsHeight * state.Delta.X;
+        _pitch += touchSensitivity * _camera.Fov / _graphicsWidth * state.Delta.Y;
 
         _cameraNode.Rotation = new Quaternion(_pitch, _yaw, 0);
       }

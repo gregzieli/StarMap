@@ -14,7 +14,6 @@ namespace StarMap.Dal.Providers
 {
   public class StarDatabaseAsyncProvider : DatabaseAsyncProvider, IStarDataAsyncProvider
   {
-    // Inject the context (supports mock)
     public StarDatabaseAsyncProvider(IRepository repository) : base(repository) { }
 
     public async Task<IList<Constellation>> GetConstellationsAsync()

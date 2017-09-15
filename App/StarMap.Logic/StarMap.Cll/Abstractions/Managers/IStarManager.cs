@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace StarMap.Cll.Abstractions
 {
+  /// <summary>
+  /// Contains methods dedicated to handling star data.
+  /// </summary>
   public interface IStarManager
   {
     StarFilter LoadFilter();

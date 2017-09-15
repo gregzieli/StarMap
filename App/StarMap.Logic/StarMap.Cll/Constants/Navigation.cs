@@ -4,7 +4,7 @@
   {
     public const string DetailAbsolute = @"ms-app:///MasterDetail/StarDetailPage";
 
-    public const string WebView = @"WebViewPage";
+    public const string WebView = "WebViewPage";
 
     public static class Keys
     {

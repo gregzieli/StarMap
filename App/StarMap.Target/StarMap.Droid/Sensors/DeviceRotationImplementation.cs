@@ -23,17 +23,17 @@ namespace StarMap.Droid.Sensors
     IWindowManager _windowManager;
     SensorManager _sensorManager;
 
-    Sensor _accelerometer;
+    Sensor _gravitySensor;
     Sensor _magnetometer;
     
-    bool _on, _accReady, _magReady;
+    bool _on, _gReady, _magReady;
     float[] _gravity = new float[3],
       _magnet = new float[3],
       _orientation = new float[3],
       R = new float[9],
       rotatedR = new float[9];
 
-    static readonly object _lock = new object();
+    static object _lock = new object();
 
     public DeviceRotationImplementation() : base()
     {
@@ -43,19 +43,19 @@ namespace StarMap.Droid.Sensors
     public void Init()
     {
       var context = Application.Context;
-      _windowManager = context.GetSystemService(Context.WindowService).JavaCast<IWindowManager>(); // TODO: check if this funny casting is a must
+      _windowManager = context.GetSystemService(Context.WindowService).JavaCast<IWindowManager>(); 
       _sensorManager = (SensorManager)context.GetSystemService(Context.SensorService);
 
-      _accelerometer = _sensorManager.GetDefaultSensor(SensorType.Accelerometer);
+      _gravitySensor = _sensorManager.GetDefaultSensor(SensorType.Gravity);
       _magnetometer = _sensorManager.GetDefaultSensor(SensorType.MagneticField);
     }
 
     #region ISensorEventListener implementation
-
+    
     public void OnSensorChanged(SensorEvent e)
     {
-      // Neither the emulator, nor my LG Spirit, give higher readings than this.
-      //if (e.Accuracy == SensorStatus.Unreliable) return;
+      // Neither the emulator, nor some real devices, give higher readings than this.
+      if (e.Accuracy == SensorStatus.Unreliable) return;
 
       // I don't think the lock is needed. Threads don't get confused on which sensor fired the event.
       // Maybe it's to prevent from raising RotationVhanged event multiple times, by many threads, then OK.
@@ -65,12 +65,12 @@ namespace StarMap.Droid.Sensors
       {
         switch (e.Sensor.Type)
         {
-          case SensorType.Accelerometer:
-            if (!_accReady)
+          case SensorType.Gravity:
+            if (!_gReady)
             {
               e.Values.CopyTo(_gravity, 0);
 
-              _accReady = true;
+              _gReady = true;
             }              
             break;
           case SensorType.MagneticField:
@@ -83,10 +83,10 @@ namespace StarMap.Droid.Sensors
             break;
         }
 
-        if (!(_accReady && _magReady))
+        if (!(_gReady && _magReady))
           return;
 
-        _accReady = _magReady = false;
+        _gReady = _magReady = false;
 
         SensorManager.GetRotationMatrix(R, null, _gravity, _magnet);
 
@@ -94,27 +94,27 @@ namespace StarMap.Droid.Sensors
         // Cellphone's natural orientation is portrait, tilted to the left it returns display (rotation) = 1,
         // to the right = 3.
         // However, a tablet is already in landscape, so the natural application displays are 0 or 2.
-        //Axis x = Axis.X, y = Axis.Y;
-        //switch (_windowManager.DefaultDisplay.Rotation)
-        //{
-        //  case SurfaceOrientation.Rotation180:
-        //    x = Axis.MinusX;
-        //    y = Axis.MinusY;
-        //    break;
-        //  case SurfaceOrientation.Rotation270:
-        //    x = Axis.MinusY; // TODO: check if they are not in fact inverted.
-        //    y = Axis.X;
-        //    break;
-        //  case SurfaceOrientation.Rotation90: // phone tilted to the left
-        //    x = Axis.Y;
-        //    y = Axis.MinusX;
-        //    break;
-        //  default:
-        //    break;
-        //}
+        Axis x = Axis.X, y = Axis.Y;
+        switch (_windowManager.DefaultDisplay.Rotation)
+        {
+          case SurfaceOrientation.Rotation180:
+            x = Axis.MinusX;
+            y = Axis.MinusY;
+            break;
+          case SurfaceOrientation.Rotation270:
+            x = Axis.MinusY; 
+            y = Axis.X;
+            break;
+          case SurfaceOrientation.Rotation90: // phone tilted to the left
+            x = Axis.Y;
+            y = Axis.MinusX;
+            break;
+          default:
+            break;
+        }
 
-        //SensorManager.RemapCoordinateSystem(R, x, y, rotatedR);
-        SensorManager.GetOrientation(R, _orientation);
+        SensorManager.RemapCoordinateSystem(R, x, y, rotatedR);
+        SensorManager.GetOrientation(rotatedR, _orientation);
         
         _rotationChanged?.Invoke(this, new RotationChangedEventArgs(_orientation));
       }
@@ -157,8 +157,8 @@ namespace StarMap.Droid.Sensors
     {
       if (_on) return;
 
-      _sensorManager.RegisterListener(this, _accelerometer, SensorDelay.Normal);
-      _sensorManager.RegisterListener(this, _magnetometer, SensorDelay.Normal);
+      _sensorManager.RegisterListener(this, _gravitySensor, SensorDelay.Ui);
+      _sensorManager.RegisterListener(this, _magnetometer, SensorDelay.Ui);
 
       _on = true;
     }
@@ -168,8 +168,8 @@ namespace StarMap.Droid.Sensors
     {
       if (!_on) return;
 
-      if (_accelerometer != null)
-        _sensorManager?.UnregisterListener(this, _accelerometer);
+      if (_gravitySensor != null)
+        _sensorManager?.UnregisterListener(this, _gravitySensor);
       if (_magnetometer != null)
         _sensorManager?.UnregisterListener(this, _magnetometer);
 
@@ -205,8 +205,8 @@ namespace StarMap.Droid.Sensors
         Stop();
         _sensorManager?.Dispose();
         _sensorManager = null;
-        _accelerometer.Dispose();
-        _accelerometer = null;
+        _gravitySensor.Dispose();
+        _gravitySensor = null;
         _magnetometer.Dispose();
         _magnetometer = null;
       }

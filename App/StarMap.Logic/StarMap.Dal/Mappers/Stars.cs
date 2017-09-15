@@ -5,6 +5,9 @@ namespace StarMap.Dal.Mappers
 {
   public static class Stars
   {
+    /// <summary>
+    /// Maps an object from the Star table to the application Star object.
+    /// </summary>
     public static Star Map(DbEntityStar source)
     {
       if (source == null)
@@ -26,6 +29,9 @@ namespace StarMap.Dal.Mappers
       };
     }
 
+    /// <summary>
+    /// Maps an object from the Star table to the application StarDetail object.
+    /// </summary>
     public static StarDetail MapDetail(DbEntityStar source)
     {
       if (source == null)

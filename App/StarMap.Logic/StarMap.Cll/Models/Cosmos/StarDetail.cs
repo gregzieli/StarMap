@@ -22,14 +22,9 @@ namespace StarMap.Cll.Models.Cosmos
 
     public double? ColorIndex { get; set; }
 
+    // TODO: lose this dependency!
     public Color Color { get; set; }
 
-    //public double RightAscension { get; set; }
-
-    //public double Declination { get; set; }
-
-    // from https://github.com/astronexus/HYG-Database:
-    // Star's luminosity as a multiple of Solar luminosity
     public double Luminosity { get; set; }
 
     public string LuminosityDescription => $"{Luminosity.ToString("F1")} times {(Luminosity < 1 ? "as bright" : "brighter")}";
