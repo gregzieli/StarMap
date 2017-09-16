@@ -50,9 +50,9 @@ namespace StarMap.Urho
       _rayCast = new PhysicsRaycastResult();
 
       _camera = _cameraNode.GetComponent<Camera>();
-      // From Xamarin workbooks: Setting higher Field of View (default is 45[deg]) works as *zooming out*
-      // but e.g. 90 wierdly skews the view, and the Sun is still not visible.
-      _camera.Fov = 35;
+      //// From Xamarin workbooks: Setting higher Field of View (default is 45[deg]) works as *zooming out*
+      //// but e.g. 90 wierdly skews the view, and the Sun is still not visible.
+      //_camera.Fov = 45;
       // Not sure if it changes anything. This is the smallest value possible.
       //_camera.NearClip = 0.010000599f;
 
@@ -64,7 +64,6 @@ namespace StarMap.Urho
       StarSprite = ResourceCache.GetSprite2D("Sprites/star.png");
       
       HighlightedStars = new List<StarComponent>();
-      
     }
 
 
@@ -125,10 +124,12 @@ namespace StarMap.Urho
       if (Input.NumTouches == 1)
       {
         TouchState state = Input.GetTouch(0);
-        _yaw += touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.X;
-        _pitch += touchSensitivity * _camera.Fov / Graphics.Width * state.Delta.Y;
 
-        _cameraNode.Rotation = new Quaternion(_pitch, _yaw, 0);
+        // From the WorkBooks (Exploring Urho Coordinates): 
+        // The Pitch, Yaw, and Roll methods are named after terms used in aerodynamics 
+        // and perform accumulative rotations around the X, Y, and Z axes, respectively.
+        _cameraNode.Yaw(touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.X);
+        _cameraNode.Pitch(touchSensitivity * _camera.Fov / Graphics.Width * state.Delta.Y);
       }
     }
 

@@ -19,10 +19,8 @@ namespace StarMap.Urho
   public class SingleStar : UrhoBase
   {
     public SingleStar(ApplicationOptions options) : base(options) { }
-    
+
     Node _starNode;
-    
-    public StarDetail Star { get; set; }
     
     [Obsolete("In the future, maybe, after change: not by color, but some other criteria")]
     IDictionary<XFColor, IList<Material>> GetTextures()
@@ -85,14 +83,13 @@ namespace StarMap.Urho
 
     public void SetStar(StarDetail star)
     {
-      Star = star;
-
       var scale = star.AbsoluteMagnitude.Normalize(-8, 10, 1.5, 0.5);
-      _starNode?.SetScale(Convert.ToSingle(scale));
+      // Sometimes FillScene's gets code executes afther this one :(
+      _starNode?.SetScale((float)scale);
 
       var light = _lightNode?.GetComponent<Light>();
       if (light != null)
-        light.Color =  new Color((float)star.Color.R, (float)star.Color.G, (float)star.Color.B);
+        light.Color = new Color((float)star.Color.R, (float)star.Color.G, (float)star.Color.B);
     }
 
     protected override void OnUpdate(float timeStep)
@@ -107,30 +104,20 @@ namespace StarMap.Urho
 
     protected override void FillScene()
     {
-      InvokeOnMain(() =>
-      {
-        try
-        {
-          _starNode = _scene.CreateChild();
+      _cameraNode.Position = new Vector3(0, 0, -2);
+      Node skyboxNode = _scene.CreateChild();
 
-          Node skyboxNode = _scene.CreateChild();
-          skyboxNode.SetScale(100);
+      Skybox skybox = skyboxNode.CreateComponent<Skybox>();
+      skybox.Model = CoreAssets.Models.Box;
+      skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 2)}.png"));
 
-          Skybox skybox = skyboxNode.CreateComponent<Skybox>();
-          skybox.Model = CoreAssets.Models.Box;
-          skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 2)}.png"));
-          _starNode.Position = new Vector3(0, 0, 2);
+      _starNode = _scene.CreateChild();
+      //_starNode.Position = new Vector3(0, 0, 2);
 
-          Sphere star = _starNode.CreateComponent<Sphere>();
-          star.SetMaterial(Material.FromImage("Textures/white-dwarf2.jpg"));
+      Sphere star = _starNode.CreateComponent<Sphere>();
+      star.SetMaterial(Material.FromImage("Textures/white-dwarf2.jpg"));
 
-          _starNode.RunActions(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
-        }
-        catch
-        {
-          throw;
-        }
-      });      
+      _starNode.RunActions(new RepeatForever(new RotateBy(duration: 1f, deltaAngleX: 0, deltaAngleY: 2, deltaAngleZ: 0)));
     }
 
     protected override void HandleException(Exception ex)

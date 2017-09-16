@@ -39,16 +39,16 @@ namespace StarMap.Cll.Models.Cosmos
     string GetDesignation()
     {
       var sb = new StringBuilder();
-      bool tracker = false,
+      bool hasBayFlam = !(Flamsteed is null && Bayer is null),
         hasName = Name != null;
       
-      if (tracker |= Flamsteed != null)
+      if (Flamsteed != null)
         sb.AppendFormat("{0} ", Flamsteed);
 
-      if (tracker |= Bayer != null)
+      if (Bayer != null)
         sb.AppendFormat("{0} ", MapBayer(Bayer));
 
-      if (Constellation != null && (hasName || tracker))
+      if (Constellation != null && (hasName || hasBayFlam))
         sb.Append(Resources.AppResources.ResourceManager
           .GetString($"{Constellation.Abbreviation}_G"));
 
