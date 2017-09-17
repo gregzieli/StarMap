@@ -3,7 +3,6 @@ using StarMap.Cll.Exceptions;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Abstractions;
 using StarMap.Core.Extensions;
-using StarMap.Core.Utils;
 using StarMap.Urho.Components;
 using System;
 using System.Collections.Generic;
@@ -38,8 +37,7 @@ namespace StarMap.Urho
     const float VELOCITY = 3;//[pc/s]
     const float RAD2DEG = 180 / (float)Math.PI;
     float _yaw, _pitch, _roll;
-    
-    //int[] _orientation = new int[3];
+
     bool _usingSensors = false;
     PhysicsWorld _physics;
     PhysicsRaycastResult _rayCast;
@@ -64,6 +62,41 @@ namespace StarMap.Urho
       StarSprite = ResourceCache.GetSprite2D("Sprites/star.png");
       
       HighlightedStars = new List<StarComponent>();
+    }
+
+    public void UpdateWithStars(IList<Star> stars, IUnique currentPosition)
+    {
+      var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
+      _cameraNode.Position = new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
+      CurrentLocation = currentStar;
+
+      _plotNode.RemoveAllChildren();
+
+      string id;
+      foreach (var star in stars)
+      {
+        id = star.Id.ToString();
+
+        Node starNode = _plotNode.CreateChild(id, CreateMode.Local);
+        var starComponent = starNode.CreateComponent<StarComponent>();
+
+        starComponent.Sprite = StarSprite;
+        float scale = 1;
+
+        // Scale by absolute magnitude
+        if (star.AbsoluteMagnitude < 2)
+          scale = (float)star.AbsoluteMagnitude.Normalize(-14, 1, 4, 1.2);
+
+        starNode.Scale = new Vector3(scale, scale, scale);
+        // haha this throws error sometimes when moving away from the page
+        //starNode.SetScale(scale);
+
+        starNode.Position = new Vector3(star.X, star.Y, star.Z);
+        starNode.LookAt(_cameraNode.Position, Vector3.Up);
+        starNode.AddCollisionSupport(0.1f);
+      }
+
+      MarkSun().SetDeepEnabled(!IsHome);
     }
 
 
@@ -185,41 +218,7 @@ namespace StarMap.Urho
       }
       existingNodesById.Clear();
     }
-
-    public void UpdateWithStars(IList<Star> stars, IUnique currentPosition)
-    {
-      var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
-      _cameraNode.Position = new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
-      CurrentLocation = currentStar;
-
-      _plotNode.RemoveAllChildren();
-
-      string id;
-      foreach (var star in stars)
-      {
-        id = star.Id.ToString();
-
-        Node starNode = _plotNode.CreateChild(id, CreateMode.Local);
-        var starComponent = starNode.CreateComponent<StarComponent>();
-
-        starComponent.Sprite = StarSprite;
-        float scale = 1;
-
-        // Scale by absolute magnitude
-        if (star.AbsoluteMagnitude < 2)
-          scale = (float)star.AbsoluteMagnitude.Normalize(-14, 1, 2, 1.2);
-
-        starNode.Scale = new Vector3(scale, scale, scale);
-        // haha this throws error sometimes when moving away from the page
-        //starNode.SetScale(scale);
-
-        starNode.Position = new Vector3(star.X, star.Y, star.Z);
-        starNode.LookAt(_cameraNode.Position, Vector3.Up);
-        starNode.AddCollisionSupport(0.1f);
-      }
-
-      MarkSun().SetDeepEnabled(!IsHome);
-    }
+    
 
     public void HighlightStars(IEnumerable<IUnique> selectedStars)
     {

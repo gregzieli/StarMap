@@ -97,7 +97,7 @@ namespace StarMap.Urho
       if (Input.NumTouches >= 1)
       {
         var touch = Input.GetTouch(0);
-        _cameraNode?.RotateAround(_starNode.Position, new Quaternion(-touch.Delta.Y, -touch.Delta.X, 0), TransformSpace.World);
+        _cameraNode?.RotateAround(_starNode.Position, new Quaternion(-touch.Delta.Y * 0.05f, -touch.Delta.X * 0.05f, 0), TransformSpace.World);
       }
       base.OnUpdate(timeStep);
     }
@@ -112,7 +112,6 @@ namespace StarMap.Urho
       skybox.SetMaterial(Material.SkyboxFromImage($"Textures/space{Randomizer.RandomInt(1, 2)}.png"));
 
       _starNode = _scene.CreateChild();
-      //_starNode.Position = new Vector3(0, 0, 2);
 
       Sphere star = _starNode.CreateComponent<Sphere>();
       star.SetMaterial(Material.FromImage("Textures/white-dwarf2.jpg"));

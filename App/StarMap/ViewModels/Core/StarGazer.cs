@@ -45,7 +45,7 @@ namespace StarMap.ViewModels.Core
 
     protected override void Restore(NavigationParameters parameters)
     {
-      XF.MessagingCenter.Subscribe<TUrhoException>(this, string.Empty, async (ex) => await HandleException(ex));
+      XF.MessagingCenter.Subscribe<TUrhoException>(this, string.Empty, async ex => await HandleException(ex));
     }
 
     protected override void CleanUp()
@@ -91,6 +91,6 @@ namespace StarMap.ViewModels.Core
       UrhoSurface.OnPause();
     }
 
-    public abstract void OnUrhoGenerated();
+    public abstract void OnUrhoGenerated();    
   }
 }

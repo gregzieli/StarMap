@@ -1,9 +1,5 @@
-﻿using StarMap.Core.Extensions;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
+﻿using System;
 using Urho;
-using Urho.Gui;
 using XF = Xamarin.Forms;
 
 namespace StarMap.Urho

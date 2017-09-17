@@ -1,8 +1,7 @@
 ﻿using StarMap.Cll.Abstractions.Urho;
-using System.Threading.Tasks;
 using Urho.Forms;
 using Xamarin.Forms;
-using a = Urho;
+using urho = Urho;
 
 namespace StarMap.Views
 {
@@ -22,7 +21,7 @@ namespace StarMap.Views
     protected override async void OnDisappearing()
     {
       base.OnDisappearing();
-      await a.Application.Current.Exit();
+      await urho.Application.Current.Exit();
       UrhoSurface.OnDestroy();
     }
 
