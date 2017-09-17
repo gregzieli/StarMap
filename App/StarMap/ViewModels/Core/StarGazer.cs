@@ -13,7 +13,7 @@ namespace StarMap.ViewModels.Core
 {
   // Not sure about this name now. Let's just assume, that this is just to take some load off the MainPageVM, not to store all the code in one place; 
   // The ethods here are more 'GENERAL', but I don't think any other VM would inherit this class.
-  public abstract class StarGazer<TUhroApp, TUrhoException> : Navigator, IUrhoHandler, IApplicationLifecycle
+  public abstract class StarGazer<TUhroApp, TUrhoException> : Navigator, IUrhoHandler, IApplicationLifecycle, IDestructible
     where TUhroApp : Application
     where TUrhoException : Exception
   {
@@ -91,6 +91,17 @@ namespace StarMap.ViewModels.Core
       UrhoSurface.OnPause();
     }
 
-    public abstract void OnUrhoGenerated();    
+    public async void Destroy()
+    {
+      await CallAsync(async () =>
+      {
+        UrhoApplication.Graphics.Close();
+
+        await Task.Delay(1000);
+        await UrhoApplication.Exit();
+      });
+    }
+
+    public abstract void OnUrhoGenerated();
   }
 }

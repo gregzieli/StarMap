@@ -1,7 +1,5 @@
 ﻿using StarMap.Cll.Abstractions.Urho;
-using Urho.Forms;
 using Xamarin.Forms;
-using urho = Urho;
 
 namespace StarMap.Views
 {
@@ -16,13 +14,6 @@ namespace StarMap.Views
     {
       base.OnAppearing();
       await ((IUrhoHandler)BindingContext).GenerateUrho(surface);
-    }
-    
-    protected override async void OnDisappearing()
-    {
-      base.OnDisappearing();
-      await urho.Application.Current.Exit();
-      UrhoSurface.OnDestroy();
     }
 
     //protected override bool OnBackButtonPressed()

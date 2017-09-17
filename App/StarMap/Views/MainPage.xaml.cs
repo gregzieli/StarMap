@@ -1,9 +1,7 @@
 ﻿using StarMap.Cll.Abstractions.Urho;
 using StarMap.Controls;
 using System;
-using Urho.Forms;
 using Xamarin.Forms;
-using urho = Urho;
 
 namespace StarMap.Views
 {
@@ -22,13 +20,6 @@ namespace StarMap.Views
       RightPanel.Collapse(length: 0);
 
       await ((IUrhoHandler)BindingContext).GenerateUrho(surface);      
-    }
-
-    protected override async void OnDisappearing()
-    {
-      base.OnDisappearing();
-      await urho.Application.Current.Exit();
-      UrhoSurface.OnDestroy();
     }
 
     void OnConstellationsButtonClicked(object sender, EventArgs args)
