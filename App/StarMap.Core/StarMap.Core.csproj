@@ -42,6 +42,7 @@
     <Compile Include="Extensions\NumberExtensions_Integer.cs" />
     <Compile Include="Extensions\NumberExtensions_Single.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Models\ElementAwareCollection.cs" />
     <Compile Include="Models\ObservantCollection.cs" />
     <Compile Include="Models\RotationChangedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

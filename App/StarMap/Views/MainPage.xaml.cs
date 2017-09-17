@@ -13,7 +13,7 @@ namespace StarMap.Views
 
     protected override async void OnAppearing()
     {
-      base.OnAppearing();      
+      base.OnAppearing();
 
       RightPanel = new Overlay(rightOverlay, DockSide.Right, rightPanelButtons.Width + rightOverlay.Padding.Left * 2);
 

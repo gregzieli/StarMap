@@ -161,8 +161,10 @@ namespace StarMap.Urho
         // From the WorkBooks (Exploring Urho Coordinates): 
         // The Pitch, Yaw, and Roll methods are named after terms used in aerodynamics 
         // and perform accumulative rotations around the X, Y, and Z axes, respectively.
+        // 
+        // Math taken from urho-samples SmartHome (https://github.com/xamarin/urho-samples/blob/master/SmartHome/Clients/SmartHouse/UrhoApp.cs)
         _cameraNode.Yaw(touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.X);
-        _cameraNode.Pitch(touchSensitivity * _camera.Fov / Graphics.Width * state.Delta.Y);
+        _cameraNode.Pitch(touchSensitivity * _camera.Fov / Graphics.Height * state.Delta.Y);
       }
     }
 

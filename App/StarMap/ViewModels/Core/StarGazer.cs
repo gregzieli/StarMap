@@ -95,6 +95,11 @@ namespace StarMap.ViewModels.Core
     {
       await CallAsync(async () =>
       {
+        // This really shouldn't be written by me (and after so many tests which is best!)
+        // Anyway, without this method app navigates to another view, but can never instantiate it back.
+        // Oh, and there's no error or nothing - just waits and waits.
+        //
+        // And without that ugly Delay, it just crashes, or waits infinately, etc - no rule there.
         UrhoApplication.Graphics.Close();
 
         await Task.Delay(1000);
