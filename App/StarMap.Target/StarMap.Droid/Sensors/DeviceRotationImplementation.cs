@@ -30,6 +30,8 @@ namespace StarMap.Droid.Sensors
       R = new float[9],
       rotatedR = new float[9];
 
+    Axis _currentX, _currentY;
+
     static object _lock = new object();
 
     public DeviceRotationImplementation() : base()
@@ -45,6 +47,44 @@ namespace StarMap.Droid.Sensors
 
       _gravitySensor = _sensorManager.GetDefaultSensor(SensorType.Gravity);
       _magnetometer = _sensorManager.GetDefaultSensor(SensorType.MagneticField);
+
+      ReorientDevice();
+    }
+
+    /// <summary>
+    /// Sets device's axes to app's coordinate system.
+    /// </summary>
+    /// <remarks>
+    /// StarMap has locked screen orientation: landscape. 
+    /// On phone this is <see cref="SurfaceOrientation.Rotation90"/>.
+    /// On tablet this is already <see cref="SurfaceOrientation.Rotation0"/>.
+    /// </remarks>
+    void ReorientDevice()
+    {
+      // Phone's natural orientation is portrait, in landscape orientation (tilted to the left) it returns Rotation90,
+      //
+      // Tablet's is already in landscape, so the natural application displays are 0 or 2.
+      switch (_windowManager.DefaultDisplay.Rotation)
+      {
+        case SurfaceOrientation.Rotation0:
+          _currentX = Axis.X;
+          _currentY = Axis.Y;
+          break;
+        case SurfaceOrientation.Rotation90:
+          _currentX = Axis.MinusY;
+          _currentY = Axis.X;
+          break;
+
+          // These will never be used. Just for reference.
+        case SurfaceOrientation.Rotation180:
+          _currentX = Axis.MinusX;
+          _currentY = Axis.MinusY;
+          break;
+        case SurfaceOrientation.Rotation270:
+          _currentX = Axis.Y;
+          _currentY = Axis.MinusX;
+          break;
+      }
     }
 
     #region ISensorEventListener implementation
@@ -82,30 +122,7 @@ namespace StarMap.Droid.Sensors
         _gReady = _magReady = false;
 
         SensorManager.GetRotationMatrix(R, null, _gravity, _magnet);
-
-        // Cellphone's natural orientation is portrait, tilted to the left it returns display (rotation) = 1,
-        // to the right = 3.
-        // However, a tablet is already in landscape, so the natural application displays are 0 or 2.
-        Axis x = Axis.X, y = Axis.Y;
-        switch (_windowManager.DefaultDisplay.Rotation)
-        {
-          case SurfaceOrientation.Rotation180:
-            x = Axis.MinusX;
-            y = Axis.MinusY;
-            break;
-          case SurfaceOrientation.Rotation270:
-            x = Axis.Y; 
-            y = Axis.MinusX;
-            break;
-          case SurfaceOrientation.Rotation90: // phone tilted to the left
-            x = Axis.MinusY;
-            y = Axis.X;
-            break;
-          default:
-            break;
-        }
-
-        SensorManager.RemapCoordinateSystem(R, x, y, rotatedR);
+        SensorManager.RemapCoordinateSystem(R, _currentX, _currentY, rotatedR);
 
         _rotationChanged?.Invoke(this, new RotationChangedEventArgs(rotatedR));
       }
