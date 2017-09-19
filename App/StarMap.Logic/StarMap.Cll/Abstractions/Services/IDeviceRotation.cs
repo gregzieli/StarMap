@@ -1,4 +1,4 @@
-﻿using StarMap.Core.Models;
+﻿using StarMap.Cll.Events;
 using System;
 
 namespace StarMap.Cll.Abstractions.Services

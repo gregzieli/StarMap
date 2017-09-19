@@ -35,8 +35,8 @@ namespace StarMap.Urho
     Camera _camera;
     const float touchSensitivity = 1f;
     const float VELOCITY = 3;//[pc/s]
-    const float RAD2DEG = 180 / (float)Math.PI;
-    float _yaw, _pitch, _roll;
+
+    Matrix3 _rotationMatrix = new Matrix3();
 
     bool _usingSensors = false;
     PhysicsWorld _physics;
@@ -129,12 +129,10 @@ namespace StarMap.Urho
       return SelectedStar?.Node.Name;
     }
 
-    public void SetRotation(float[] orientation)
+    public void SetRotation(Matrix3 rotation)
     {
       _usingSensors = true;
-      _yaw = (int)Math.Round(orientation[0] * RAD2DEG);
-      _pitch = (int)Math.Round(orientation[1] * RAD2DEG);
-      //_roll = (int)Math.Round(orientation[2] * RAD2DEG);
+      _rotationMatrix = rotation;
     }
     
     protected override void OnUpdate(float timeStep)
@@ -149,7 +147,7 @@ namespace StarMap.Urho
 
     void UpdateBySensor()
     {
-      _cameraNode.Rotation = new Quaternion(_pitch, _yaw, 0);
+      _cameraNode.Rotation = new Quaternion(ref _rotationMatrix);
     }
 
     void UpdateByTouch()

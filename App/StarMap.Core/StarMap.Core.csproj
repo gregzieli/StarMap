@@ -44,7 +44,6 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Models\ElementAwareCollection.cs" />
     <Compile Include="Models\ObservantCollection.cs" />
-    <Compile Include="Models\RotationChangedEventArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Extensions\NumberExtensions_Double.cs" />
     <Compile Include="Utils\Randomizer.cs" />

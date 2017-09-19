@@ -256,9 +256,9 @@ namespace StarMap.ViewModels
       }, always: () => Loading = false);
     }
 
-    void OnRotationChanged(object sender, RotationChangedEventArgs e)
+    void OnRotationChanged(object sender, Cll.Events.RotationChangedEventArgs e)
     {
-      UrhoApplication?.SetRotation(e.Orientation);
+      UrhoApplication?.SetRotation(e.Rotation);
     }
 
     async void OnStarSelected(TouchEndEventArgs obj)

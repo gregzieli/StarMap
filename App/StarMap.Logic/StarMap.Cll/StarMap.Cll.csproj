@@ -46,6 +46,7 @@
     <Compile Include="Constants\Filters.cs" />
     <Compile Include="Constants\Names.cs" />
     <Compile Include="Constants\Navigation.cs" />
+    <Compile Include="Events\RotationChangedEventArgs.cs" />
     <Compile Include="Exceptions\UniverseUrhoException.cs" />
     <Compile Include="Exceptions\StarDetailUrhoException.cs" />
     <Compile Include="Models\Filters\StarFilter.cs" />

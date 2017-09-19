@@ -6,7 +6,7 @@ using Prism.Services;
 
 namespace StarMap.ViewModels.Core
 {
-  public abstract class Navigator : Herald, INavigationAware
+  public abstract class Navigator : Herald, INavigatedAware
   {
     INavigationService _navigationService;
 
@@ -54,8 +54,6 @@ namespace StarMap.ViewModels.Core
 
     public virtual void OnNavigatedTo(NavigationParameters parameters)
       => Restore(parameters);
-
-    public virtual void OnNavigatingTo(NavigationParameters parameters) { }
     
     /// <summary>
     /// Logic to restore VM's properties, and other actions done upon opening the page

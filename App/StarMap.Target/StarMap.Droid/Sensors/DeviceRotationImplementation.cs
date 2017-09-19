@@ -4,11 +4,9 @@ using Android.Hardware;
 using Android.Runtime;
 using Android.Views;
 using StarMap.Cll.Abstractions.Services;
-using StarMap.Core.Models;
+using StarMap.Cll.Events;
 using StarMap.Droid.Sensors;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Security;
 using Axis = Android.Hardware.Axis;
 
@@ -25,11 +23,10 @@ namespace StarMap.Droid.Sensors
 
     Sensor _gravitySensor;
     Sensor _magnetometer;
-    
+
     bool _on, _gReady, _magReady;
     float[] _gravity = new float[3],
       _magnet = new float[3],
-      _orientation = new float[3],
       R = new float[9],
       rotatedR = new float[9];
 
@@ -57,10 +54,6 @@ namespace StarMap.Droid.Sensors
       // Neither the emulator, nor some real devices, give higher readings than this.
       if (e.Accuracy == SensorStatus.Unreliable) return;
 
-      // I don't think the lock is needed. Threads don't get confused on which sensor fired the event.
-      // Maybe it's to prevent from raising RotationVhanged event multiple times, by many threads, then OK.
-      // But e.g. in standard Windows application, Filewatcher catches events synchronously, one thread at a time, even if 
-      // multuiple events are raised simultanously - each one waits for it's turn. From what I see here it's the same.
       lock (_lock)
       {
         switch (e.Sensor.Type)
@@ -90,7 +83,6 @@ namespace StarMap.Droid.Sensors
 
         SensorManager.GetRotationMatrix(R, null, _gravity, _magnet);
 
-
         // Cellphone's natural orientation is portrait, tilted to the left it returns display (rotation) = 1,
         // to the right = 3.
         // However, a tablet is already in landscape, so the natural application displays are 0 or 2.
@@ -102,21 +94,20 @@ namespace StarMap.Droid.Sensors
             y = Axis.MinusY;
             break;
           case SurfaceOrientation.Rotation270:
-            x = Axis.MinusY; 
-            y = Axis.X;
+            x = Axis.Y; 
+            y = Axis.MinusX;
             break;
           case SurfaceOrientation.Rotation90: // phone tilted to the left
-            x = Axis.Y;
-            y = Axis.MinusX;
+            x = Axis.MinusY;
+            y = Axis.X;
             break;
           default:
             break;
         }
 
         SensorManager.RemapCoordinateSystem(R, x, y, rotatedR);
-        SensorManager.GetOrientation(rotatedR, _orientation);
-        
-        _rotationChanged?.Invoke(this, new RotationChangedEventArgs(_orientation));
+
+        _rotationChanged?.Invoke(this, new RotationChangedEventArgs(rotatedR));
       }
     }    
 
