@@ -175,6 +175,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sensors\DeviceRotationImplementation.cs" />
     <Compile Include="Sensors\DeviceRotationImplementationOld.cs" />
+    <Compile Include="UnityInitializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="..\..\StarMap.Logic\StarMap.Dal\Database\Universe.db3">
