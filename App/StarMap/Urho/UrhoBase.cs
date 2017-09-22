@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StarMap.Cll.Constants;
+using System;
 using Urho;
 using XF = Xamarin.Forms;
 
@@ -62,7 +63,7 @@ namespace StarMap.Urho
     // That's why I'm using Xamarin's solution.
     protected void PublishError<T>(T payload) where T : Exception
       // Must be main thread, else Android gets an exception "Can't create handler inside thread that has not called Looper.prepare()"
-      => XF.Device.BeginInvokeOnMainThread(() => XF.MessagingCenter.Send(payload, string.Empty));
+      => XF.Device.BeginInvokeOnMainThread(() => XF.MessagingCenter.Send(payload, MessageKeys.UrhoError));
 
     protected override void Stop()
     {

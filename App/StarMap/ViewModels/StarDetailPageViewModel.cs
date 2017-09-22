@@ -6,6 +6,7 @@ using StarMap.Cll.Exceptions;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Urho;
 using StarMap.ViewModels.Core;
+using System;
 
 namespace StarMap.ViewModels
 {
@@ -25,7 +26,7 @@ namespace StarMap.ViewModels
     {
       base.Restore(parameters);
       await CallAsync(() => 
-        _starManager.GetStarDetailsAsync((int)parameters[Navigation.Keys.StarId]), 
+        _starManager.GetStarDetailsAsync(Convert.ToInt32(parameters[Navigation.Keys.StarId])), 
         star => 
           Star = star);
     }

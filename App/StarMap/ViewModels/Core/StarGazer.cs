@@ -3,6 +3,7 @@ using Prism.Navigation;
 using Prism.Services;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Abstractions.Urho;
+using StarMap.Cll.Constants;
 using System;
 using System.Threading.Tasks;
 using Urho;
@@ -45,12 +46,12 @@ namespace StarMap.ViewModels.Core
 
     protected override void Restore(NavigationParameters parameters)
     {
-      XF.MessagingCenter.Subscribe<TUrhoException>(this, string.Empty, async ex => await HandleException(ex));
+      XF.MessagingCenter.Subscribe<TUrhoException>(this, MessageKeys.UrhoError, async ex => await HandleException(ex));
     }
 
     protected override void CleanUp()
     {
-      XF.MessagingCenter.Unsubscribe<TUrhoException>(this, string.Empty);
+      XF.MessagingCenter.Unsubscribe<TUrhoException>(this, MessageKeys.UrhoError);
     }
 
     public async Task GenerateUrho(UrhoSurface surface)

@@ -44,6 +44,7 @@
     <Compile Include="Abstractions\Services\IRepository.cs" />
     <Compile Include="Abstractions\Urho\IUrhoHandler.cs" />
     <Compile Include="Constants\Filters.cs" />
+    <Compile Include="Constants\MessageKeys.cs" />
     <Compile Include="Constants\Names.cs" />
     <Compile Include="Constants\Navigation.cs" />
     <Compile Include="Events\RotationChangedEventArgs.cs" />
