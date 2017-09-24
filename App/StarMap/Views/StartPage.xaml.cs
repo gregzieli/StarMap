@@ -5,7 +5,7 @@ namespace StarMap.Views
 {
   public partial class StartPage : ContentPage
   {
-    CancellationTokenSource cts = new CancellationTokenSource();
+    CancellationTokenSource cts;
 
     public StartPage()
     {
@@ -13,7 +13,8 @@ namespace StarMap.Views
     }
 
     protected override async void OnAppearing()
-    {      
+    {
+      cts = new CancellationTokenSource();
       base.OnAppearing();
       while (!cts.IsCancellationRequested)
       {
