@@ -22,7 +22,12 @@ namespace StarMap.Cll.Models.Geolocation
 
         public int Seconds { get; set; }
 
-        CardinalPoint GetCardinalPoint()
+        public override string ToString()
+        {
+            return $"{Degrees}\u00B0{Minutes:D2}'{Seconds:D2}\"{GetCardinalPoint()}";
+        }
+
+        private CardinalPoint GetCardinalPoint()
         {
             switch (_type)
             {
@@ -38,7 +43,7 @@ namespace StarMap.Cll.Models.Geolocation
         }
 
         //https://en.wikipedia.org/wiki/Geographic_coordinate_conversion#Conversion_from_Decimal_Degree_to_DMS
-        void Convert()
+        private void Convert()
         {
             var absoluteValue = Math.Abs(_value);
             Degrees = (int)absoluteValue;
@@ -46,21 +51,5 @@ namespace StarMap.Cll.Models.Geolocation
             Minutes = (int)(delta * 60);
             Seconds = (int)Math.Round(3600 * delta - 60 * Minutes, MidpointRounding.AwayFromZero);
         }
-
-        public override string ToString()
-        {
-            return $"{Degrees}\u00B0{Minutes:D2}'{Seconds:D2}\"{GetCardinalPoint()}";
-        }
-    }
-
-    enum CardinalPoint
-    {
-        N,
-
-        S,
-
-        E,
-
-        W
     }
 }

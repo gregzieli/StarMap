@@ -5,8 +5,8 @@ namespace StarMap.Cll.Abstractions
 {
     public interface ILocationManager
     {
-        Task<ExtendedPosition> GetNewGpsPositionAsync();
+        Task<ExtendedLocation> GetNewGpsPositionAsync();
 
-        Task<ExtendedPosition> CheckLocationAsync();
+        Task<ExtendedLocation> CheckLocationAsync();
     }
 }
