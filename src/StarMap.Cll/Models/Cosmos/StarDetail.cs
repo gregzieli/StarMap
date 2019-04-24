@@ -33,10 +33,10 @@ namespace StarMap.Cll.Models.Cosmos
 
         public double? TemperatureCelcius => TemperatureKelvin.HasValue ? TemperatureKelvin - 273.15 : null;
 
-        string _designation;
+        private string _designation;
         public override string Designation => _designation ?? (_designation = GetDesignation());
 
-        string GetDesignation()
+        private string GetDesignation()
         {
             var sb = new StringBuilder();
             bool hasBayFlam = !(Flamsteed is null && Bayer is null),
@@ -62,10 +62,11 @@ namespace StarMap.Cll.Models.Cosmos
             return sb.ToString().Trim();
         }
 
-        static Regex _bayerRx = new Regex(@"(\w+)(-?\d?)");
-        string MapBayer(string bayer)
+        private static readonly Regex BayerRx = new Regex(@"(\w+)(-?\d?)");
+
+        private string MapBayer(string bayer)
         {
-            var match = _bayerRx.Match(bayer);
+            var match = BayerRx.Match(bayer);
             if (!match.Success)
                 return null;
 

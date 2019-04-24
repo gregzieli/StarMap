@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StarMap.Cll\StarMap.Cll.csproj" />
-    <ProjectReference Include="..\StarMap.Dal\StarMap.Dal.csproj" />
   </ItemGroup>
 
 </Project>
