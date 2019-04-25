@@ -32,7 +32,7 @@ namespace StarMap.Dal.Providers
             }
             finally
             {
-                await _connection.CloseAsync();
+                await _connection.CloseAsync().ConfigureAwait(false);
             }
         }
     }

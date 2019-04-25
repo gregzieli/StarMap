@@ -1,11 +1,12 @@
 using Newtonsoft.Json;
+using StarMap.Cll.Abstractions.Managers;
 using System;
 
 namespace StarMap.Bll.Managers
 {
-    public abstract class BaseManager
+    public class SerializationManager : ISerializationManager
     {
-        protected T Deserialize<T>(string json, bool canThrow = true)
+        public T Deserialize<T>(string json, bool canThrow = true)
         {
             try
             {
@@ -19,7 +20,7 @@ namespace StarMap.Bll.Managers
             }
         }
 
-        protected T Deserialize<T>(string json, T defValue)
+        public T Deserialize<T>(string json, T defValue)
         {
             try
             {
@@ -31,7 +32,7 @@ namespace StarMap.Bll.Managers
             }
         }
 
-        protected string Serialize(object obj)
+        public string Serialize(object obj)
         {
             try
             {

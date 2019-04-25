@@ -2,7 +2,9 @@ using StarMap.Cll.Abstractions;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
+using StarMap.Cll.Extensions;
 using StarMap.Dal.Mappers;
+using StarMap.Dal.Queries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +14,7 @@ using StarEntity = StarMap.Dal.Database.Contracts.Star;
 
 namespace StarMap.Dal.Providers
 {
-    public class StarDatabaseAsyncProvider : DatabaseAsyncProvider, IStarDataAsyncProvider
+    public class StarDatabaseAsyncProvider : DatabaseAsyncProvider, IStarDataAsyncProvider // TODO: rename to just StarDataProvider
     {
         public StarDatabaseAsyncProvider(IRepository repository) : base(repository) { }
 
@@ -44,23 +46,18 @@ namespace StarMap.Dal.Providers
 
         public async Task<IEnumerable<Star>> GetStarsAsync(StarFilter filter)
         {
+            var query = new StarQuery
+            {
+                Distance = filter.DistanceTo,
+                Magnitude = filter.MagnitudeTo,
+                Designation = filter.DesignationQuery
+            };
+
             var stars = await Read(async context =>
             {
-                var query = context.Table<StarEntity>()
-                    .Where(x => x.ParsecDistance <= filter.DistanceTo) // TODO: make it a Query Object Pattern
-                    .Where(x => x.ApparentMagnitude <= filter.MagnitudeTo);
-
-                var search = filter.DesignationQuery;
-                if (!search.IsNullOrWhiteSpace())
-                {
-                    query = query.Where(x => x.ProperName.Contains(search)
-                     || x.BayerName.Contains(search)
-                     || x.FlamsteedName.Contains(search)
-                     || search.Contains(x.ProperName)
-                     || search.Contains(x.BayerName)
-                     || search.Contains(x.FlamsteedName));
-                }
-                var list = await query.ToListAsync();
+                var list = await context.Table<StarEntity>()
+                    .Where(query.AllFilters)
+                    .ToListAsync();
 
                 // Ensure the Sun is always there
                 if (!list.Any(x => x.Id == 0))

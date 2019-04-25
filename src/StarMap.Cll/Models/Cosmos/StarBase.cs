@@ -26,10 +26,10 @@ namespace StarMap.Cll.Models.Cosmos
 
         public double LightYearDistance => ParsecDistance * 3.262;
 
-        string _designation;
+        private string _designation;
         public virtual string Designation => _designation ?? (_designation = GetDesignation());
 
-        string GetDesignation()
+        private string GetDesignation()
         {
             var con = Constellation?.Abbreviation;
 

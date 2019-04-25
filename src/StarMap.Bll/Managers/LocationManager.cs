@@ -1,4 +1,5 @@
 using StarMap.Cll.Abstractions;
+using StarMap.Cll.Abstractions.Managers;
 using StarMap.Cll.Models.Geolocation;
 using StarMap.Core.Extensions;
 using System;
@@ -7,13 +8,15 @@ using Xamarin.Essentials;
 
 namespace StarMap.Bll.Managers
 {
-    public class LocationManager : BaseManager, ILocationManager
+    public class LocationManager : ILocationManager
     {
         private readonly ISettingsManager _settingsManager;
+        private readonly ISerializationManager _serializationManager;
 
-        public LocationManager(ISettingsManager settingsManager)
+        public LocationManager(ISettingsManager settingsManager, ISerializationManager serializationManager)
         {
             _settingsManager = settingsManager;
+            _serializationManager = serializationManager;
         }
 
         // TODO: in the Android project:
@@ -25,7 +28,7 @@ namespace StarMap.Bll.Managers
             var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
             var location = await Geolocation.GetLocationAsync(request).ConfigureAwait(false);
 
-            _settingsManager.Geolocation = Serialize(location);
+            _settingsManager.Geolocation = _serializationManager.Serialize(location);
 
             return new ExtendedLocation(location);
         }
@@ -36,7 +39,7 @@ namespace StarMap.Bll.Managers
             if (p.IsNullOrEmpty())
                 return await GetNewGpsPositionAsync();
 
-            var position = Deserialize<Location>(p);
+            var position = _serializationManager.Deserialize<Location>(p);
 
             return new ExtendedLocation(position);
         }

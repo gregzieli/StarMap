@@ -1,4 +1,5 @@
 using StarMap.Cll.Abstractions;
+using StarMap.Cll.Abstractions.Managers;
 using StarMap.Cll.Abstractions.Services;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;
@@ -9,17 +10,19 @@ using System.Threading.Tasks;
 
 namespace StarMap.Bll.Managers
 {
-    public class StarManager : BaseManager, IStarManager
+    public class StarManager : IStarManager
     {
         private readonly IStarDataAsyncProvider _provider;
         private readonly IAstronomer _astronomer;
         private readonly ISettingsManager _settingsManager;
+        private readonly ISerializationManager _serializationManager;
 
-        public StarManager(IStarDataAsyncProvider provider, IAstronomer astronomer, ISettingsManager settingsManager)
+        public StarManager(IStarDataAsyncProvider provider, IAstronomer astronomer, ISettingsManager settingsManager, ISerializationManager serializationManager)
         {
             _provider = provider;
             _astronomer = astronomer;
             _settingsManager = settingsManager;
+            _serializationManager = serializationManager;
         }
 
         public async Task<IList<Constellation>> GetConstellationsAsync()
@@ -34,7 +37,7 @@ namespace StarMap.Bll.Managers
 
         public async Task<IEnumerable<Star>> GetStarsAsync(StarFilter filter)
         {
-            _settingsManager.Filter = Serialize(filter);
+            _settingsManager.Filter = _serializationManager.Serialize(filter);
 
             var stars = await _provider.GetStarsAsync(filter);
 
@@ -65,7 +68,7 @@ namespace StarMap.Bll.Managers
             var filter = _settingsManager.Filter;
             var defReturn = new StarFilter();
 
-            return filter.IsNullOrEmpty() ? defReturn : Deserialize(filter, defReturn);
+            return filter.IsNullOrEmpty() ? defReturn : _serializationManager.Deserialize(filter, defReturn);
         }
 
         private void PrepareStar(StarDetail star)
