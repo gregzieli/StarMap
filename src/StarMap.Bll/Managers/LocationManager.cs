@@ -19,9 +19,6 @@ namespace StarMap.Bll.Managers
             _serializationManager = serializationManager;
         }
 
-        // TODO: in the Android project:
-        // https://docs.microsoft.com/en-us/xamarin/essentials/geolocation?context=xamarin%2Fxamarin-forms&tabs=android#get-started
-
         // TODO: Also this: https://docs.microsoft.com/en-us/xamarin/essentials/get-started?tabs=windows%2Candroid
         public async Task<ExtendedLocation> GetNewGpsPositionAsync()
         {
