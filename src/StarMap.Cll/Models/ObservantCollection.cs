@@ -34,13 +34,13 @@ namespace StarMap.Core.Models
             base.OnCollectionChanged(e);
         }
 
-        void Subscribe(IEnumerable source)
+        private void Subscribe(IEnumerable source)
         {
             foreach (INotifyPropertyChanged item in source)
                 item.PropertyChanged += Item_PropertyChanged;
         }
 
-        void Unsubscribe(IEnumerable source)
+        private void Unsubscribe(IEnumerable source)
         {
             foreach (INotifyPropertyChanged item in source)
                 item.PropertyChanged -= Item_PropertyChanged;
@@ -48,6 +48,6 @@ namespace StarMap.Core.Models
 
         //https://codeblog.jonskeet.uk/2015/01/30/clean-event-handlers-invocation-with-c-6/
         // if i unsubscribe from ElementChanged, it will be null, and without ?., throws nullrefexc.
-        void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => ElementChanged?.Invoke(sender, e);
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => ElementChanged?.Invoke(sender, e);
     }
 }

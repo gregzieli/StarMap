@@ -49,18 +49,18 @@ namespace StarMap.Core.Models
             base.SetItem(index, item);
         }
 
-        void Subscribe(IEnumerable source)
+        private void Subscribe(IEnumerable source)
         {
             foreach (INotifyPropertyChanged item in source)
                 item.PropertyChanged += Item_PropertyChanged;
         }
 
-        void Unsubscribe(IEnumerable source)
+        private void Unsubscribe(IEnumerable source)
         {
             foreach (INotifyPropertyChanged item in source)
                 item.PropertyChanged -= Item_PropertyChanged;
         }
 
-        void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => ElementChanged?.Invoke(sender, e);
+        private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => ElementChanged?.Invoke(sender, e);
     }
 }
