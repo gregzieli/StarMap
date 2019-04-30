@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -8,17 +10,37 @@ namespace StarMap.Core.Abstractions
     /// </summary>
     public abstract class ObservableBase : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Occurs when property changed.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-          => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        /// <summary>
+        /// Raises the property changed event.
+        /// </summary>
+        /// <param name="propertyName">Property name.</param>
+        protected virtual void OnPropertyChanged([CallerMemberName]string propertyName = "")
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        /// <summary>
+        /// Sets the property.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="backingStore">Backing store.</param>
+        /// <param name="value">Value.</param>
+        /// <param name="propertyName">Property name.</param>
+        /// <param name="onChanged">On changed.</param>
+        /// <returns><c>true</c>, if property was set, <c>false</c> otherwise.</returns>
+        protected virtual bool SetProperty<T>(
+            ref T backingStore, T value,
+            [CallerMemberName]string propertyName = "",
+            Action onChanged = null)
         {
-            if (Equals(storage, value))
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
                 return false;
 
-            storage = value;
+            backingStore = value;
+            onChanged?.Invoke();
             OnPropertyChanged(propertyName);
             return true;
         }

@@ -1,56 +1,56 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-
-using Xamarin.Forms;
-
+using StarMap.Core.Abstractions;
 using StarMap.Models;
 using StarMap.Services;
+using Xamarin.Forms;
 
 namespace StarMap.ViewModels
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public class BaseViewModel : ObservableBase
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
 
-        bool isBusy = false;
+        private bool _isBusy;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is busy.
+        /// </summary>
+        /// <value><c>true</c> if this instance is busy; otherwise, <c>false</c>.</value>
         public bool IsBusy
         {
-            get { return isBusy; }
-            set { SetProperty(ref isBusy, value); }
+            get => _isBusy;
+            set
+            {
+                if (SetProperty(ref _isBusy, value))
+                    IsNotBusy = !_isBusy;
+            }
         }
 
-        string title = string.Empty;
+        private bool _isNotBusy = true;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is not busy.
+        /// </summary>
+        /// <value><c>true</c> if this instance is not busy; otherwise, <c>false</c>.</value>
+        public bool IsNotBusy
+        {
+            get => _isNotBusy;
+            set
+            {
+                if (SetProperty(ref _isNotBusy, value))
+                    IsBusy = !_isNotBusy;
+            }
+        }
+
+        private string _title = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the title.
+        /// </summary>
+        /// <value>The title.</value>
         public string Title
         {
-            get { return title; }
-            set { SetProperty(ref title, value); }
+            get => _title;
+            set => SetProperty(ref _title, value);
         }
-
-        protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName]string propertyName = "",
-            Action onChanged = null)
-        {
-            if (EqualityComparer<T>.Default.Equals(backingStore, value))
-                return false;
-
-            backingStore = value;
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            var changed = PropertyChanged;
-            if (changed == null)
-                return;
-
-            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        #endregion
     }
 }
