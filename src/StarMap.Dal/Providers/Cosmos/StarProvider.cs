@@ -1,8 +1,7 @@
 using StarMap.Cll.Abstractions;
+using StarMap.Cll.Extensions;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;
-using StarMap.Core.Extensions;
-using StarMap.Cll.Extensions;
 using StarMap.Dal.Mappers;
 using StarMap.Dal.Queries;
 using System;
@@ -14,9 +13,9 @@ using StarEntity = StarMap.Dal.Database.Contracts.Star;
 
 namespace StarMap.Dal.Providers
 {
-    public class StarDatabaseAsyncProvider : DatabaseAsyncProvider, IStarDataAsyncProvider // TODO: rename to just StarDataProvider
+    public class StarProvider : DatabaseAsyncProvider, IStarProvider
     {
-        public StarDatabaseAsyncProvider(IRepository repository) : base(repository) { }
+        public StarProvider(IRepository repository) : base(repository) { }
 
         public async Task<IList<Constellation>> GetConstellationsAsync()
         {

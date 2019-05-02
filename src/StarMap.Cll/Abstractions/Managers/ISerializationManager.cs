@@ -1,6 +1,6 @@
 namespace StarMap.Cll.Abstractions.Managers
 {
-    public interface ISerializationManager // TODO: Add to container
+    public interface ISerializationManager
     {
         T Deserialize<T>(string json, bool canThrow = true);
 

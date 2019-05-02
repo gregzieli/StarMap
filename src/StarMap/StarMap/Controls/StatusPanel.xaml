@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Grid xmlns="http://xamarin.com/schemas/2014/forms" 
+      xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+      xmlns:conv="clr-namespace:StarMap.Converters"
+      x:Class="StarMap.Controls.StatusPanel"
+      Padding="10, 0">
+
+  <Grid.Resources>
+    <ResourceDictionary>
+      <conv:NullableToBooleanConverter x:Key="NullConverter" />
+      <Style x:Key="statusStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="Micro" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="TextColor" Value="AntiqueWhite" />
+      </Style>
+      <Style x:Key="buttonStyle" TargetType="Button">
+        <Setter Property="WidthRequest" Value="33" />
+      </Style>
+    </ResourceDictionary>    
+  </Grid.Resources>
+
+  <Grid.ColumnDefinitions>
+    <ColumnDefinition Width="*" />
+    <ColumnDefinition Width="Auto" />
+  </Grid.ColumnDefinitions>
+
+  <StackLayout Orientation="Horizontal" Spacing="7">
+    <Label Style="{StaticResource statusStyle}"
+           Text="{Binding CurrentPosition.Designation, StringFormat='Location: {0}'}"/>
+    <Label Style="{StaticResource statusStyle}"
+           Text="✧"
+           IsVisible="{Binding SelectedStar, Converter={StaticResource NullConverter}"/>
+    <Label Style="{StaticResource statusStyle}"
+           Text="{Binding SelectedStar.Designation, StringFormat='Destination: {0}'}" />
+    <Label Style="{StaticResource statusStyle}"
+           Text="✧"
+           IsVisible="{Binding SelectedStar, Converter={StaticResource NullConverter}"/>
+    <Label Style="{StaticResource statusStyle}"
+           Text="{Binding SelectedStar.RelativeDistance, StringFormat='Distance: {0:N0} pc'}" />
+  </StackLayout>
+
+  <StackLayout Grid.Column="1" Orientation="Horizontal" HorizontalOptions="EndAndExpand" >
+    <Button x:Name="earthButton" 
+            Style="{StaticResource buttonStyle}"
+            Image="turn_back.png" 
+            Command="{Binding GoHomeCommand}"
+            IsVisible="{Binding CurrentPosition, Converter={conv:LocationToBooleanConverter}}" />
+    <Button x:Name="travelButton" 
+            Style="{StaticResource buttonStyle}"
+            Image="rocket.png" 
+            Command="{Binding TravelCommand}"/>
+    <Button Image="star_detail.png" 
+            Style="{StaticResource buttonStyle}"
+            Command="{Binding ShowStarDetailsCommand}"/>
+  </StackLayout>
+</Grid>

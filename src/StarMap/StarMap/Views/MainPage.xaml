@@ -1,24 +1,57 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
-            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-            xmlns:views="clr-namespace:StarMap.Views"
-            x:Class="StarMap.Views.MainPage">
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:urho="clr-namespace:Urho.Forms;assembly=UrhoSharp.Forms"
+             xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
+             xmlns:custom="clr-namespace:StarMap.Controls"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="StarMap.Views.MainPage" >
 
-    <MasterDetailPage.Master>
-        <views:MenuPage />
-    </MasterDetailPage.Master>
+	<AbsoluteLayout>
+    <urho:UrhoSurface x:Name="surface" 
+                      AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                      AbsoluteLayout.LayoutFlags="All" />
 
-    <MasterDetailPage.Detail>
-        <NavigationPage>
-            <NavigationPage.Icon>
-                <OnPlatform x:TypeArguments="FileImageSource">
-                    <On Platform="iOS" Value="tab_feed.png"/>
-                </OnPlatform>
-            </NavigationPage.Icon>
-            <x:Arguments>
-                <views:ItemsPage />
-            </x:Arguments>
-        </NavigationPage>
-    </MasterDetailPage.Detail>
-    
-</MasterDetailPage>
+		<ContentView IsVisible="{Binding Loading}" 
+                 BackgroundColor="{StaticResource OverlayBackground}" 
+                 InputTransparent="True" 
+                 AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                 AbsoluteLayout.LayoutFlags="All">
+			<ActivityIndicator HorizontalOptions="Center" VerticalOptions="Center" IsRunning="True" />
+		</ContentView>
+
+		<Grid x:Name="rightOverlay"
+          AbsoluteLayout.LayoutBounds="1, 0, .4, .9" 
+          AbsoluteLayout.LayoutFlags="All" 
+          BackgroundColor="{StaticResource OverlayBackground}" 
+          Padding="5, 10, 5, 1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="20" />
+				<ColumnDefinition Width="*"  />
+			</Grid.ColumnDefinitions>
+
+			<StackLayout x:Name="rightPanelButtons" VerticalOptions="Start" Spacing="24">
+				<Image Source="constellation_filter.png">
+					<Image.GestureRecognizers>
+						<TapGestureRecognizer Tapped="OnConstellationsButtonClicked" />
+					</Image.GestureRecognizers>
+				</Image>
+
+				<Image Source="star_filter.png">
+					<Image.GestureRecognizers>
+						<TapGestureRecognizer Tapped="OnStarFilterPanelButtonClicked" />
+					</Image.GestureRecognizers>
+				</Image>
+			</StackLayout>
+
+			<custom:StarFilter x:Name="starFilters" Grid.Column="1" IsVisible="False" />
+			<custom:ConstellationFilter x:Name="constellationFilters" Grid.Column="1"  IsVisible="False" />
+		</Grid>
+
+		<custom:StatusPanel AbsoluteLayout.LayoutBounds="1, 1, 1, .1" 
+                        AbsoluteLayout.LayoutFlags="All" 
+                        BackgroundColor="{StaticResource OverlayBackground}" />
+
+	</AbsoluteLayout>
+
+</ContentPage>

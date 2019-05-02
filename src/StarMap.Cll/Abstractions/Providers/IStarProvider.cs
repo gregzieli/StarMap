@@ -8,7 +8,7 @@ namespace StarMap.Cll.Abstractions
     /// <summary>
     /// Contains methods tasked to retrieve related Universe informations asynchronously.
     /// </summary>
-    public interface IStarDataAsyncProvider
+    public interface IStarProvider
     {
         Task<IList<Constellation>> GetConstellationsAsync();
 

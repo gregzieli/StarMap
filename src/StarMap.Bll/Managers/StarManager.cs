@@ -12,12 +12,12 @@ namespace StarMap.Bll.Managers
 {
     public class StarManager : IStarManager
     {
-        private readonly IStarDataAsyncProvider _provider;
+        private readonly IStarProvider _provider;
         private readonly IAstronomer _astronomer;
         private readonly ISettingsManager _settingsManager;
         private readonly ISerializationManager _serializationManager;
 
-        public StarManager(IStarDataAsyncProvider provider, IAstronomer astronomer, ISettingsManager settingsManager, ISerializationManager serializationManager)
+        public StarManager(IStarProvider provider, IAstronomer astronomer, ISettingsManager settingsManager, ISerializationManager serializationManager)
         {
             _provider = provider;
             _astronomer = astronomer;

@@ -58,6 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Prism.Autofac.Forms">
+      <Version>7.1.0.431</Version>
+    </PackageReference>
+    <PackageReference Include="UrhoSharp.Forms">
+      <Version>1.9.67</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
     <PackageReference Include="Xamarin.Android.Support.Design" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.1" />
@@ -69,14 +75,27 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AndroidInitializer.cs" />
+    <Compile Include="Database\AndroidRepository.cs" />
+    <Compile Include="Database\Connector.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sensors\DeviceRotationImplementation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="..\..\StarMap.Dal\Database\Universe.db3">
+      <Link>Assets\Universe.db3</Link>
+    </AndroidAsset>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <None Include="Properties\AndroidManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\icon.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Tabbar.axml" />
@@ -98,12 +117,158 @@
     <AndroidResource Include="Resources\drawable\xamarin_logo.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\drawable-hdpi\" />
-    <Folder Include="Resources\drawable-xhdpi\" />
-    <Folder Include="Resources\drawable-xxhdpi\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Sprites\star.png">
+      <Link>Assets\Data\Sprites\star.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\space1.png">
+      <Link>Assets\Data\Textures\space1.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\space2.png">
+      <Link>Assets\Data\Textures\space2.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_darkblue_dark.png">
+      <Link>Assets\Data\Textures\star_darkblue_dark.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_darkblue_light.png">
+      <Link>Assets\Data\Textures\star_darkblue_light.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_lightblue_dark.png">
+      <Link>Assets\Data\Textures\star_lightblue_dark.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_lightblue_light.png">
+      <Link>Assets\Data\Textures\star_lightblue_light.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_orange_dark1.jpg">
+      <Link>Assets\Data\Textures\star_orange_dark1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_orange_dark2.png">
+      <Link>Assets\Data\Textures\star_orange_dark2.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_orange_light1.jpg">
+      <Link>Assets\Data\Textures\star_orange_light1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_orange_light2.png">
+      <Link>Assets\Data\Textures\star_orange_light2.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_red_dark1.jpg">
+      <Link>Assets\Data\Textures\star_red_dark1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_red_dark2.jpg">
+      <Link>Assets\Data\Textures\star_red_dark2.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_red_light1.jpg">
+      <Link>Assets\Data\Textures\star_red_light1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_red_light2.png">
+      <Link>Assets\Data\Textures\star_red_light2.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_red_light3.png">
+      <Link>Assets\Data\Textures\star_red_light3.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_white1.jpg">
+      <Link>Assets\Data\Textures\star_white1.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_yellow_dark.png">
+      <Link>Assets\Data\Textures\star_yellow_dark.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\star_yellow_light.png">
+      <Link>Assets\Data\Textures\star_yellow_light.png</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="..\StarMap\Assets\Textures\white-dwarf2.jpg">
+      <Link>Assets\Data\Textures\white-dwarf2.jpg</Link>
+    </AndroidAsset>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\about.png">
+      <Link>Resources\drawable\about.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\constellation_filter.png">
+      <Link>Resources\drawable\constellation_filter.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\refresh.png">
+      <Link>Resources\drawable\refresh.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\rocket.png">
+      <Link>Resources\drawable\rocket.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\settings.png">
+      <Link>Resources\drawable\settings.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\star_detail.png">
+      <Link>Resources\drawable\star_detail.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\star_filter.png">
+      <Link>Resources\drawable\star_filter.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\stars.png">
+      <Link>Resources\drawable\stars.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="..\StarMap\Assets\Icons\turn_back.png">
+      <Link>Resources\drawable\turn_back.png</Link>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\StarMap.Cll\StarMap.Cll.csproj">
+      <Project>{b7f49263-c63d-4026-8ad3-e3919ff6b5c4}</Project>
+      <Name>StarMap.Cll</Name>
+    </ProjectReference>
     <ProjectReference Include="..\StarMap\StarMap.csproj">
       <Project>{543FAA65-A16C-4AB5-8D84-7EC0A5C44D9B}</Project>
       <Name>StarMap</Name>

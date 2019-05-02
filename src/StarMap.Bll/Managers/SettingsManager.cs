@@ -3,7 +3,7 @@ using Xamarin.Essentials;
 
 namespace StarMap.Bll.Managers
 {
-    public class SettingsManager : ISettingsManager // TODO: add it to the container!
+    public class SettingsManager : ISettingsManager
     {
         public string Geolocation
         {

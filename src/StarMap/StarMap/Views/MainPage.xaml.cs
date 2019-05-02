@@ -1,54 +1,47 @@
-﻿using StarMap.Models;
+using StarMap.Cll.Abstractions.Urho;
+using StarMap.Controls;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace StarMap.Views
 {
-    // Learn more about making custom code visible in the Xamarin.Forms previewer
-    // by visiting https://aka.ms/xamarinforms-previewer
-    [DesignTimeVisible(true)]
-    public partial class MainPage : MasterDetailPage
+    public partial class MainPage : ContentPage
     {
-        Dictionary<int, NavigationPage> MenuPages = new Dictionary<int, NavigationPage>();
-        public MainPage()
+        public Overlay RightPanel { get; private set; }
+
+        public MainPage() => InitializeComponent();
+
+        protected override async void OnAppearing()
         {
-            InitializeComponent();
+            base.OnAppearing();
 
-            MasterBehavior = MasterBehavior.Popover;
+            RightPanel = new Overlay(rightOverlay, DockSide.Right, rightPanelButtons.Width + rightOverlay.Padding.Left * 2);
 
-            MenuPages.Add((int)MenuItemType.Browse, (NavigationPage)Detail);
+            RightPanel.Collapse(length: 0);
+
+            await ((IUrhoHandler)BindingContext).GenerateUrho(surface);
         }
 
-        public async Task NavigateFromMenu(int id)
+        void OnConstellationsButtonClicked(object sender, EventArgs args)
         {
-            if (!MenuPages.ContainsKey(id))
-            {
-                switch (id)
-                {
-                    case (int)MenuItemType.Browse:
-                        MenuPages.Add(id, new NavigationPage(new ItemsPage()));
-                        break;
-                    case (int)MenuItemType.About:
-                        MenuPages.Add(id, new NavigationPage(new AboutPage()));
-                        break;
-                }
-            }
+            if (RightPanel.IsExpanded && constellationFilters.IsVisible)
+                RightPanel.Collapse(Easing.CubicOut);
+            else
+                RightPanel.Expand(Easing.CubicIn);
 
-            var newPage = MenuPages[id];
+            starFilters.IsVisible = false;
+            constellationFilters.IsVisible = true;
+        }
 
-            if (newPage != null && Detail != newPage)
-            {
-                Detail = newPage;
+        void OnStarFilterPanelButtonClicked(object sender, EventArgs args)
+        {
+            if (RightPanel.IsExpanded && starFilters.IsVisible)
+                RightPanel.Collapse(Easing.CubicOut);
+            else
+                RightPanel.Expand(Easing.CubicIn);
 
-                if (Device.RuntimePlatform == Device.Android)
-                    await Task.Delay(100);
-
-                IsPresented = false;
-            }
+            constellationFilters.IsVisible = false;
+            starFilters.IsVisible = true;
         }
     }
 }

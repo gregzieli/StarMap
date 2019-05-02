@@ -125,14 +125,14 @@ namespace StarMap.Dal.Test.Integration
                 .Including(y => y.Designation));
         }
 
-        private IStarDataAsyncProvider GetProvider()
+        private IStarProvider GetProvider()
         {
             var dbPath = Path.Combine(Directory.GetCurrentDirectory(), @"..\..\..\..\..\src\StarMap.Dal\Database\Universe.db3");
 
             _mockRepository.Setup(x => x.GetFilePath())
                 .Returns(dbPath);
 
-            return new StarDatabaseAsyncProvider(_mockRepository.Object);
+            return new StarProvider(_mockRepository.Object);
         }
     }
 }

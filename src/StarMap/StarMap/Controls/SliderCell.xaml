@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+          x:Class="StarMap.Controls.SliderCell"          
+          x:Name="cell">
+  <ViewCell.View>
+    <Grid BindingContext="{x:Reference cell}" >
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <Label Text="{Binding Label}" VerticalOptions="Center" Grid.RowSpan="2" />
+      <Label Text="{Binding Value, Source={Reference slider}, StringFormat='{0:F0}'}" HorizontalOptions="Center" Grid.Column="1"/>
+      <Slider x:Name="slider" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding SelectedValue}" Grid.Column="1" Grid.Row="1"/>
+    </Grid>
+  </ViewCell.View>
+</ViewCell>
