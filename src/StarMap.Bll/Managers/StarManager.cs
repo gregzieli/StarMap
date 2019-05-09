@@ -1,5 +1,6 @@
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Abstractions.Managers;
+using StarMap.Cll.Abstractions.Providers;
 using StarMap.Cll.Abstractions.Services;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;

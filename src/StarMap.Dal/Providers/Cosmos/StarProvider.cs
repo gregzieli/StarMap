@@ -1,4 +1,5 @@
 using StarMap.Cll.Abstractions;
+using StarMap.Cll.Abstractions.Providers;
 using StarMap.Cll.Extensions;
 using StarMap.Cll.Filters;
 using StarMap.Cll.Models.Cosmos;
@@ -15,7 +16,7 @@ namespace StarMap.Dal.Providers
 {
     public class StarProvider : DatabaseAsyncProvider, IStarProvider
     {
-        public StarProvider(IRepository repository) : base(repository) { }
+        public StarProvider(IConnectionProvider connectionProvider) : base(connectionProvider) { }
 
         public async Task<IList<Constellation>> GetConstellationsAsync()
         {

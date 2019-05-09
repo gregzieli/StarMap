@@ -68,7 +68,8 @@ namespace StarMap.Urhosharp
             var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
             _cameraNode.Position = new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
             CurrentLocation = currentStar;
-
+            SelectedStar?.Deselect();
+            SelectedStar = null;
             _plotNode.RemoveAllChildren();
 
             string id;

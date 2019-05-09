@@ -1,5 +1,5 @@
 using SQLite;
-using StarMap.Cll.Abstractions;
+using StarMap.Cll.Abstractions.Providers;
 using System;
 using System.Threading.Tasks;
 
@@ -7,11 +7,11 @@ namespace StarMap.Dal.Providers
 {
     public abstract class DatabaseAsyncProvider
     {
-        private readonly SQLiteAsyncConnection _connection;
+        private readonly IConnectionProvider _connectionProvider;
 
-        protected DatabaseAsyncProvider(IRepository repository)
+        protected DatabaseAsyncProvider(IConnectionProvider connectionProvider)
         {
-            _connection = new SQLiteAsyncConnection(repository.GetFilePath(), SQLiteOpenFlags.ReadOnly);
+            _connectionProvider = connectionProvider;
         }
 
         /// <summary>
@@ -22,9 +22,10 @@ namespace StarMap.Dal.Providers
         /// <returns>The value taken from DB.</returns>
         protected async Task<T> Read<T>(Func<SQLiteAsyncConnection, Task<T>> action)
         {
+            var connection = _connectionProvider.GetConnection();
             try
             {
-                return await action(_connection).ConfigureAwait(false);
+                return await action(connection).ConfigureAwait(false);
             }
             catch
             {
@@ -32,7 +33,7 @@ namespace StarMap.Dal.Providers
             }
             finally
             {
-                await _connection.CloseAsync().ConfigureAwait(false);
+                await connection.CloseAsync().ConfigureAwait(false);
             }
         }
     }

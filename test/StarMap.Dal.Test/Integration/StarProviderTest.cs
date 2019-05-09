@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Xunit;
 using StarMap.Cll.Models.Cosmos;
+using StarMap.Cll.Abstractions.Providers;
 
 namespace StarMap.Dal.Test.Integration
 {
-    public class StarDatabaseProviderTest
+    public class StarProviderTest
     {
         private readonly Mock<IRepository> _mockRepository = new Mock<IRepository>();
 
@@ -132,7 +133,7 @@ namespace StarMap.Dal.Test.Integration
             _mockRepository.Setup(x => x.GetFilePath())
                 .Returns(dbPath);
 
-            return new StarProvider(_mockRepository.Object);
+            return new StarProvider(new ConnectionProvider(_mockRepository.Object));
         }
     }
 }

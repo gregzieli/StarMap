@@ -19,7 +19,6 @@ namespace StarMap.Bll.Managers
             _serializationManager = serializationManager;
         }
 
-        // TODO: Also this: https://docs.microsoft.com/en-us/xamarin/essentials/get-started?tabs=windows%2Candroid
         public async Task<ExtendedLocation> GetNewGpsPositionAsync()
         {
             var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));

@@ -1,11 +1,10 @@
-using System;
 
 using Android.App;
 using Android.Content.PM;
+using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using Android.Widget;
-using Android.OS;
+using StarMap.Droid.Database;
 
 namespace StarMap.Droid
 {
@@ -17,12 +16,17 @@ namespace StarMap.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
+            //Remove notification bar // TODO: does this work?
+            Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
+
             base.OnCreate(savedInstanceState);
+            Connector.CheckDatabase();
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App(new AndroidInitializer()));
         }
+
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);

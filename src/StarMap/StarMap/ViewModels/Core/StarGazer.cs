@@ -58,27 +58,27 @@ namespace StarMap.ViewModels.Core
         {
             await CallAsync(async () =>
             {
-          // As it happens, MainPanel's Urho doesn't get disposed before 
-          // starting this one. Believe me, I tryied many other ways.
-          await Task.Delay(1000);
+                // As it happens, MainPanel's Urho doesn't get disposed before 
+                // starting this one. Believe me, I tryied many other ways.
+                await Task.Delay(1000);
 
-          // Moving this piece of code to here from the View doesn't change much, it's really just for consistency;
-          // I still am unable to catch any exception that occurs upon creating the UrhoApplication.
-          // That is why it is needed to be handled separately, as another layer.
-          // An error on OnUrhoGenerated can be caught here.
-          var options = new ApplicationOptions(assetsFolder: "Data")
+                // Moving this piece of code to here from the View doesn't change much, it's really just for consistency;
+                // I still am unable to catch any exception that occurs upon creating the UrhoApplication.
+                // That is why it is needed to be handled separately, as another layer.
+                // An error on OnUrhoGenerated can be caught here.
+                var options = new ApplicationOptions(assetsFolder: "Data")
                 {
-              //Orientation = Urho.ApplicationOptions.OrientationType.LandscapeAndPortrait,
-              // iOS only - which is a shame, because now I have to ensure the view height < width
-              // from https://github.com/xamarin/urho/blob/master/Urho3D/Urho3D_Android/Sdl/SDLSurface.java
-              // if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) 
-              //  if (mWidth < mHeight) skip = true;
-              // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
-          };
+                    //Orientation = Urho.ApplicationOptions.OrientationType.LandscapeAndPortrait,
+                    // iOS only - which is a shame, because now I have to ensure the view height < width
+                    // from https://github.com/xamarin/urho/blob/master/Urho3D/Urho3D_Android/Sdl/SDLSurface.java
+                    // if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) 
+                    //  if (mWidth < mHeight) skip = true;
+                    // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
+                };
 
-          // Unbelievable. After almost a year, navigating back and forth still doesn't work properly.
-          // This appears to solve the issue.
-          System.GC.Collect();
+                // Unbelievable. After almost a year, navigating back and forth still doesn't work properly.
+                // This appears to solve the issue.
+                System.GC.Collect();
                 System.GC.WaitForPendingFinalizers();
 
                 UrhoApplication = await surface.Show<TUhroApp>(options);

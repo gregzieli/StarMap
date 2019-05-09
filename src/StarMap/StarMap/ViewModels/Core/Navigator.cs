@@ -65,16 +65,14 @@ namespace StarMap.ViewModels.Core
         /// </summary>
         protected virtual void CleanUp() { }
 
-
-
-        // TODO: Check which is better
-        //      OK checked, this would be bad design, because not always the code in Cleanup or restore is asynchronous.
-        //      So neither CallAsync not Call wouldn't work for all.
-        public virtual async void OnNavigatedFrom2(INavigationParameters parameters)
-          => await CallAsync(CleanUp2);
-        public virtual async void OnNavigatedTo2(INavigationParameters parameters)
-          => await CallAsync(() => Restore2(parameters));
-        protected virtual async Task Restore2(INavigationParameters parameters) { }
-        protected virtual async Task CleanUp2() { }
+        //// TODO: Check which is better
+        ////      OK checked, this would be bad design, because not always the code in Cleanup or restore is asynchronous.
+        ////      So neither CallAsync not Call wouldn't work for all.
+        //public virtual async void OnNavigatedFrom2(INavigationParameters parameters)
+        //  => await CallAsync(CleanUp2);
+        //public virtual async void OnNavigatedTo2(INavigationParameters parameters)
+        //  => await CallAsync(() => Restore2(parameters));
+        //protected virtual async Task Restore2(INavigationParameters parameters) { }
+        //protected virtual async Task CleanUp2() { }
     }
 }

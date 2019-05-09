@@ -3,7 +3,7 @@ using StarMap.Cll.Models.Cosmos;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace StarMap.Cll.Abstractions
+namespace StarMap.Cll.Abstractions.Providers
 {
     /// <summary>
     /// Contains methods tasked to retrieve related Universe informations asynchronously.

@@ -4,6 +4,7 @@ using StarMap.Bll.Helpers;
 using StarMap.Bll.Managers;
 using StarMap.Cll.Abstractions;
 using StarMap.Cll.Abstractions.Managers;
+using StarMap.Cll.Abstractions.Providers;
 using StarMap.Cll.Abstractions.Services;
 using StarMap.Dal.Providers;
 using StarMap.ViewModels;
@@ -31,7 +32,7 @@ namespace StarMap
             try
             {
                 InitializeComponent();
-                await NavigationService.NavigateAsync("MasterDetail/NavigationPage/StartPage");
+                await NavigationService.NavigateAsync("MasterDetail/StartPage");
             }
             catch (Exception e)
             {
@@ -41,6 +42,7 @@ namespace StarMap
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.Register<IConnectionProvider, ConnectionProvider>();
             containerRegistry.Register<ISettingsManager, SettingsManager>();
             containerRegistry.Register<ISerializationManager, SerializationManager>();
             containerRegistry.Register<ILocationManager, LocationManager>();
