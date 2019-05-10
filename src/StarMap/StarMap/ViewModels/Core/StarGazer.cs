@@ -5,6 +5,7 @@ using StarMap.Cll.Abstractions;
 using StarMap.Cll.Abstractions.Urho;
 using StarMap.Cll.Constants;
 using StarMap.Urhosharp;
+using System.Threading;
 using System.Threading.Tasks;
 using Urho;
 using Urho.Forms;
@@ -18,30 +19,30 @@ namespace StarMap.ViewModels.Core
       where TUhroApp : UrhoBase
       where TUrhoException : System.Exception
     {
-        protected IStarManager _starManager;
+        protected IStarManager StarManager;
         public TUhroApp UrhoApplication { get; set; }
 
 
         public StarGazer(INavigationService navigationService, IPageDialogService pageDialogService, IStarManager starManager)
           : base(navigationService, pageDialogService)
         {
-            _starManager = starManager;
+            StarManager = starManager;
             // So if I use this, the Catch in CallAsync doesn't get used. 
             // And that implementation works smoothly, whereas this causes more and more problems.
             // Leave it for future reference.
             //Application.UnhandledException += UrhoUnhandledException;
         }
 
-        private void UrhoUnhandledException(object sender, UnhandledExceptionEventArgs e)
+        private async void UrhoUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             e.Handled = true;
             // Some stuff get caught here, some don't. For example an error during init doesn't get caught here, that's why
             // it has its own trycatch, and a MessagingCenter event handling.
-            //if (!UrhoApplication.IsExiting)
-            //{
-            //	await UrhoApplication.Exit().ConfigureAwait(false);
-            //	await HandleException(e.Exception).ConfigureAwait(false);
-            //}
+            if (!UrhoApplication.IsExiting)
+            {
+                await UrhoApplication.Exit().ConfigureAwait(false);
+                await HandleException(e.Exception).ConfigureAwait(false);
+            }
         }
 
         protected override void Restore(INavigationParameters parameters)
@@ -60,7 +61,7 @@ namespace StarMap.ViewModels.Core
             {
                 // As it happens, MainPanel's Urho doesn't get disposed before 
                 // starting this one. Believe me, I tryied many other ways.
-                await Task.Delay(1000);
+                await Task.Delay(100);
 
                 // Moving this piece of code to here from the View doesn't change much, it's really just for consistency;
                 // I still am unable to catch any exception that occurs upon creating the UrhoApplication.
@@ -95,9 +96,11 @@ namespace StarMap.ViewModels.Core
         {
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
-            //await Task.Delay(500);
-            //await UrhoApplication?.Exit();
-            XF.Device.BeginInvokeOnMainThread(() => UrhoSurface.OnDestroy());
+            //UrhoApplication?.Exit().Wait();
+
+            Thread.Sleep(100);
+            UrhoSurface.OnDestroy();
+            //XF.Device.BeginInvokeOnMainThread(() => UrhoSurface.OnDestroy());
         }
     }
 }

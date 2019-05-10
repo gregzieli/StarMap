@@ -26,7 +26,7 @@ namespace StarMap.ViewModels
         {
             base.Restore(parameters);
             await CallAsync(() =>
-              _starManager.GetStarDetailsAsync(Convert.ToInt32(parameters[Navigation.Keys.StarId])),
+              StarManager.GetStarDetailsAsync(Convert.ToInt32(parameters[Navigation.Keys.StarId])),
               star =>
                 Star = star);
         }

@@ -147,7 +147,7 @@ namespace StarMap.ViewModels
         {
             await CallAsync(async () =>
             {
-                if (!_starManager.CheckFilterChanged(StarFilter))
+                if (!StarManager.CheckFilterChanged(StarFilter))
                     return;
 
                 Loading = true;
@@ -172,9 +172,9 @@ namespace StarMap.ViewModels
         {
             await CallAsync(() =>
             {
-          // Unsubscribe to avoid 80-something consecutive calls
-          Constellations.ElementChanged -= OnConstellationFiltered;
-                bool action = (bool)command;
+                // Unsubscribe to avoid 80-something consecutive calls
+                Constellations.ElementChanged -= OnConstellationFiltered;
+                var action = (bool)command;
                 foreach (var c in Constellations)
                     c.IsOn = action;
 
@@ -203,7 +203,7 @@ namespace StarMap.ViewModels
 
                 StartSensors();
 
-                StarFilter = _starManager.LoadFilter();
+                StarFilter = StarManager.LoadFilter();
 
                 return GetConstellations();
             });
@@ -274,13 +274,13 @@ namespace StarMap.ViewModels
                 if (!id.IsNullOrEmpty())
                 {
                     var star = Stars.FirstOrDefault(x => x.Id == int.Parse(id));
-              // NB: I could set refs to constellations for all the stars upon retrieving from db,
-              //     it's the obvious thing to do. But, in most operations I need only the Id. 
-              //     The Constellation ref is needed only to display proper designation.
-              //     And no one is going to select every star there is. That's why i decided to get the constellation ref
-              //     here, which can be misleading.
+                    // NB: I could set refs to constellations for all the stars upon retrieving from db,
+                    //     it's the obvious thing to do. But, in most operations I need only the Id. 
+                    //     The Constellation ref is needed only to display proper designation.
+                    //     And no one is going to select every star there is. That's why i decided to get the constellation ref
+                    //     here, which can be misleading.
 
-              if (star.Constellation is null && star.ConstellationId != null)
+                    if (star.Constellation is null && star.ConstellationId != null)
                         star.Constellation = Constellations.First(x => x.Id == star.ConstellationId);
 
                     star.RelativeDistance = relativeDistance;
@@ -305,14 +305,14 @@ namespace StarMap.ViewModels
 
         async Task GetConstellations()
         {
-            var constellations = await _starManager.GetConstellationsAsync().ConfigureAwait(false);
+            var constellations = await StarManager.GetConstellationsAsync().ConfigureAwait(false);
             Constellations = new ObservantCollection<Constellation>(constellations);
             Constellations.ElementChanged += OnConstellationFiltered;
         }
 
         async Task GetStars()
         {
-            var stars = await _starManager.GetStarsAsync(StarFilter).ConfigureAwait(false);
+            var stars = await StarManager.GetStarsAsync(StarFilter).ConfigureAwait(false);
             // Since the size of the collection may differ, it's better memorywise to instantiate a new one,
             // rather than reuse the already allocated list with a completely different size.
             Stars = new List<Star>(stars);
