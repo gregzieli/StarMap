@@ -38,8 +38,6 @@ namespace StarMap.Bll.Managers
 
         public async Task<IEnumerable<Star>> GetStarsAsync(StarFilter filter)
         {
-            // TODO: Mention in-text: Obviously ISettingsManager should just have Get<T> and Set<T> methods,
-            //       and ISerializationManager should be its dependency, 
             _settingsManager.Filter = _serializationManager.Serialize(filter);
 
             var stars = await _provider.GetStarsAsync(filter);

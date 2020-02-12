@@ -29,7 +29,7 @@ namespace StarMap.Droid.Sensors
         private readonly float[] R = new float[9];
         private readonly float[] rotatedR = new float[9];
 
-        static readonly object _lock = new object();
+        private static readonly object _lock = new object();
 
         public DeviceRotationImplementation() : base()
         {
@@ -222,7 +222,6 @@ namespace StarMap.Droid.Sensors
             _disposed = true;
         }
 
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
         ~DeviceRotationImplementation()
         {
             // Do not change this code. Put cleanup code in Dispose(bool disposing) above.

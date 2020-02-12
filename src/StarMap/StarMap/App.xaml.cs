@@ -86,8 +86,6 @@ namespace StarMap
             ShowCrashPage(e.Exception.Flatten().GetBaseException());
         }
 
-        // TODO: Or just a popup and close app
-        // cannot close app programaticaly?
         private void ShowCrashPage(Exception e = null)
         {
             // setting of the MainPage should clear the stack.

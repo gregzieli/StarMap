@@ -1,7 +1,6 @@
 using SQLite;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
 
 namespace StarMap.Cll.Extensions
@@ -20,19 +19,13 @@ namespace StarMap.Cll.Extensions
             where T : new()
         {
             if (source is null)
-            {
                 throw new ArgumentNullException(nameof(source));
-            }
 
             if (predicates is null)
-            {
                 throw new ArgumentNullException(nameof(predicates));
-            }
 
             foreach (var predicate in predicates)
-            {
                 source = source.Where(predicate);
-            }
 
             return source;
         }

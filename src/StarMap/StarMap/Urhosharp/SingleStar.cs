@@ -3,88 +3,22 @@ using StarMap.Cll.Models.Cosmos;
 using StarMap.Core.Extensions;
 using StarMap.Core.Utils;
 using System;
-using System.Collections.Generic;
 using Urho;
 using Urho.Actions;
 using Urho.Shapes;
-using static Xamarin.Forms.Color;
-using XFColor = Xamarin.Forms.Color;
 
 namespace StarMap.Urhosharp
 {
-    // TODO: if in the sky mode the multi-star system is in fact rendered as few spheres close to one another,
-    //       add a functionality to display more than one star here.
-    // Because of that 'cant add component not on the main thread', the quickest solution would be to use a different class, like 'MultiDetail',
-    // and in the view decide which one to use.
     public class SingleStar : UrhoBase
     {
         public SingleStar(ApplicationOptions options) : base(options) { }
 
-        Node _starNode;
-
-        [Obsolete("In the future, maybe, after change: not by color, but some other criteria")]
-        IDictionary<XFColor, IList<Material>> GetTextures()
-        {
-            return new Dictionary<XFColor, IList<Material>>()
-      {
-        {
-          DarkRed, new List<Material>()
-            {
-              Material.FromImage("Textures/star_red_dark1.jpg"),
-              Material.FromImage("Textures/star_red_dark2.jpg"),
-            }
-        },
-        {
-          Red, new List<Material>()
-            {
-              Material.FromImage("Textures/star_red_light1.jpg"),
-              Material.FromImage("Textures/star_red_light2.png"),
-              Material.FromImage("Textures/star_red_light3.png")
-            }
-        },
-        {
-          Orange, new List<Material>
-            {
-              Material.FromImage("Textures/star_orange_dark1.jpg"),
-              Material.FromImage("Textures/star_orange_dark2.png"),
-              Material.FromImage("Textures/star_orange_light1.jpg"),
-              Material.FromImage("Textures/star_orange_light2.png")
-            }
-        },
-        {
-          Yellow, new List<Material>
-            {
-              Material.FromImage("Textures/star_yellow_dark.png"),
-              Material.FromImage("Textures/star_yellow_light.png")
-            }
-        },
-        {
-          White, new List<Material>
-            {
-              Material.FromImage("Textures/star_white1.jpg")
-            }
-        },
-        {
-          Blue, new List<Material>
-            {
-              Material.FromImage("Textures/star_lightblue_light.png"),
-              Material.FromImage("Textures/star_lightblue_dark.png")
-            }
-        },
-        {
-          DarkBlue, new List<Material>
-            {
-              Material.FromImage("Textures/star_darkblue_dark.png"),
-              Material.FromImage("Textures/star_darkblue_light.png")
-            }
-        }
-      };
-        }
+        private Node _starNode;
 
         public void SetStar(StarDetail star)
         {
             var scale = star.AbsoluteMagnitude.Normalize(-8, 10, 1.5, 0.5);
-            // Sometimes FillScene's gets code executes afther this one :(
+            // Sometimes FillScene's gets code executed after this one :/
             _starNode?.SetScale((float)scale);
 
             var light = _lightNode?.GetComponent<Light>();
