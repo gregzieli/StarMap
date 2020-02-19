@@ -22,7 +22,7 @@ namespace StarMap.Views
             await ((IUrhoHandler)BindingContext).GenerateUrho(surface);
         }
 
-        void OnConstellationsButtonClicked(object sender, EventArgs args)
+        private void OnConstellationsButtonClicked(object sender, EventArgs args)
         {
             if (RightPanel.IsExpanded && constellationFilters.IsVisible)
                 RightPanel.Collapse(Easing.CubicOut);
@@ -33,7 +33,7 @@ namespace StarMap.Views
             constellationFilters.IsVisible = true;
         }
 
-        void OnStarFilterPanelButtonClicked(object sender, EventArgs args)
+        private void OnStarFilterPanelButtonClicked(object sender, EventArgs args)
         {
             if (RightPanel.IsExpanded && starFilters.IsVisible)
                 RightPanel.Collapse(Easing.CubicOut);

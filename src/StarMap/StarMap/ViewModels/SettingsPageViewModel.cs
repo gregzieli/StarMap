@@ -12,8 +12,8 @@ namespace StarMap.ViewModels
 {
     public class SettingsPageViewModel : Navigator
     {
-        ILocationManager _locationManager;
-        readonly SettingsManager _settingsManager;
+        private ILocationManager _locationManager;
+        private readonly SettingsManager _settingsManager;
 
         public SettingsPageViewModel(INavigationService navigationService, IPageDialogService pageDialogService, ILocationManager locationManager, SettingsManager settingsManager)
       : base(navigationService, pageDialogService)
@@ -25,25 +25,22 @@ namespace StarMap.ViewModels
         public bool SensorsOn
         {
             get => _settingsManager.SensorsOn;
-            // No time to create a manager for that. 
             set { _settingsManager.SensorsOn = value; }
         }
 
-        ExtendedLocation _geoPosition;
+        private ExtendedLocation _geoPosition;
         public ExtendedLocation GeoPosition
         {
             get => _geoPosition;
             set => SetProperty(ref _geoPosition, value);
         }
 
-        DelegateCommand _updateLocationCommand;
+        private DelegateCommand _updateLocationCommand;
         public DelegateCommand UpdateLocationCommand =>
             _updateLocationCommand ?? (_updateLocationCommand = new DelegateCommand(UpdateLocation)
-            // If IsBusy didn't RaisePropertyChanged on CanExecute, this code could stay, but with ObservesProperty.
             .ObservesCanExecute(() => CanExecute));
 
-
-        async void UpdateLocation()
+        private async void UpdateLocation()
         {
             await CallAsync(_locationManager.GetNewGpsPositionAsync,
               position =>
@@ -62,6 +59,6 @@ namespace StarMap.ViewModels
         }
 
         protected override Task HandleException(Exception ex)
-            => DisplayAlertAsync(ex.Message, "Cannot get localtion for this device. The position will not update.");
+            => DisplayAlertAsync(ex.Message, "Cannot get location for this device. The position will not update.");
     }
 }

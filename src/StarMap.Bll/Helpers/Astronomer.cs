@@ -8,8 +8,6 @@ namespace StarMap.Bll.Helpers
 {
     public class Astronomer : IAstronomer
     {
-        // TODO: If there's time, consider calculating the rgb from the b-v color index.
-        // The math described here:  https://stackoverflow.com/questions/21977786/star-b-v-color-index-to-apparent-rgb-color
         public Color GetColor(string spectralType)
         {
             if (spectralType.IsNullOrEmpty())

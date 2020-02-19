@@ -1,5 +1,4 @@
 using StarMap.Cll.Models.Core;
-using StarMap.Core.Extensions;
 using System.Linq;
 using System.Text;
 
@@ -38,10 +37,7 @@ namespace StarMap.Cll.Models.Cosmos
 
             var sb = new StringBuilder();
 
-            if (new[] { Flamsteed, Bayer, con }.Any(x => !x.IsNullOrEmpty()))
-                // The database originally had a column bf that contains just that. 
-                // If there's time, use that, to limit the fields populated on db query.
-                // Not that important, since it will only be one vs two.
+            if (new[] { Flamsteed, Bayer, con }.Any(x => !string.IsNullOrEmpty(x)))
                 sb.AppendFormat("{0}{1} {2}", Flamsteed, Bayer, con);
 
             if (HipparcosId.HasValue)

@@ -22,7 +22,6 @@ namespace StarMap.Cll.Models.Cosmos
 
         public double? ColorIndex { get; set; }
 
-        // TODO: lose this dependency!
         public Color Color { get; set; }
 
         public double Luminosity { get; set; }

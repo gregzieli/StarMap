@@ -29,10 +29,10 @@ namespace StarMap.Views
 				Browser.GoForward();
 		}
 
-		void webOnNavigating(object sender, WebNavigatingEventArgs e)
+        private void webOnNavigating(object sender, WebNavigatingEventArgs e)
 			=> preloader.IsRunning = true;
 
-		void webOnEndNavigating(object sender, WebNavigatedEventArgs e)
+        private void webOnEndNavigating(object sender, WebNavigatedEventArgs e)
 			=> preloader.IsRunning = false;
 	}
 }

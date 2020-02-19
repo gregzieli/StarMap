@@ -20,18 +20,17 @@ namespace StarMap.ViewModels
         {
             // Unfortunately, I couldn't use simply in xaml 
             // NavigateCommand with CommandParameter="{Binding Url, StringFormat='WebViewPage?url={0}'}",
-            // Because prism treats that deepLinking, and throws that I didn't register the url :D:D
+            // Because prism treats that deepLinking, and throws that I didn't register the url
             await Navigate(Navigation.WebView, Navigation.Keys.Url, url);
         }
 
-        public IList<Source> Sources { get; } = new List<Source> // TODO: read from config
+        public IList<Source> Sources { get; } = new List<Source>
         {
             new Source("HYG Database", "http://www.astronexus.com/hyg"),
             new Source("Xamarin.Forms", "https://github.com/xamarin/Xamarin.Forms"),
             new Source("SQLite-net", "https://github.com/praeclarum/sqlite-net"),
             new Source("UrhoSharp", "https://github.com/xamarin/urho"),
             new Source("Prism", "https://github.com/PrismLibrary/Prism"),
-            new Source("Xamarin Plugins", "https://github.com/xamarin/XamarinComponents"),
             new Source("Iconfinder", "https://www.iconfinder.com"),
             new Source("Star texture", "http://www.celestiamotherlode.net/catalog/extrasolar_stars.php"),
             new Source("Icon8", "http://ic8.link/33242")

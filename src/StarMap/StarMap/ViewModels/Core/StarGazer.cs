@@ -13,8 +13,6 @@ using XF = Xamarin.Forms;
 
 namespace StarMap.ViewModels.Core
 {
-    // Not sure about this name now. Let's just assume, that this is just to take some load off the MainPageVM, not to store all the code in one place; 
-    // The methods here are more 'GENERAL', but I don't think any other VM would inherit this class.
     public abstract class StarGazer<TUhroApp, TUrhoException> : Navigator, IUrhoHandler, IApplicationLifecycleAware, IDestructible
       where TUhroApp : UrhoBase
       where TUrhoException : System.Exception
@@ -27,10 +25,6 @@ namespace StarMap.ViewModels.Core
           : base(navigationService, pageDialogService)
         {
             StarManager = starManager;
-            // So if I use this, the Catch in CallAsync doesn't get used. 
-            // And that implementation works smoothly, whereas this causes more and more problems.
-            // Leave it for future reference.
-            //Application.UnhandledException += UrhoUnhandledException;
         }
 
         private async void UrhoUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -60,22 +54,14 @@ namespace StarMap.ViewModels.Core
             await CallAsync(async () =>
             {
                 // As it happens, MainPanel's Urho doesn't get disposed before 
-                // starting this one. Believe me, I tryied many other ways.
+                // starting this one. Believe me, I tried many other ways.
                 await Task.Delay(100);
 
                 // Moving this piece of code to here from the View doesn't change much, it's really just for consistency;
                 // I still am unable to catch any exception that occurs upon creating the UrhoApplication.
                 // That is why it is needed to be handled separately, as another layer.
                 // An error on OnUrhoGenerated can be caught here.
-                var options = new ApplicationOptions(assetsFolder: "Data")
-                {
-                    //Orientation = Urho.ApplicationOptions.OrientationType.LandscapeAndPortrait,
-                    // iOS only - which is a shame, because now I have to ensure the view height < width
-                    // from https://github.com/xamarin/urho/blob/master/Urho3D/Urho3D_Android/Sdl/SDLSurface.java
-                    // if (requestedOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) 
-                    //  if (mWidth < mHeight) skip = true;
-                    // and with skip=true nothing happens, with log Log.v("SDL", "Skip .. Surface is not ready.");        
-                };
+                var options = new ApplicationOptions(assetsFolder: "Data");
 
                 // Unbelievable. After almost a year, navigating back and forth still doesn't work properly.
                 // This appears to solve the issue.
@@ -96,11 +82,9 @@ namespace StarMap.ViewModels.Core
         {
             System.GC.Collect();
             System.GC.WaitForPendingFinalizers();
-            //UrhoApplication?.Exit().Wait();
 
             Thread.Sleep(100);
             UrhoSurface.OnDestroy();
-            //XF.Device.BeginInvokeOnMainThread(() => UrhoSurface.OnDestroy());
         }
     }
 }

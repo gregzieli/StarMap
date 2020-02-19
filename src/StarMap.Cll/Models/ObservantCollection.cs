@@ -46,8 +46,6 @@ namespace StarMap.Core.Models
                 item.PropertyChanged -= Item_PropertyChanged;
         }
 
-        //https://codeblog.jonskeet.uk/2015/01/30/clean-event-handlers-invocation-with-c-6/
-        // if i unsubscribe from ElementChanged, it will be null, and without ?., throws nullrefexc.
         private void Item_PropertyChanged(object sender, PropertyChangedEventArgs e) => ElementChanged?.Invoke(sender, e);
     }
 }

@@ -1,14 +1,13 @@
-﻿using System;
-using System.Diagnostics;
+using System;
 using Xamarin.Forms;
 
 namespace StarMap.Controls
 {
-  public partial class SliderCell : ViewCell
+    public partial class SliderCell : ViewCell
   {
-    const double _zero = default(double);
-    static readonly Type _doubleType = typeof(double);
-    static readonly Type _thisType = typeof(SliderCell);
+        private const double _zero = default(double);
+        private static readonly Type _doubleType = typeof(double);
+        private static readonly Type _thisType = typeof(SliderCell);
 
     public static readonly BindableProperty LabelProperty = BindableProperty.Create("Label", typeof(string), _thisType, null);
 
@@ -16,14 +15,7 @@ namespace StarMap.Controls
 
     public static readonly BindableProperty MaximumProperty = BindableProperty.Create("Maximum", _doubleType, _thisType, 100.0);
 
-    public static readonly BindableProperty SelectedValueProperty = BindableProperty.Create("SelectedValue", _doubleType, _thisType, _zero, BindingMode.TwoWay,
-      propertyChanged: (sender, oldValue, newValue) =>
-      {
-        // It seems that it's not really necessary, just need to be not null to work.
-        //SliderCell slider = (SliderCell)sender;
-        //slider.ValueChanged?.Invoke(slider, (double)newValue);
-      });
-    //public event EventHandler<double> ValueChanged;
+    public static readonly BindableProperty SelectedValueProperty = BindableProperty.Create("SelectedValue", _doubleType, _thisType, _zero, BindingMode.TwoWay);
 
     public string Label
     {

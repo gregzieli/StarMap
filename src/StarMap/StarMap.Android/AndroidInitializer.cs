@@ -12,7 +12,6 @@ namespace StarMap.Droid
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // Register any platform specific implementations
-            // TODO: use this way and inject IEventAggregator to device rotation service
             containerRegistry.Register<IRepository, AndroidRepository>();
             containerRegistry.Register<IDeviceRotation, DeviceRotationImplementation>();
         }
