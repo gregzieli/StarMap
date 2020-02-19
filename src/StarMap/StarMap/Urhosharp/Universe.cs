@@ -30,16 +30,15 @@ namespace StarMap.Urhosharp
         //https://github.com/xamarin/urho-samples/blob/master/FeatureSamples/Core/24_Urho2DSprite/Urho2DSprite.cs
         public Sprite2D StarSprite { get; set; }
 
-        Node _plotNode;
-        Camera _camera;
-        const float touchSensitivity = 1f;
-        const float VELOCITY = 3;//[pc/s]
+        private Node _plotNode;
+        private Camera _camera;
+        private const float touchSensitivity = 1f;
+        private const float VELOCITY = 3; //[pc/s]
 
-        Matrix3 _rotationMatrix = new Matrix3();
-
-        bool _usingSensors = false;
-        PhysicsWorld _physics;
-        PhysicsRaycastResult _rayCast;
+        private Matrix3 _rotationMatrix = new Matrix3();
+        private bool _usingSensors = false;
+        private PhysicsWorld _physics;
+        private PhysicsRaycastResult _rayCast;
 
         protected override void FillScene()
         {
@@ -47,12 +46,6 @@ namespace StarMap.Urhosharp
             _rayCast = new PhysicsRaycastResult();
 
             _camera = _cameraNode.GetComponent<Camera>();
-            //// From Xamarin workbooks: Setting higher Field of View (default is 45[deg]) works as *zooming out*
-            //// but e.g. 90 wierdly skews the view, and the Sun is still not visible.
-            //_camera.Fov = 45;
-            // Not sure if it changes anything. This is the smallest value possible.
-            //_camera.NearClip = 0.010000599f;
-
             _plotNode = _scene.CreateChild();
 
             var light = _lightNode.GetComponent<Light>();
@@ -88,8 +81,6 @@ namespace StarMap.Urhosharp
                     scale = (float)star.AbsoluteMagnitude.Normalize(-14, 1, 4, 1.2);
 
                 starNode.Scale = new Vector3(scale, scale, scale);
-                // haha this throws error sometimes when moving away from the page
-                //starNode.SetScale(scale);
 
                 starNode.Position = new Vector3(star.X, star.Y, star.Z);
                 starNode.LookAt(_cameraNode.Position, Vector3.Up);
@@ -145,12 +136,12 @@ namespace StarMap.Urhosharp
             base.OnUpdate(timeStep);
         }
 
-        void UpdateBySensor()
+        private void UpdateBySensor()
         {
             _cameraNode.Rotation = new Quaternion(ref _rotationMatrix);
         }
 
-        void UpdateByTouch()
+        private void UpdateByTouch()
         {
             if (Input.NumTouches == 1)
             {
@@ -168,57 +159,6 @@ namespace StarMap.Urhosharp
 
         protected override void HandleException(Exception ex)
          => PublishError(new UniverseUrhoException(ex));
-
-        [Obsolete("I thought this algorithm would be helpful, but as it turns out, it's much slower than simply *plotNode.RemoveAll*")]
-        public void UpdateWithStars2(IList<Star> stars, IUnique currentPosition)
-        {
-            var currentStar = stars.FirstOrDefault(x => x.Id == currentPosition.Id);
-            _cameraNode.Position = new Vector3(currentStar.X, currentStar.Y, currentStar.Z);
-            CurrentLocation = currentStar;
-
-            var existingNodesById = _plotNode.GetChildrenWithComponent<StarComponent>()
-              .ToDictionary(x => x.Name, x => x);
-
-            foreach (var star in stars)
-            {
-                var id = star.Id.ToString();
-
-                if (existingNodesById.ContainsKey(id))
-                {
-                    existingNodesById.Remove(id);
-                    continue;
-                }
-
-                var starNode = _plotNode.CreateChild(id, CreateMode.Local);
-                var starComponent = starNode.CreateComponent<StarComponent>();
-
-                starComponent.Sprite = StarSprite;
-                float scale = 1;
-
-                // Scale by absolute magnitude
-                if (star.AbsoluteMagnitude < 2)
-                    scale = (float)star.AbsoluteMagnitude.Normalize(-14, 1, 2, 1.2);
-
-                starNode.Scale = new Vector3(scale, scale, scale);
-                // haha this throws error sometimes when moving away from the page
-                //starNode.SetScale(scale);
-
-                starNode.Position = new Vector3(star.X, star.Y, star.Z);
-                starNode.LookAt(_cameraNode.Position, Vector3.Up);
-                starNode.AddCollisionSupport(0.1f);
-            }
-
-            MarkSun().SetDeepEnabled(!IsHome);
-
-            foreach (var leftUnused in existingNodesById.Values)
-            {
-                leftUnused.RemoveComponent<StarComponent>();
-                leftUnused.RemoveAllChildren();
-                leftUnused.Remove();
-            }
-            existingNodesById.Clear();
-        }
-
 
         public void HighlightStars(IEnumerable<IUnique> selectedStars)
         {
@@ -264,7 +204,6 @@ namespace StarMap.Urhosharp
 
             var duration = Vector3.Distance(_cameraNode.Position, target.Position) / VELOCITY;
 
-            // Then u can travel non-stop changing the destination
             _cameraNode.RemoveAllActions();
 
             var travelTask = _cameraNode.TryRunActionsAsync(new MoveTo(duration, target.Position));
@@ -278,7 +217,7 @@ namespace StarMap.Urhosharp
             await MarkSun(!IsHome);
         }
 
-        Node MarkSun()
+        private Node MarkSun()
         {
             Node sol;
             var sunNode = _plotNode.GetChild("0");
@@ -299,8 +238,7 @@ namespace StarMap.Urhosharp
             return sol;
         }
 
-        Task MarkSun(bool enable)
+        private Task MarkSun(bool enable)
           => InvokeOnMainAsync(() => _plotNode.GetChild("0").GetChild("sol").SetDeepEnabled(enable));
-
     }
 }

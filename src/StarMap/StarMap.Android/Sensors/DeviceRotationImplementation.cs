@@ -139,7 +139,7 @@ namespace StarMap.Droid.Sensors
         // methods, that would take an Action and hide the event altogether.
         public event EventHandler<RotationChangedEventArgs> RotationChanged
         {
-            [SecurityCritical] // suggested by Code Analysis
+            [SecurityCritical] 
             add
             {
                 lock (EventLocker)

@@ -11,21 +11,12 @@ namespace StarMap.Urhosharp
         public UrhoBase(ApplicationOptions options) : base(options)
         { }
 
-        // Check if this way still an exception doesn't get caught by the Call method from VM.
-        // Then consider if it's not even a better solution to just swallow them.
-        //static UrhoBase()
-        //{
-        //  UnhandledException += (s, e) =>
-        //  {
-        //e.Handled = true;
-        //  };
-        //}
-
         protected Scene _scene;
         protected Octree _octree;
         protected Node _lightNode, _cameraNode;
 
         protected abstract void HandleException(Exception ex);
+
         protected abstract void FillScene();
 
         protected override async void Start()
@@ -43,7 +34,7 @@ namespace StarMap.Urhosharp
             }
         }
 
-        void CreateScene()
+        private void CreateScene()
         {
             _scene = new Scene();
             _octree = _scene.CreateComponent<Octree>();

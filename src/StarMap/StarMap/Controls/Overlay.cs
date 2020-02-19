@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Xamarin.Forms;
 
 namespace StarMap.Controls
@@ -8,7 +8,7 @@ namespace StarMap.Controls
   /// </summary>
   public class Overlay
   {
-    VisualElement _element;
+        private VisualElement _element;
 
     public Rectangle Bounds { get; private set; }
 
@@ -34,7 +34,7 @@ namespace StarMap.Controls
       SetBounds();
     }
 
-    void SetBounds()
+        private void SetBounds()
     {
       switch (DockSide)
       {
@@ -64,7 +64,6 @@ namespace StarMap.Controls
       IsExpanded = false;
     }
 
-    // Changed the order - i'm more likely to change the easing than the duration.
     public void Slide(Easing easing = null, uint length = 250)
     {
       if (IsExpanded)

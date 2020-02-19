@@ -16,7 +16,6 @@ namespace StarMap.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            //Remove notification bar // TODO: does this work?
             Window.SetFlags(WindowManagerFlags.Fullscreen, WindowManagerFlags.Fullscreen);
 
             base.OnCreate(savedInstanceState);

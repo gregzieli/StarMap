@@ -16,7 +16,7 @@ namespace StarMap.Cll.Test.Stubs
 
         public string MyProperty5 { get; set; }
 
-        static int _count;
+        private static int _count;
 
         public CollectionItem()
         {

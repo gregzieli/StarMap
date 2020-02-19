@@ -5,16 +5,10 @@ using System.Threading.Tasks;
 
 namespace StarMap.ViewModels.Core
 {
-    // Official prism documentation
     // https://github.com/PrismLibrary/Prism/blob/master/docs/WPF/09-Communication.md
-    // says that 'The PubSubEvent<TPayload> is intended to be the base class for an application's or module's specific events'
-    // So using this class would be against that. And to have generics using this custom event class would be an overkill, since 
-    // the methods would need two type params (where TEventType : PubSubEvent<TPayload>).
-    // OK, so really:
-    // If it turns out I only use one TPayload per event, it's fine to use this class, otherwise custom events are required.
     public abstract class Publisher : Navigator
     {
-        IEventAggregator _eventAggregator;
+        private IEventAggregator _eventAggregator;
         public Publisher(INavigationService navigationService, IPageDialogService pageDialogService, IEventAggregator eventAggregator) : base(navigationService, pageDialogService)
         {
             _eventAggregator = eventAggregator;

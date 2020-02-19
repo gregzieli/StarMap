@@ -5,7 +5,7 @@ namespace StarMap.Views
 {
 	public partial class StartPage : ContentPage
 	{
-		CancellationTokenSource cts;
+        private CancellationTokenSource cts;
 
 		public StartPage()
 		{

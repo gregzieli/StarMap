@@ -64,4 +64,5 @@ namespace StarMap.ViewModels.Core
         /// Logic to be executed upon exiting a view model.
         /// </summary>
         protected virtual void CleanUp() { }
+    }
 }

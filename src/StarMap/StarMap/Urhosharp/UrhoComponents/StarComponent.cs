@@ -7,13 +7,12 @@ namespace StarMap.Urhosharp.UrhoComponents
 {
     public class StarComponent : StaticSprite2D
     {
-        Vector3 _scale;
+        private Vector3 _scale;
 
         public async void Highlight()
         {
             Color = Color.Cyan;
             _scale = Node.Scale;
-            // "blinking" animation
             await Node.TryRunActionsAsync(new RepeatForever(new ScaleTo(1, 0.9f), new ScaleTo(1, 2)));
         }
 
@@ -26,8 +25,6 @@ namespace StarMap.Urhosharp.UrhoComponents
 
         public async void Select()
         {
-            // For now leave it at that. If there's time, consider using another sprite, something that looks
-            // like a target, and have  it rotate around.
             var selectionNode = Node.CreateChild("selection");
             selectionNode.SetScale(0.3f);
 

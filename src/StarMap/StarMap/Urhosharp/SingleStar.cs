@@ -18,7 +18,6 @@ namespace StarMap.Urhosharp
         public void SetStar(StarDetail star)
         {
             var scale = star.AbsoluteMagnitude.Normalize(-8, 10, 1.5, 0.5);
-            // Sometimes FillScene's gets code executed after this one :/
             _starNode?.SetScale((float)scale);
 
             var light = _lightNode?.GetComponent<Light>();
